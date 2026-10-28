@@ -144,25 +144,33 @@
 /* Scroll-driven effects (applied only where animation-timeline is supported) */
 @utility parallax-a {
   @supports (animation-timeline: view()) {
-    animation: pxA linear both;
+    animation-name: pxA;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
     animation-timeline: view();
   }
 }
 @utility parallax-b {
   @supports (animation-timeline: view()) {
-    animation: pxB linear both;
+    animation-name: pxB;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
     animation-timeline: view();
   }
 }
 @utility parallax-c {
   @supports (animation-timeline: view()) {
-    animation: pxC linear both;
+    animation-name: pxC;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
     animation-timeline: view();
   }
 }
 @utility revelar {
   @supports (animation-timeline: view()) {
-    animation: revelar linear both;
+    animation-name: revelar;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
     animation-timeline: view();
     animation-range: entry 70% cover 40%;
   }
@@ -170,14 +178,18 @@
 @utility trazar {
   @supports (animation-timeline: view()) {
     stroke-dasharray: 1;
-    animation: trazar linear both;
+    animation-name: trazar;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
     animation-timeline: view();
     animation-range: cover 20% cover 60%;
   }
 }
 @utility zoom-lento {
   @supports (animation-timeline: view()) {
-    animation: zoomLento linear both;
+    animation-name: zoomLento;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
     animation-timeline: view();
   }
 }
@@ -185,14 +197,18 @@
 /* Horizontal gallery driven by vertical scroll */
 @utility horiz-pista {
   @supports (animation-timeline: view()) {
-    animation: horiz linear both;
+    animation-name: horiz;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
     animation-timeline: --horiz;
     animation-range: contain 0% contain 100%;
   }
 }
 @utility horiz-barra {
   @supports (animation-timeline: view()) {
-    animation: barra linear both;
+    animation-name: barra;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
     animation-timeline: --horiz;
     animation-range: contain 0% contain 100%;
   }
