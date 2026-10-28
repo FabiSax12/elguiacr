@@ -1,5 +1,8 @@
 ---
+import { getLocale, useTranslations } from '../i18n/utils';
 import logo from '../assets/logo.svg';
+
+const t = useTranslations(getLocale(Astro.currentLocale));
 ---
 
 <footer class="oscuro" style="background: #17362d; color: #fff7e8; padding: 72px clamp(16px, 5vw, 64px) 32px;">
@@ -7,20 +10,20 @@ import logo from '../assets/logo.svg';
     <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px;">
       <div style="max-width: 360px;">
         <img src={logo.src} alt="El Guía CR" width={logo.width} height={logo.height} style="width: 200px; height: auto; display: block;" />
-        <p style="margin: 24px 0 0; font: 500 italic 22px/1.35 'Alegreya', Georgia, serif; color: #e0a632;">Experiencias diseñadas con propósito.</p>
+        <p style="margin: 24px 0 0; font: 500 italic 22px/1.35 'Alegreya', Georgia, serif; color: #e0a632;">{t.footer.tagline}</p>
       </div>
       <div style="display: flex; flex-wrap: wrap; gap: 48px;">
         <div>
-          <p style="margin: 0 0 12px; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #e0a632;">Explorar</p>
+          <p style="margin: 0 0 12px; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #e0a632;">{t.footer.exploreHeading}</p>
           <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font: 400 15px/24px 'Source Sans 3', system-ui, sans-serif;">
-            <li><a class="nav-link" href="#para-quien" style="display: inline-block; padding: 6px 0;">Viajeros · Locales · Empresas · Educación</a></li>
-            <li><a class="nav-link" href="#como-funciona" style="display: inline-block; padding: 6px 0;">Cómo funciona</a></li>
-            <li><a class="nav-link" href="#destinos" style="display: inline-block; padding: 6px 0;">Destinos</a></li>
-            <li><a class="nav-link" href="#privacidad" style="display: inline-block; padding: 6px 0;">FAQ · Privacidad · Condiciones</a></li>
+            <li><a class="nav-link" href="#para-quien" style="display: inline-block; padding: 6px 0;">{t.hero.segments}</a></li>
+            <li><a class="nav-link" href="#como-funciona" style="display: inline-block; padding: 6px 0;">{t.footer.how}</a></li>
+            <li><a class="nav-link" href="#destinos" style="display: inline-block; padding: 6px 0;">{t.footer.destinations}</a></li>
+            <li><a class="nav-link" href="#privacidad" style="display: inline-block; padding: 6px 0;">{t.footer.legal}</a></li>
           </ul>
         </div>
         <div>
-          <p style="margin: 0 0 12px; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #e0a632;">Contacto</p>
+          <p style="margin: 0 0 12px; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #e0a632;">{t.footer.contactHeading}</p>
           <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; font: 400 15px/24px 'Source Sans 3', system-ui, sans-serif;">
             <li>WhatsApp +506 8587 8863</li>
             <li>contact@elguiacr.com</li>
@@ -32,7 +35,7 @@ import logo from '../assets/logo.svg';
     </div>
     <div style="margin-top: 56px; padding-top: 20px; border-top: 1px solid rgba(224,166,50,.4); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font: 600 11px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase;">
       <span id="privacidad">© 2026 El Guía CR · elguiacr.com</span>
-      <span>Hecho en Costa Rica</span>
+      <span>{t.footer.madeIn}</span>
     </div>
   </div>
 </footer>

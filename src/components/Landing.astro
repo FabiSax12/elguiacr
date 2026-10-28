@@ -1,0 +1,32 @@
+---
+import Audiences from './Audiences.astro';
+import ContactForm from './ContactForm.astro';
+import Destinations from './Destinations.astro';
+import Footer from './Footer.astro';
+import Founder from './Founder.astro';
+import Hero from './Hero.astro';
+import HowItWorks from './HowItWorks.astro';
+import Manifesto from './Manifesto.astro';
+import Nav from './Nav.astro';
+import Stories from './Stories.astro';
+import Ticker from './Ticker.astro';
+import Values from './Values.astro';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+  <div class="landing" style="width: 100%; min-width: 320px; background: #fff7e8; color: #17362d; font-family: 'Source Sans 3', 'Segoe UI', system-ui, sans-serif; overflow-x: clip;">
+    <Nav />
+    <Hero />
+    <Ticker />
+    <Manifesto />
+    <Audiences />
+    <HowItWorks />
+    <Founder />
+    <Destinations />
+    <Stories />
+    <Values />
+    <ContactForm />
+    <Footer />
+  </div>
+</Layout>

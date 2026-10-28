@@ -1,19 +1,21 @@
 ---
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
 import '../styles/global.css';
+import { defaultLocale, localeMeta, locales } from '../i18n/config';
+import { getLocale, useTranslations } from '../i18n/utils';
 
-interface Props {
-  title?: string;
-  description?: string;
-}
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
 
-const {
-  title = 'El Guía CR · Experiencias diseñadas con propósito',
-  description = 'elguiacr.com · Diseño y coordinación de experiencias en Costa Rica. Viajeros, locales, empresas y educación.',
-} = Astro.props;
+const { title = t.meta.title, description = t.meta.description } = Astro.props;
+
+const canonical = getAbsoluteLocaleUrl(locale);
+const alternates = locales.map((code) => ({ code, href: getAbsoluteLocaleUrl(code) }));
+const otherLocales = locales.filter((code) => code !== locale);
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={locale}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -22,6 +24,15 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <title>{title}</title>
+    <link rel="canonical" href={canonical} />
+    {alternates.map(({ code, href }) => <link rel="alternate" hreflang={code} href={href} />)}
+    <link rel="alternate" hreflang="x-default" href={getAbsoluteLocaleUrl(defaultLocale)} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={localeMeta[locale].ogLocale} />
+    {otherLocales.map((code) => <meta property="og:locale:alternate" content={localeMeta[code].ogLocale} />)}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

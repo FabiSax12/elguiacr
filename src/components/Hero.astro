@@ -1,38 +1,43 @@
+---
+import { getLocale, useTranslations } from '../i18n/utils';
+
+const t = useTranslations(getLocale(Astro.currentLocale));
+---
 <section id="inicio" class="oscuro" style="position: relative; background: #17362d; color: #fff7e8; overflow: clip;">
   <div style="max-width: 1240px; margin: 0 auto; padding: clamp(48px, 8vw, 112px) clamp(16px, 5vw, 64px) 140px; display: flex; flex-wrap: wrap; align-items: center; gap: 56px;">
     <div style="flex: 1 1 520px; min-width: 0; position: relative; z-index: 2;">
-      <p style="margin: 0 0 24px; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #e0a632;">elguiacr.com · Diseño y coordinación de experiencias en Costa Rica</p>
-      <h1 style="margin: 0; font: 800 clamp(48px, 7.4vw, 108px)/0.96 'Alegreya', Georgia, serif; letter-spacing: -0.02em;">Experiencias diseñadas con <em style="font-style: italic; font-weight: 600; color: #e0a632;">propósito.</em></h1>
-      <p style="margin: 32px 0 0; max-width: 520px; font: 400 clamp(18px, 1.6vw, 21px)/1.55 'Source Sans 3', system-ui, sans-serif; color: #fff7e8;">Usted nos cuenta qué quiere vivir, aprender o lograr en Costa Rica. El Guía se encarga de conectar las piezas: lugares, personas, aliados y logística.</p>
+      <p style="margin: 0 0 24px; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #e0a632;">{t.hero.eyebrow}</p>
+      <h1 style="margin: 0; font: 800 clamp(48px, 7.4vw, 108px)/0.96 'Alegreya', Georgia, serif; letter-spacing: -0.02em;">{t.hero.titleBefore} <em style="font-style: italic; font-weight: 600; color: #e0a632;">{t.hero.titleEmphasis}</em></h1>
+      <p style="margin: 32px 0 0; max-width: 520px; font: 400 clamp(18px, 1.6vw, 21px)/1.55 'Source Sans 3', system-ui, sans-serif; color: #fff7e8;">{t.hero.intro}</p>
       <div style="margin-top: 40px; display: flex; flex-wrap: wrap; gap: 14px;">
-        <a class="btn-claro" href="#contanos" style="display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 28px; background: #e0a632; color: #17362d; font: 600 16px/24px 'Source Sans 3', system-ui, sans-serif; text-decoration: none;">Cuéntenos qué tiene en mente <span class="flecha" aria-hidden="true">→</span></a>
-        <a class="btn-linea" href="#como-funciona" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 24px; border: 2px solid #fff7e8; color: #fff7e8; font: 600 16px/24px 'Source Sans 3', system-ui, sans-serif; text-decoration: none;">Ver cómo funciona</a>
+        <a class="btn-claro" href="#contanos" style="display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 28px; background: #e0a632; color: #17362d; font: 600 16px/24px 'Source Sans 3', system-ui, sans-serif; text-decoration: none;">{t.hero.primaryCta} <span class="flecha" aria-hidden="true">→</span></a>
+        <a class="btn-linea" href="#como-funciona" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 24px; border: 2px solid #fff7e8; color: #fff7e8; font: 600 16px/24px 'Source Sans 3', system-ui, sans-serif; text-decoration: none;">{t.hero.secondaryCta}</a>
       </div>
-      <p style="margin: 40px 0 0; font: 500 13px/20px 'Source Sans 3', system-ui, sans-serif; color: #fff7e8; opacity: .85;">Viajeros · Locales · Empresas · Educación</p>
+      <p style="margin: 40px 0 0; font: 500 13px/20px 'Source Sans 3', system-ui, sans-serif; color: #fff7e8; opacity: .85;">{t.hero.segments}</p>
     </div>
 
-    <!-- collage con parallax -->
+    <!-- parallax collage -->
     <div style="flex: 1 1 420px; min-width: 0; position: relative; height: 620px;">
       <div class="px-a" style="position: absolute; right: 0; top: 0; width: 74%; height: 560px; background: #1f5c46; overflow: clip; display: flex; flex-direction: column; justify-content: flex-end; padding: 22px;">
         <svg viewBox="0 0 300 80" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; left: 0; top: 38%; width: 100%; height: 80px; opacity: .5;"><polyline points="0,70 60,48 110,58 165,26 215,40 270,10 300,18" fill="none" stroke="#e0a632" stroke-width="3" vector-effect="non-scaling-stroke"></polyline></svg>
         <div style="position: absolute; top: 22px; left: 22px; display: flex; align-items: center; gap: 10px; font: 600 11px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: #fff7e8;">
           <span style="width: 44px; height: 44px; border: 2px solid #fff7e8; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5 L13 8 L4 13.5 Z" fill="#fff7e8"></path></svg></span>
-          Video hero · loop 15 s
+          {t.hero.videoLabel}
         </div>
-        <p style="position: relative; margin: 0; font: 400 14px/21px 'Source Sans 3', system-ui, sans-serif; color: #fff7e8;">[VIDEO: cortes de 2–3 s sin audio. Manos tostando café en una finca, un grupo cruzando un puente colgante en bosque nuboso, estudiantes midiendo un río con un especialista. Gente haciendo, no posando.]</p>
+        <p style="position: relative; margin: 0; font: 400 14px/21px 'Source Sans 3', system-ui, sans-serif; color: #fff7e8;">{t.hero.videoNote}</p>
       </div>
       <div class="px-b" style="position: absolute; left: 0; top: 300px; width: 44%; height: 250px; background: #f3ead8; color: #17362d; padding: 16px; display: flex; flex-direction: column; justify-content: flex-end; border: 6px solid #17362d;">
-        <p style="margin: 0 0 6px; font: 600 11px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: #1f5c46;">Foto</p>
-        <p style="margin: 0; font: 400 13px/19px 'Source Sans 3', system-ui, sans-serif;">[FOTO: Bernald conversando con un anfitrión local en su finca, luz de tarde.]</p>
+        <p style="margin: 0 0 6px; font: 600 11px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: #1f5c46;">{t.hero.photoLabel}</p>
+        <p style="margin: 0; font: 400 13px/19px 'Source Sans 3', system-ui, sans-serif;">{t.hero.photoNoteMain}</p>
       </div>
       <div class="px-c" style="position: absolute; left: 12%; top: 40px; width: 34%; height: 190px; background: #e0a632; color: #17362d; padding: 14px; display: flex; flex-direction: column; justify-content: flex-end; border: 6px solid #17362d;">
-        <p style="margin: 0 0 6px; font: 600 11px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase;">Foto</p>
-        <p style="margin: 0; font: 400 13px/19px 'Source Sans 3', system-ui, sans-serif;">[FOTO: equipo de trabajo cocinando juntos.]</p>
+        <p style="margin: 0 0 6px; font: 600 11px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase;">{t.hero.photoLabel}</p>
+        <p style="margin: 0; font: 400 13px/19px 'Source Sans 3', system-ui, sans-serif;">{t.hero.photoNoteSecondary}</p>
       </div>
     </div>
   </div>
 
-  <!-- el camino se dibuja -->
+  <!-- the path draws itself -->
   <svg viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; left: 0; bottom: 18px; width: 100%; height: 120px;">
     <polyline class="dibujar" pathLength="1" points="0,104 180,70 340,88 520,34 700,60 880,22 1060,50 1240,8 1440,30" fill="none" stroke="#e0a632" stroke-width="4" vector-effect="non-scaling-stroke"></polyline>
   </svg>

@@ -1,19 +1,24 @@
 ---
-import { stories } from '../data/content';
+import { getLocale, useTranslations } from '../i18n/utils';
+import { getStories } from '../data/content';
+
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+const stories = getStories(locale);
 ---
 
 <section id="historias" class="oscuro" style="background: #17362d; color: #fff7e8; padding: clamp(80px, 10vw, 144px) 0 clamp(64px, 8vw, 112px);">
   <div style="max-width: 1240px; margin: 0 auto; padding: 0 clamp(16px, 5vw, 64px); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px;">
     <div style="max-width: 680px;">
-      <p style="margin: 0; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #e0a632;">05 · Historias</p>
-      <h2 style="margin: 16px 0 0; font: 700 clamp(36px, 4.6vw, 64px)/1.05 'Alegreya', Georgia, serif;">Mejor verlo que contarlo.</h2>
+      <p style="margin: 0; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #e0a632;">{t.stories.eyebrow}</p>
+      <h2 style="margin: 16px 0 0; font: 700 clamp(36px, 4.6vw, 64px)/1.05 'Alegreya', Georgia, serif;">{t.stories.title}</h2>
     </div>
-    <p style="margin: 0; max-width: 380px; font: 400 16px/1.6 'Source Sans 3', system-ui, sans-serif;">Siga bajando: las historias pasan de lado. Experiencias reales, aliados y el detrás de cámaras.</p>
+    <p style="margin: 0; max-width: 380px; font: 400 16px/1.6 'Source Sans 3', system-ui, sans-serif;">{t.stories.intro}</p>
   </div>
 
   <div class="horiz-outer" style="margin-top: 56px;">
     <div class="horiz-sticky">
-      <div class="horiz-vista" role="region" aria-label="Historias en video" tabindex="0">
+      <div class="horiz-vista" role="region" aria-label={t.stories.regionLabel} tabindex="0">
         <div class="horiz-track">
           {stories.map((story) => story.format === 'reel' ? (
             <figure style="margin: 0; width: 300px; flex: 0 0 auto;">
@@ -32,8 +37,8 @@ import { stories } from '../data/content';
             </figure>
           ))}
           <a href="#contanos" class="btn-claro" style="width: 320px; flex: 0 0 auto; align-self: center; aspect-ratio: 1 / 1; background: #e0a632; color: #17362d; text-decoration: none; padding: 28px; display: flex; flex-direction: column; justify-content: space-between;">
-            <span style="font: 700 36px/1.1 'Alegreya', Georgia, serif;">¿La próxima historia es la suya?</span>
-            <span style="font: 600 16px/24px 'Source Sans 3', system-ui, sans-serif;">Cuéntenos qué tiene en mente <span class="flecha" aria-hidden="true">→</span></span>
+            <span style="font: 700 36px/1.1 'Alegreya', Georgia, serif;">{t.stories.closingTitle}</span>
+            <span style="font: 600 16px/24px 'Source Sans 3', system-ui, sans-serif;">{t.stories.closingCta} <span class="flecha" aria-hidden="true">→</span></span>
           </a>
         </div>
       </div>

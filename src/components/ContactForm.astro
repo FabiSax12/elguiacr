@@ -1,17 +1,21 @@
 ---
-import { segments } from '../data/audiences';
+import { getLocale, useTranslations } from '../i18n/utils';
+import { getSegments } from '../data/audiences';
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+const segments = getSegments(locale);
 ---
 
 <section id="contanos" style="background: #fff7e8; padding: 0 clamp(16px, 5vw, 64px) clamp(80px, 10vw, 144px);">
   <div style="max-width: 1240px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: stretch;">
     <div class="oscuro" style="flex: 1 1 400px; min-width: 0; background: #1f5c46; color: #fff7e8; padding: clamp(32px, 4vw, 56px); position: relative; overflow: clip;">
-      <p style="margin: 0; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #fff7e8;">07 · Empecemos</p>
-      <h2 style="margin: 16px 0 0; font: 700 clamp(36px, 4vw, 56px)/1.05 'Alegreya', Georgia, serif;">Cuéntenos qué tiene en mente.</h2>
-      <p style="margin: 20px 0 0; font: 400 17px/1.6 'Source Sans 3', system-ui, sans-serif;">No hace falta tener todo claro. Con esto arrancamos una conversación; presupuesto y detalles los vemos después, con calma.</p>
+      <p style="margin: 0; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #fff7e8;">{t.contact.eyebrow}</p>
+      <h2 style="margin: 16px 0 0; font: 700 clamp(36px, 4vw, 56px)/1.05 'Alegreya', Georgia, serif;">{t.contact.title}</h2>
+      <p style="margin: 20px 0 0; font: 400 17px/1.6 'Source Sans 3', system-ui, sans-serif;">{t.contact.intro}</p>
       <ol style="list-style: none; margin: 40px 0 0; padding: 0; display: flex; flex-direction: column; gap: 22px;">
-        <li style="display: flex; gap: 16px;"><span style="font: 700 28px/1 'Alegreya', Georgia, serif; color: #e0a632;" aria-hidden="true">1</span><span style="font: 400 16px/1.5 'Source Sans 3', system-ui, sans-serif;"><strong style="font-weight: 600;">Le escribimos.</strong> Una persona, no un bot. [TIEMPO DE RESPUESTA]</span></li>
-        <li style="display: flex; gap: 16px;"><span style="font: 700 28px/1 'Alegreya', Georgia, serif; color: #e0a632;" aria-hidden="true">2</span><span style="font: 400 16px/1.5 'Source Sans 3', system-ui, sans-serif;"><strong style="font-weight: 600;">Conversamos.</strong> Entendemos el propósito, el grupo y el contexto.</span></li>
-        <li style="display: flex; gap: 16px;"><span style="font: 700 28px/1 'Alegreya', Georgia, serif; color: #e0a632;" aria-hidden="true">3</span><span style="font: 400 16px/1.5 'Source Sans 3', system-ui, sans-serif;"><strong style="font-weight: 600;">Le enviamos una propuesta</strong> diseñada para usted.</span></li>
+        <li style="display: flex; gap: 16px;"><span style="font: 700 28px/1 'Alegreya', Georgia, serif; color: #e0a632;" aria-hidden="true">1</span><span style="font: 400 16px/1.5 'Source Sans 3', system-ui, sans-serif;"><strong style="font-weight: 600;">{t.contact.steps[0].lead}</strong> {t.contact.steps[0].rest}</span></li>
+        <li style="display: flex; gap: 16px;"><span style="font: 700 28px/1 'Alegreya', Georgia, serif; color: #e0a632;" aria-hidden="true">2</span><span style="font: 400 16px/1.5 'Source Sans 3', system-ui, sans-serif;"><strong style="font-weight: 600;">{t.contact.steps[1].lead}</strong> {t.contact.steps[1].rest}</span></li>
+        <li style="display: flex; gap: 16px;"><span style="font: 700 28px/1 'Alegreya', Georgia, serif; color: #e0a632;" aria-hidden="true">3</span><span style="font: 400 16px/1.5 'Source Sans 3', system-ui, sans-serif;"><strong style="font-weight: 600;">{t.contact.steps[2].lead}</strong> {t.contact.steps[2].rest}</span></li>
       </ol>
       <svg viewBox="0 0 400 60" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; left: 0; bottom: 24px; width: 100%; height: 60px;"><polyline points="0,52 70,30 130,42 200,12 260,26 330,6 400,16" fill="none" stroke="#e0a632" stroke-width="3" vector-effect="non-scaling-stroke"></polyline></svg>
     </div>
@@ -19,44 +23,44 @@ import { segments } from '../data/audiences';
     <div style="flex: 1.4 1 480px; min-width: 0; background: #ffffff; border: 2px solid #17362d; padding: clamp(28px, 4vw, 56px);">
       <div data-form-view="form" style="display: flex; flex-direction: column; gap: 28px;">
         <fieldset style="border: 0; margin: 0; padding: 0;">
-          <legend style="padding: 0; font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif;">¿Para quién es?</legend>
+          <legend style="padding: 0; font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif;">{t.contact.whoFor}</legend>
           <div style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px;">
             {segments.map((segment) => (
-              <button type="button" class="chip chip-destino" data-chip={segment} aria-pressed="false"><span class="check">✓ </span>{segment}</button>
+              <button type="button" class="chip chip-destino" data-chip={segment.id} aria-pressed="false"><span class="check">✓ </span>{segment.label}</button>
             ))}
           </div>
         </fieldset>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px;">
-          <div><label for="f-nombre" style="font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif;">Nombre</label><input id="f-nombre" class="campo" type="text" autocomplete="name" placeholder="Su nombre"></div>
-          <div><label for="f-contacto" style="font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif;">WhatsApp o correo</label><input id="f-contacto" class="campo" type="text" autocomplete="email" placeholder="Por dónde le escribimos"></div>
+          <div><label for="f-nombre" style="font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif;">{t.contact.nameLabel}</label><input id="f-nombre" class="campo" type="text" autocomplete="name" placeholder={t.contact.namePlaceholder}></div>
+          <div><label for="f-contacto" style="font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif;">{t.contact.contactLabel}</label><input id="f-contacto" class="campo" type="text" autocomplete="email" placeholder={t.contact.contactPlaceholder}></div>
         </div>
 
-        <div><label for="f-que" style="font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif;">¿Qué quiere vivir, descubrir, aprender o lograr?</label><textarea id="f-que" class="campo" placeholder="Ej.: celebrar los 15 años de la empresa con algo que no sea otra cena; una gira de biología para 30 estudiantes; nuestro primer viaje a Costa Rica, sin prisas."></textarea></div>
+        <div><label for="f-que" style="font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif;">{t.contact.whatLabel}</label><textarea id="f-que" class="campo" placeholder={t.contact.whatPlaceholder}></textarea></div>
 
         <div data-field="destination-row" hidden style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; background: #f3ead8; padding: 12px 16px;">
-          <span style="font: 500 14px/20px 'Source Sans 3', system-ui, sans-serif;">Destino que le llamó la atención: <strong data-field="destination-name" style="font-weight: 600;"></strong></span>
-          <button type="button" data-clear-destination style="min-height: 36px; padding: 0 12px; border: 0; background: transparent; color: #1f5c46; font: 600 14px/20px 'Source Sans 3', system-ui, sans-serif; text-decoration: underline; cursor: pointer;">Quitar</button>
+          <span style="font: 500 14px/20px 'Source Sans 3', system-ui, sans-serif;">{t.contact.destinationPicked} <strong data-field="destination-name" style="font-weight: 600;"></strong></span>
+          <button type="button" data-clear-destination style="min-height: 36px; padding: 0 12px; border: 0; background: transparent; color: #1f5c46; font: 600 14px/20px 'Source Sans 3', system-ui, sans-serif; text-decoration: underline; cursor: pointer;">{t.contact.destinationRemove}</button>
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 24px;">
-          <div><label for="f-personas" style="font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif;">¿Cuántas personas?</label><input id="f-personas" class="campo" type="number" min="1" inputmode="numeric" placeholder="Aprox."></div>
-          <div><label for="f-fecha" style="font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif;">Fecha aproximada</label><input id="f-fecha" class="campo" type="text" placeholder="Ej.: marzo 2027"></div>
+          <div><label for="f-personas" style="font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif;">{t.contact.peopleLabel}</label><input id="f-personas" class="campo" type="number" min="1" inputmode="numeric" placeholder={t.contact.peoplePlaceholder}></div>
+          <div><label for="f-fecha" style="font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif;">{t.contact.dateLabel}</label><input id="f-fecha" class="campo" type="text" placeholder={t.contact.datePlaceholder}></div>
         </div>
 
-        <div><label for="f-extra" style="font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif;">¿Algo más que debamos saber? <span style="font-weight: 400; color: #5b625f;">(opcional)</span></label><textarea id="f-extra" class="campo" style="min-height: 72px;" placeholder="Restricciones, ideas, lo que se le ocurra."></textarea></div>
+        <div><label for="f-extra" style="font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif;">{t.contact.extraLabel} <span style="font-weight: 400; color: #5b625f;">{t.contact.optional}</span></label><textarea id="f-extra" class="campo" style="min-height: 72px;" placeholder={t.contact.extraPlaceholder}></textarea></div>
 
         <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px;">
-          <button type="button" class="btn-marca" data-submit style="min-height: 52px; padding: 0 28px; border: 0; background: #1f5c46; color: #fff7e8; font: 600 16px/24px 'Source Sans 3', system-ui, sans-serif; cursor: pointer; display: inline-flex; align-items: center; gap: 10px;">Quiero que El Guía me contacte <span class="flecha" aria-hidden="true">→</span></button>
-          <p style="margin: 0; font: 400 13px/19px 'Source Sans 3', system-ui, sans-serif; color: #5b625f;">Usamos sus datos solo para responderte. <a href="#privacidad">Privacidad</a></p>
+          <button type="button" class="btn-marca" data-submit style="min-height: 52px; padding: 0 28px; border: 0; background: #1f5c46; color: #fff7e8; font: 600 16px/24px 'Source Sans 3', system-ui, sans-serif; cursor: pointer; display: inline-flex; align-items: center; gap: 10px;">{t.contact.submit} <span class="flecha" aria-hidden="true">→</span></button>
+          <p style="margin: 0; font: 400 13px/19px 'Source Sans 3', system-ui, sans-serif; color: #5b625f;">{t.contact.privacy} <a href="#privacidad">{t.contact.privacyLink}</a></p>
         </div>
       </div>
 
       <div data-form-view="sent" hidden style="min-height: 520px; display: flex; flex-direction: column; justify-content: center; gap: 18px;">
         <svg viewBox="0 0 300 60" aria-hidden="true" style="width: 220px; height: 44px;"><polyline class="dibujar" pathLength="1" points="0,50 60,30 110,40 165,12 215,24 270,4 300,10" fill="none" stroke="#e0a632" stroke-width="4"></polyline></svg>
-        <h3 style="margin: 0; font: 700 44px/1.05 'Alegreya', Georgia, serif;">Listo. Ya estamos en eso.</h3>
-        <p style="margin: 0; max-width: 460px; font: 400 17px/1.6 'Source Sans 3', system-ui, sans-serif;">Recibimos su mensaje. Una persona de El Guía le va a escribir para conversar. Mientras tanto, no tiene que hacer nada más.</p>
-        <button type="button" data-reset style="align-self: flex-start; min-height: 44px; padding: 0; border: 0; background: transparent; color: #1f5c46; font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif; text-decoration: underline; cursor: pointer;">Enviar otra consulta</button>
+        <h3 style="margin: 0; font: 700 44px/1.05 'Alegreya', Georgia, serif;">{t.contact.sentTitle}</h3>
+        <p style="margin: 0; max-width: 460px; font: 400 17px/1.6 'Source Sans 3', system-ui, sans-serif;">{t.contact.sentText}</p>
+        <button type="button" data-reset style="align-self: flex-start; min-height: 44px; padding: 0; border: 0; background: transparent; color: #1f5c46; font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif; text-decoration: underline; cursor: pointer;">{t.contact.sentReset}</button>
       </div>
     </div>
   </div>

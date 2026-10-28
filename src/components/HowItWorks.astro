@@ -1,11 +1,16 @@
 ---
-import { steps } from '../data/content';
+import { getLocale, useTranslations } from '../i18n/utils';
+import { getSteps } from '../data/content';
+
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+const steps = getSteps(locale);
 ---
 
 <section id="como-funciona" style="background: #fff7e8; padding: clamp(80px, 10vw, 144px) clamp(16px, 5vw, 64px);">
   <div style="max-width: 1240px; margin: 0 auto;">
-    <p style="margin: 0; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #1f5c46;">03 · Cómo funciona</p>
-    <h2 class="revelar" style="margin: 16px 0 0; max-width: 820px; font: 700 clamp(36px, 4.6vw, 64px)/1.05 'Alegreya', Georgia, serif;">Usted no tiene que diseñar nada. Para eso estamos.</h2>
+    <p style="margin: 0; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #1f5c46;">{t.how.eyebrow}</p>
+    <h2 class="revelar" style="margin: 16px 0 0; max-width: 820px; font: 700 clamp(36px, 4.6vw, 64px)/1.05 'Alegreya', Georgia, serif;">{t.how.title}</h2>
     <div style="height: 1px; background: #e0a632; margin-top: 32px;"></div>
 
     <div style="position: relative; margin-top: 64px;">

@@ -1,16 +1,61 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import logo from '../assets/logo.svg';
 import { navLinks } from '../data/content';
+import { localeMeta, locales } from '../i18n/config';
+import { getLocale, useTranslations } from '../i18n/utils';
+
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
 ---
 
 <header class="oscuro" style="position: relative; z-index: 50; background: #17362d; border-bottom: 1px solid rgba(224,166,50,.35);">
-  <nav aria-label="Principal" style="max-width: 1240px; margin: 0 auto; padding: 14px clamp(16px, 5vw, 64px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 28px;">
-    <a href="#inicio" aria-label="El Guía CR, inicio" style="display: block; line-height: 0;"><img src={logo.src} alt="El Guía CR" width={logo.width} height={logo.height} style="width: 160px; height: auto; display: block;" /></a>
+  <nav aria-label={t.nav.ariaLabel} style="max-width: 1240px; margin: 0 auto; padding: 14px clamp(16px, 5vw, 64px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 28px;">
+    <a href="#inicio" aria-label={t.nav.homeLabel} style="display: block; line-height: 0;"><img src={logo.src} alt="El Guía CR" width={logo.width} height={logo.height} style="width: 160px; height: auto; display: block;" /></a>
     <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 28px; font: 500 15px/24px 'Source Sans 3', system-ui, sans-serif;">
       {navLinks.map((link) => (
-        <a class="nav-link" href={link.href} style="padding: 10px 0;">{link.label}</a>
+        <a class="nav-link" href={link.href} style="padding: 10px 0;">{t.nav.links[link.key]}</a>
       ))}
-      <a class="btn-claro" href="#contanos" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; background: #e0a632; color: #17362d; font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif; text-decoration: none;">Cuéntenos qué necesita</a>
+      <ul class="lang-switch" aria-label={t.nav.languageLabel}>
+        {locales.map((code) => (
+          <li>
+            <a
+              class="nav-link"
+              href={getRelativeLocaleUrl(code)}
+              lang={code}
+              hreflang={code}
+              aria-label={localeMeta[code].name}
+              aria-current={code === locale ? 'true' : undefined}
+            >{code.toUpperCase()}</a>
+          </li>
+        ))}
+      </ul>
+      <a class="btn-claro" href="#contanos" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; background: #e0a632; color: #17362d; font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif; text-decoration: none;">{t.nav.cta}</a>
     </div>
   </nav>
 </header>
+
+<style>
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .lang-switch li + li::before {
+    content: '|';
+    color: #fff7e8;
+    opacity: 0.4;
+  }
+  .lang-switch a {
+    display: inline-block;
+    min-width: 44px;
+    padding: 10px 0;
+    text-align: center;
+  }
+  .lang-switch a[aria-current='true'] {
+    color: #e0a632;
+    font-weight: 700;
+  }
+</style>

@@ -1,6 +1,9 @@
 ---
-import { tickerWords } from '../data/content';
+import { getLocale } from '../i18n/utils';
+import { getAudiences } from '../data/audiences';
 
+const locale = getLocale(Astro.currentLocale);
+const tickerWords = getAudiences(locale).map((audience) => audience.word);
 const items = Array.from({ length: 4 }, () => tickerWords.flatMap((word) => [word, '·'])).flat();
 ---
 

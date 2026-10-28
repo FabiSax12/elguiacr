@@ -1,12 +1,17 @@
 ---
-import { pillars } from '../data/content';
+import { getLocale, useTranslations } from '../i18n/utils';
+import { getPillars } from '../data/content';
+
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+const pillars = getPillars(locale);
 ---
 
 <section style="background: #fff7e8; padding: clamp(80px, 10vw, 144px) clamp(16px, 5vw, 64px);">
   <div style="max-width: 1240px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 48px 64px; align-items: flex-start;">
-    <p style="flex: 0 0 auto; margin: 0; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #1f5c46;">01 · Qué hacemos</p>
+    <p style="flex: 0 0 auto; margin: 0; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #1f5c46;">{t.manifesto.eyebrow}</p>
     <div style="flex: 1 1 640px; min-width: 0;">
-      <p class="revelar" style="margin: 0; font: 600 clamp(30px, 3.8vw, 54px)/1.18 'Alegreya', Georgia, serif; color: #17362d;">No armamos tours sueltos. Primero entendemos qué quiere vivir, descubrir, aprender o lograr; después conectamos <span style="color: #1f5c46; font-style: italic;">las personas, los lugares y los aliados</span> que lo hacen posible.</p>
+      <p class="revelar" style="margin: 0; font: 600 clamp(30px, 3.8vw, 54px)/1.18 'Alegreya', Georgia, serif; color: #17362d;">{t.manifesto.statementBefore} <span style="color: #1f5c46; font-style: italic;">{t.manifesto.statementEmphasis}</span> {t.manifesto.statementAfter}</p>
       <div style="margin-top: 56px; height: 1px; background: #e0a632;"></div>
       <div style="margin-top: 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 24px;">
         {pillars.map((pillar) => (

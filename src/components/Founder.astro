@@ -1,17 +1,20 @@
 ---
+import { getLocale, useTranslations } from '../i18n/utils';
 import { Image } from 'astro:assets';
 import founder from '../assets/founder.webp';
+
+const t = useTranslations(getLocale(Astro.currentLocale));
 ---
 
 <section id="fundador" class="oscuro" style="position: relative; background: #17362d; color: #fff7e8; overflow: clip; padding: clamp(80px, 10vw, 144px) clamp(16px, 5vw, 64px);">
   <div style="max-width: 1240px; margin: 0 auto;">
-    <h2 class="revelar" style="margin: 0; max-width: 760px; font: 700 clamp(38px, 5vw, 68px)/1.04 'Alegreya', Georgia, serif;">La persona detrás de El Guía</h2>
+    <h2 class="revelar" style="margin: 0; max-width: 760px; font: 700 clamp(38px, 5vw, 68px)/1.04 'Alegreya', Georgia, serif;">{t.founder.title}</h2>
     <div style="height: 1px; background: #e0a632; margin-top: 32px;"></div>
 
     <div style="margin-top: 56px; display: flex; flex-wrap: wrap; gap: 48px 72px; align-items: center;">
       <figure style="flex: 1 1 420px; min-width: 0; margin: 0;">
         <div style="position: relative; aspect-ratio: 4 / 5; overflow: clip; background: #1f5c46;">
-          <Image class="zoom-lento" src={founder} width={1000} alt="Bernald Ramirez en un mirador frente a una catarata, rodeado de bosque" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 68% 40%; display: block;" />
+          <Image class="zoom-lento" src={founder} width={1000} alt={t.founder.photoAlt} style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 68% 40%; display: block;" />
         </div>
         <svg viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true" style="display: block; width: 100%; height: 40px; margin-top: 16px;"><polyline class="trazar" pathLength="1" points="0,34 70,18 130,26 200,6 260,16 330,2 400,10" fill="none" stroke="#e0a632" stroke-width="3" vector-effect="non-scaling-stroke"></polyline></svg>
       </figure>
@@ -19,17 +22,17 @@ import founder from '../assets/founder.webp';
       <div style="flex: 1 1 460px; min-width: 0;">
         <div class="revelar" style="display: flex; align-items: baseline; gap: 18px;">
           <span style="font: 800 clamp(64px, 7vw, 96px)/0.9 'Alegreya', Georgia, serif; color: #e0a632;" aria-hidden="true">01</span>
-          <span style="font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #e0a632;">Fundador · El Guía</span>
+          <span style="font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #e0a632;">{t.founder.role}</span>
         </div>
-        <h3 class="revelar" style="margin: 18px 0 0; font: 700 clamp(34px, 3.6vw, 48px)/1.05 'Alegreya', Georgia, serif;">Bernald Ramirez</h3>
+        <h3 class="revelar" style="margin: 18px 0 0; font: 700 clamp(34px, 3.6vw, 48px)/1.05 'Alegreya', Georgia, serif;">{t.founder.name}</h3>
         <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 18px; font: 400 17px/1.65 'Source Sans 3', system-ui, sans-serif;">
-          <p class="revelar" style="margin: 0;">Bernald es el fundador de El Guía CR y quien está detrás del diseño de cada experiencia. Su formación en turismo, su trabajo como guía y su interés por la naturaleza lo han llevado a conocer Costa Rica no solo como destino, sino a través de sus personas, historias, comunidades y formas de vivirla.</p>
-          <p class="revelar" style="margin: 0;">El Guía CR nace de esa curiosidad por descubrir, aprender y conectar: escuchar lo que cada persona o grupo necesita y encontrar la mejor manera de convertirlo en una experiencia con sentido.</p>
+          <p class="revelar" style="margin: 0;">{t.founder.bio1}</p>
+          <p class="revelar" style="margin: 0;">{t.founder.bio2}</p>
         </div>
         <blockquote class="revelar" style="margin: 32px 0 0; padding: 0 0 0 22px; border-left: 4px solid #e0a632;">
-          <p style="margin: 0; font: 500 italic clamp(22px, 2.2vw, 28px)/1.4 'Alegreya', Georgia, serif; color: #fff7e8;">Para Bernald, conocer Costa Rica nunca se trata solamente de llegar a un lugar, sino de entender qué hay detrás de él y con quién vale la pena compartirlo.</p>
+          <p style="margin: 0; font: 500 italic clamp(22px, 2.2vw, 28px)/1.4 'Alegreya', Georgia, serif; color: #fff7e8;">{t.founder.quote}</p>
         </blockquote>
-        <a class="btn-claro" href="#contanos" style="margin-top: 36px; display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; background: #e0a632; color: #17362d; font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif; text-decoration: none;">Hable con Bernald <span class="flecha" aria-hidden="true">→</span></a>
+        <a class="btn-claro" href="#contanos" style="margin-top: 36px; display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; background: #e0a632; color: #17362d; font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif; text-decoration: none;">{t.founder.cta} <span class="flecha" aria-hidden="true">→</span></a>
       </div>
     </div>
   </div>

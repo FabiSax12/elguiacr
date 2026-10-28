@@ -1,11 +1,14 @@
 ---
+import { getLocale, useTranslations } from '../i18n/utils';
 import { getImage } from 'astro:assets';
 import CostaRicaMap from './CostaRicaMap.astro';
 import Leaves from './Leaves.astro';
-import { DEFAULT_SPOT_ID, spots } from '../data/spots';
+import { DEFAULT_SPOT_ID, getSpots } from '../data/spots';
 
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
 const resolved = await Promise.all(
-  spots.map(async (spot) => {
+  getSpots(locale).map(async (spot) => {
     const { image, ...rest } = spot;
     const imageSrc = image ? (await getImage({ src: image, width: 1000 })).src : undefined;
     return { ...rest, imageSrc };
@@ -19,13 +22,13 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
 
   <div style="position: relative; max-width: 1240px; margin: 0 auto;">
     <div style="text-align: center; max-width: 780px; margin: 0 auto;">
-      <p style="margin: 0; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #1f5c46;">04 · Destinos</p>
-      <h2 style="margin: 16px 0 0; font: 700 clamp(38px, 5vw, 68px)/1.04 'Alegreya', Georgia, serif;">Costa Rica, punto por punto.</h2>
-      <p style="margin: 20px auto 0; max-width: 580px; font: 400 18px/1.6 'Source Sans 3', system-ui, sans-serif;">Algunos de los lugares más visitados y queridos del país. Toque un punto: le contamos qué tiene y para quién funciona.</p>
+      <p style="margin: 0; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #1f5c46;">{t.destinations.eyebrow}</p>
+      <h2 style="margin: 16px 0 0; font: 700 clamp(38px, 5vw, 68px)/1.04 'Alegreya', Georgia, serif;">{t.destinations.title}</h2>
+      <p style="margin: 20px auto 0; max-width: 580px; font: 400 18px/1.6 'Source Sans 3', system-ui, sans-serif;">{t.destinations.intro}</p>
     </div>
 
     <div style="margin-top: 64px; display: flex; flex-wrap: wrap; gap: 40px; align-items: stretch;">
-      <!-- mapa -->
+      <!-- map -->
       <div style="flex: 1 1 560px; min-width: 0;">
         <div style="position: relative; width: 100%; aspect-ratio: 648.3 / 613;">
           <CostaRicaMap />
@@ -38,7 +41,7 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
             </button>
           ))}
         </div>
-        <!-- lista accesible / móvil -->
+        <!-- accessible / mobile list -->
         <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px;">
           {resolved.map((spot) => (
             <button type="button" class="chip chip-destino" data-spot={spot.id} aria-pressed={String(spot.id === initial.id)}>{spot.short}</button>
@@ -46,7 +49,7 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
         </div>
       </div>
 
-      <!-- ficha del destino -->
+      <!-- destination panel -->
       <aside class="ficha" aria-live="polite" style="flex: 1 1 360px; min-width: 0; background: #17362d; color: #fff7e8; display: flex; flex-direction: column;">
         <div style="height: 340px; background: #1f5c46; overflow: clip; position: relative;">
           <img class="foto-destino" data-field="image" src={initial.imageSrc} alt={initial.alt} hidden={!initial.imageSrc} style={`position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: ${initial.position ?? '50% 50%'}; display: block;`} />
@@ -58,12 +61,12 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
           <p data-field="region" style="margin: 0; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #e0a632;">{initial.region}</p>
           <h3 data-field="name" style="margin: 0; font: 700 38px/1.05 'Alegreya', Georgia, serif;">{initial.name}</h3>
           <p data-field="desc" style="margin: 0; font: 400 16px/1.6 'Source Sans 3', system-ui, sans-serif;">{initial.desc}</p>
-          <p style="margin: 6px 0 0; font: 500 13px/20px 'Source Sans 3', system-ui, sans-serif; color: #e0a632;">Funciona para: <span data-field="ideal">{initial.ideal}</span></p>
-          <a class="btn-claro" href="#contanos" data-pick-destination style="margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; background: #e0a632; color: #17362d; font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif; text-decoration: none;">Me interesa este destino <span class="flecha" aria-hidden="true">→</span></a>
+          <p style="margin: 6px 0 0; font: 500 13px/20px 'Source Sans 3', system-ui, sans-serif; color: #e0a632;">{t.destinations.idealFor} <span data-field="idealLabel">{initial.idealLabel}</span></p>
+          <a class="btn-claro" href="#contanos" data-pick-destination style="margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; background: #e0a632; color: #17362d; font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif; text-decoration: none;">{t.destinations.pick} <span class="flecha" aria-hidden="true">→</span></a>
         </div>
       </aside>
     </div>
-    <p style="margin: 28px 0 0; font: 400 14px/21px 'Source Sans 3', system-ui, sans-serif; color: #5b625f; text-align: center;">El mapa es un punto de partida. La experiencia se diseña alrededor de lo que usted busca, no al revés.</p>
+    <p style="margin: 28px 0 0; font: 400 14px/21px 'Source Sans 3', system-ui, sans-serif; color: #5b625f; text-align: center;">{t.destinations.footnote}</p>
   </div>
 </section>
 
@@ -98,7 +101,7 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
     name: string;
     region: string;
     desc: string;
-    ideal: string;
+    idealLabel: string;
     photoNote: string;
     imageSrc?: string;
     alt?: string;
@@ -124,7 +127,7 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
         el.setAttribute('aria-pressed', String(el.dataset.spot === id));
       });
 
-      (['region', 'name', 'desc', 'ideal', 'photoNote'] as const).forEach((key) => {
+      (['region', 'name', 'desc', 'idealLabel', 'photoNote'] as const).forEach((key) => {
         const el = field(key);
         if (el) el.textContent = spot[key];
       });
