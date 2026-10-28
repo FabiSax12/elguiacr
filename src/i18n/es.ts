@@ -301,5 +301,12 @@ export const es = {
     homeLink: 'Volver al inicio',
     legalNote: 'El texto legal definitivo está pendiente de revisión.',
   },
+  notFound: {
+    title: 'Página no encontrada | El Guía CR',
+    description: 'La página que buscas no existe o cambió de lugar.',
+    eyebrow: 'Error 404',
+    heading: 'Este camino no lleva a ningún lado',
+    intro: 'La página que buscas no existe o cambió de lugar. Vuelve al inicio o escríbenos y te ayudamos a encontrar lo que necesitas.',
+  },
   pages,
 };

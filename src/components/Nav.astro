@@ -9,7 +9,9 @@ interface Props {
   pageKey?: PageKey;
 }
 
-const { pageKey = 'home' } = Astro.props;
+// Without a pageKey (e.g. the 404 page) nothing is marked current and the
+// language switcher falls back to the home page.
+const { pageKey } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 const t = useTranslations(locale);
 
@@ -46,7 +48,7 @@ const navLink = 'text-crema-luminoso no-underline hover:text-mostaza-calido';
           <li class="not-first:before:text-crema-luminoso not-first:before:opacity-40 not-first:before:content-['|']">
             <a
               class:list={[navLink, 'inline-block min-w-11 py-2.5 text-center aria-[current=true]:font-bold aria-[current=true]:text-mostaza-calido']}
-              href={getPagePath(pageKey, code)}
+              href={getPagePath(pageKey ?? 'home', code)}
               lang={code}
               hreflang={code}
               aria-label={localeMeta[code].name}

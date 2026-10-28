@@ -220,6 +220,13 @@ export const en: Dictionary = {
     homeLink: 'Back to home',
     legalNote: 'The final legal text is pending review.',
   },
+  notFound: {
+    title: 'Page not found | El Guía CR',
+    description: 'The page you are looking for does not exist or has moved.',
+    eyebrow: 'Error 404',
+    heading: 'This trail leads nowhere',
+    intro: 'The page you are looking for does not exist or has moved. Head back home or write to us and we will help you find what you need.',
+  },
   pages: {
     experiences: {
       title: 'Tailor-Made Experiences in Costa Rica | El Guía CR',
