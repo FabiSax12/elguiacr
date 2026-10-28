@@ -1,0 +1,19 @@
+---
+import { getWhatsappUrl } from '../data/routes';
+import { getLocale, useTranslations } from '../i18n/utils';
+
+const t = useTranslations(getLocale(Astro.currentLocale));
+---
+
+<section class="bg-mostaza-calido px-gutter py-seccion text-verde-oscuro">
+  <div class="mx-auto flex w-full max-w-sitio flex-wrap items-center justify-between gap-x-12 gap-y-8">
+    <div class="min-w-0 flex-[1_1_420px]">
+      <h2 class="max-w-[640px] font-titulos text-titulo-b font-bold">{t.act.title}</h2>
+      <p class="mt-4 max-w-[520px] text-lg/[1.5]">{t.act.text}</p>
+    </div>
+    <div class="flex flex-wrap gap-3">
+      <a class="inline-flex min-h-12 items-center gap-2.5 rounded-full bg-verde-oscuro px-7 text-base font-semibold text-crema-luminoso no-underline hover:bg-verde-principal hover:text-crema-luminoso" href="#contanos">{t.nav.cta} <span class="inline-block" aria-hidden="true">→</span></a>
+      <a class="inline-flex min-h-12 items-center rounded-full border-2 border-verde-oscuro px-6 text-base font-semibold text-verde-oscuro no-underline hover:bg-verde-oscuro hover:text-crema-luminoso" href={getWhatsappUrl(t.act.whatsappMessage)} rel="noopener" target="_blank">{t.act.whatsappCta}</a>
+    </div>
+  </div>
+</section>

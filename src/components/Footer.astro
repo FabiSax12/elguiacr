@@ -1,8 +1,11 @@
 ---
 import { getLocale, useTranslations } from '../i18n/utils';
 import logo from '../assets/logo.svg';
+import { navLinks } from '../data/content';
+import { getPagePath, instagramUrl, legalPageKeys } from '../data/routes';
 
-const t = useTranslations(getLocale(Astro.currentLocale));
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
 
 const navLink = 'inline-block py-1.5 text-crema-luminoso no-underline hover:text-mostaza-calido';
 ---
@@ -18,10 +21,17 @@ const navLink = 'inline-block py-1.5 text-crema-luminoso no-underline hover:text
         <div>
           <p class="mb-3 text-label font-semibold tracking-eyebrow text-mostaza-calido uppercase">{t.footer.exploreHeading}</p>
           <ul class="flex flex-col gap-1 text-subtitulo">
-            <li><a class={navLink} href="#para-quien">{t.hero.segments}</a></li>
-            <li><a class={navLink} href="#como-funciona">{t.footer.how}</a></li>
-            <li><a class={navLink} href="#destinos">{t.footer.destinations}</a></li>
-            <li><a class={navLink} href="#privacidad">{t.footer.legal}</a></li>
+            {navLinks.map((key) => (
+              <li><a class={navLink} href={getPagePath(key, locale)}>{t.nav.links[key]}</a></li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <p class="mb-3 text-label font-semibold tracking-eyebrow text-mostaza-calido uppercase">{t.footer.legalHeading}</p>
+          <ul class="flex flex-col gap-1 text-subtitulo">
+            {legalPageKeys.map((key) => (
+              <li><a class={navLink} href={getPagePath(key, locale)}>{t.footer.legalLinks[key]}</a></li>
+            ))}
           </ul>
         </div>
         <div>
@@ -29,14 +39,14 @@ const navLink = 'inline-block py-1.5 text-crema-luminoso no-underline hover:text
           <ul class="flex flex-col gap-2.5 text-subtitulo">
             <li>WhatsApp +506 8587 8863</li>
             <li>contact@elguiacr.com</li>
-            <li>Instagram @elguia.cr</li>
+            <li><a class={navLink} href={instagramUrl} rel="noopener" target="_blank">{t.footer.instagramLabel}</a></li>
             <li>Alajuela, Costa Rica</li>
           </ul>
         </div>
       </div>
     </div>
     <div class="mt-14 flex flex-wrap justify-between gap-3 border-t border-mostaza-calido/40 pt-5 text-eyebrow font-semibold tracking-eyebrow-sm uppercase">
-      <span id="privacidad">© 2026 El Guía CR · elguiacr.com</span>
+      <span>© 2026 El Guía CR · elguiacr.com</span>
       <span>{t.footer.madeIn}</span>
     </div>
   </div>

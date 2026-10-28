@@ -1,5 +1,9 @@
 ---
-import { getAbsoluteLocaleUrl } from 'astro:i18n';
+import { getPageUrl, type PageKey } from '../data/routes';
+import '@fontsource-variable/alegreya';
+import '@fontsource-variable/alegreya/wght-italic.css';
+import '@fontsource-variable/source-sans-3';
+import '@fontsource-variable/source-sans-3/wght-italic.css';
 import '../styles/global.css';
 import { defaultLocale, localeMeta, locales } from '../i18n/config';
 import { getLocale, useTranslations } from '../i18n/utils';
@@ -7,10 +11,17 @@ import { getLocale, useTranslations } from '../i18n/utils';
 const locale = getLocale(Astro.currentLocale);
 const t = useTranslations(locale);
 
-const { title = t.meta.title, description = t.meta.description } = Astro.props;
+interface Props {
+  title?: string;
+  description?: string;
+  pageKey?: PageKey;
+  noindex?: boolean;
+}
 
-const canonical = getAbsoluteLocaleUrl(locale);
-const alternates = locales.map((code) => ({ code, href: getAbsoluteLocaleUrl(code) }));
+const { title = t.meta.title, description = t.meta.description, pageKey = 'home', noindex = false } = Astro.props;
+
+const canonical = getPageUrl(pageKey, locale);
+const alternates = locales.map((code) => ({ code, href: getPageUrl(pageKey, code) }));
 const otherLocales = locales.filter((code) => code !== locale);
 ---
 
@@ -20,25 +31,20 @@ const otherLocales = locales.filter((code) => code !== locale);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <title>{title}</title>
     <link rel="canonical" href={canonical} />
     {alternates.map(({ code, href }) => <link rel="alternate" hreflang={code} href={href} />)}
-    <link rel="alternate" hreflang="x-default" href={getAbsoluteLocaleUrl(defaultLocale)} />
+    <link rel="alternate" hreflang="x-default" href={getPageUrl(pageKey, defaultLocale)} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={localeMeta[locale].ogLocale} />
     {otherLocales.map((code) => <meta property="og:locale:alternate" content={localeMeta[code].ogLocale} />)}
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap"
-    />
   </head>
   <body class="bg-verde-oscuro">
     <slot />

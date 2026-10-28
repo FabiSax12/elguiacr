@@ -39,7 +39,8 @@ export function getAudiences(locale: Locale): Audience[] {
   return audienceIds.map((id) => ({ id, ...audiences.items[id], ...styles[id] }));
 }
 
-export function getSegments(locale: Locale): { id: AudienceId; label: string }[] {
-  const { audiences } = useTranslations(locale);
-  return audienceIds.map((id) => ({ id, label: audiences.items[id].segment }));
+export function getSegments(locale: Locale): { id: AudienceId | 'other'; label: string }[] {
+  const { audiences, contact } = useTranslations(locale);
+  const segments = audienceIds.map((id) => ({ id, label: audiences.items[id].segment }));
+  return [...segments, { id: 'other', label: contact.otherOption }];
 }

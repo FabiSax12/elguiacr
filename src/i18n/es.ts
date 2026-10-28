@@ -1,19 +1,93 @@
+import type { PlaceholderPageText } from './ui';
 import type { AudienceId, AudienceText } from '../data/audiences';
-import type { NavLinkKey, PillarId, PillarText, StepId, StepText, StoryId, StoryText } from '../data/content';
+import type { PillarId, PillarText, StepId, StepText, StoryId, StoryText } from '../data/content';
+import type { LegalPageKey, NavPageKey, PlaceholderPageKey } from '../data/routes';
 import type { SpotId, SpotText } from '../data/spots';
 
-const navLinks: Record<NavLinkKey, string> = {
-  audiences: 'Para quién',
-  how: 'Cómo funciona',
-  founder: 'El Guía',
+const navLinks: Record<NavPageKey, string> = {
+  home: 'Inicio',
+  experiences: 'Experiencias',
   destinations: 'Destinos',
-  stories: 'Historias',
+  transport: 'Transporte y rutas',
+  about: 'Nosotros',
+  blog: 'Blog / Guía de Costa Rica',
+  faq: 'FAQ',
+};
+
+const legalLinks: Record<LegalPageKey, string> = {
+  privacy: 'Privacidad',
+  terms: 'Términos y condiciones',
+  cookies: 'Cookies',
+  cancellations: 'Cancelaciones',
+};
+
+const pages: Record<PlaceholderPageKey, PlaceholderPageText> = {
+  experiences: {
+    title: 'Experiencias · El Guía CR',
+    description: 'Experiencias en Costa Rica diseñadas con propósito para viajeros, locales, empresas y educación.',
+    heading: 'Experiencias',
+    intro: 'Estamos preparando esta sección con las experiencias que diseñamos para viajeros, locales, empresas y centros educativos. Mientras tanto, cuéntanos qué estás buscando y armamos algo a tu medida.',
+  },
+  destinations: {
+    title: 'Destinos · El Guía CR',
+    description: 'Destinos de Costa Rica que conocemos de cerca: qué ofrece cada uno y para quién funciona.',
+    heading: 'Destinos',
+    intro: 'Pronto vas a encontrar aquí una guía de cada destino: qué ofrece, cuándo conviene ir y para quién funciona. Mientras tanto, puedes explorar el mapa de la página de inicio o escribirnos.',
+  },
+  transport: {
+    title: 'Transporte y rutas · El Guía CR',
+    description: 'Cómo moverte por Costa Rica: tiempos, rutas y opciones de transporte entre destinos.',
+    heading: 'Transporte y rutas',
+    intro: 'Estamos armando una guía práctica para moverte por Costa Rica: tiempos reales, rutas y opciones de transporte entre destinos. Si necesitas ayuda con la logística de tu viaje, cuéntanos y la coordinamos contigo.',
+  },
+  about: {
+    title: 'Nosotros · El Guía CR',
+    description: 'Quién está detrás de El Guía CR y cómo trabajamos.',
+    heading: 'Nosotros',
+    intro: 'Esta página contará con más detalle quiénes somos y cómo trabajamos. Por ahora, puedes conocer a Bernald, el fundador, en la página de inicio.',
+  },
+  blog: {
+    title: 'Blog / Guía de Costa Rica · El Guía CR',
+    description: 'Artículos y guías prácticas para conocer Costa Rica con criterio.',
+    heading: 'Blog / Guía de Costa Rica',
+    intro: 'Aún no hay artículos publicados. Estamos preparando guías prácticas para conocer Costa Rica con criterio. Si hay algo que quieras saber, escríbenos y lo tomamos en cuenta.',
+  },
+  faq: {
+    title: 'Preguntas frecuentes · El Guía CR',
+    description: 'Respuestas a las preguntas más comunes sobre cómo trabaja El Guía CR.',
+    heading: 'Preguntas frecuentes',
+    intro: 'Estamos reuniendo las preguntas más comunes sobre cómo trabajamos. Mientras tanto, si tienes una duda, cuéntanos y te respondemos personalmente.',
+  },
+  privacy: {
+    title: 'Privacidad · El Guía CR',
+    description: 'Política de privacidad de El Guía CR.',
+    heading: 'Privacidad',
+    intro: 'Aquí publicaremos cómo usamos y protegemos tus datos. Por ahora, solo los usamos para responder a tu consulta.',
+  },
+  terms: {
+    title: 'Términos y condiciones · El Guía CR',
+    description: 'Términos y condiciones de El Guía CR.',
+    heading: 'Términos y condiciones',
+    intro: 'Aquí publicaremos las condiciones para contratar y disfrutar nuestras experiencias.',
+  },
+  cookies: {
+    title: 'Cookies · El Guía CR',
+    description: 'Política de cookies de El Guía CR.',
+    heading: 'Cookies',
+    intro: 'Aquí explicaremos qué cookies usa este sitio y para qué.',
+  },
+  cancellations: {
+    title: 'Cancelaciones · El Guía CR',
+    description: 'Política de cancelaciones de El Guía CR.',
+    heading: 'Cancelaciones',
+    intro: 'Aquí publicaremos las condiciones de cambios y cancelaciones de nuestras experiencias.',
+  },
 };
 
 const audienceItems: Record<AudienceId, AudienceText> = {
-  travelers: { segment: 'Viajeros', word: 'Vivir', description: 'Viajes hechos a su ritmo, presupuesto e intereses, coordinados de principio a fin.', cta: 'Diseñen mi viaje', photoNote: '[FOTO: pareja de viajeros aprendiendo a hacer tortillas con una familia en San Carlos.]' },
-  locals: { segment: 'Locales', word: 'Descubrir', description: 'Escapadas, celebraciones y planes para ver su propio país con otros ojos.', cta: 'Quiero algo diferente', photoNote: '[FOTO: familia tica celebrando un cumpleaños en un río de la Zona Norte.]' },
-  companies: { segment: 'Empresas', word: 'Conectar', description: 'Integración, bienestar, reconocimiento o retiros, diseñados a partir del objetivo del equipo.', cta: 'Hablemos de su equipo', photoNote: '[FOTO: equipo resolviendo un reto en una finca, sin poses.]' },
+  travelers: { segment: 'Viajeros', word: 'Vivir', description: 'Viajes hechos a tu ritmo, presupuesto e intereses, coordinados de principio a fin.', cta: 'Quiero mi viaje a medida', photoNote: '[FOTO: pareja de viajeros aprendiendo a hacer tortillas con una familia en San Carlos.]' },
+  locals: { segment: 'Locales', word: 'Descubrir', description: 'Escapadas, celebraciones y planes para ver tu propio país con otros ojos.', cta: 'Quiero algo diferente', photoNote: '[FOTO: familia tica celebrando un cumpleaños en un río de la Zona Norte.]' },
+  companies: { segment: 'Empresas', word: 'Conectar', description: 'Integración, bienestar, reconocimiento o retiros, diseñados a partir del objetivo del equipo.', cta: 'Hablemos de tu equipo', photoNote: '[FOTO: equipo resolviendo un reto en una finca, sin poses.]' },
   education: { segment: 'Educación', word: 'Aprender', description: 'Giras construidas desde el curso, la carrera y los objetivos de aprendizaje.', cta: 'Planear una gira', photoNote: '[FOTO: estudiantes universitarios tomando muestras con un biólogo en bosque nuboso.]' },
 };
 
@@ -25,19 +99,19 @@ const pillars: Record<PillarId, PillarText> = {
 };
 
 const steps: Record<StepId, StepText> = {
-  understand: { title: 'Entendemos', text: 'Un formulario corto y una conversación. Para quién es, qué buscan, ritmo, fechas, restricciones.' },
+  understand: { title: 'Entendemos', text: 'Un formulario corto y una conversación. Para quién es, qué buscas, ritmo, fechas, restricciones.' },
   design: { title: 'Diseñamos', text: 'Una propuesta que combina lugares conocidos y otros menos obvios, siempre alrededor del propósito.' },
   coordinate: { title: 'Coordinamos', text: 'Aliados, disponibilidad, transporte y tiempos. Un solo contacto en vez de diez.' },
-  accompany: { title: 'Acompañamos', text: 'Antes, durante y después. Si algo cambia, lo resolvemos sin trasladarle el caos.' },
+  accompany: { title: 'Acompañamos', text: 'Antes, durante y después. Si algo cambia, lo resolvemos sin pasarte el caos.' },
 };
 
 const storyItems: Record<StoryId, StoryText> = {
-  criteria: { note: '[REEL 9:16: Bernald frente a cámara explicando cuándo conviene ir a Río Celeste y cuándo no.]', kicker: 'El Guía le cuenta', title: 'Criterio, no catálogo' },
+  criteria: { note: '[REEL 9:16: Bernald frente a cámara explicando cuándo conviene ir a Río Celeste y cuándo no.]', kicker: 'El Guía te cuenta', title: 'Criterio, no catálogo' },
   team: { note: '[FOTO horizontal: grupo de una empresa terminando una caminata, riendo, sudados, nadie posando.]', kicker: 'Empresas', title: 'Un equipo que se conoce afuera de la oficina' },
   network: { note: '[REEL 9:16: visita a una finca aliada en La Fortuna; quiénes son, qué ofrecen, para quién funciona.]', kicker: 'El Guía descubre', title: 'La red, de cerca' },
   objective: { note: '[REEL 9:16: de la necesidad a la solución. Una gira académica, del brief del profesor al día en campo.]', kicker: 'Así se diseñó', title: 'Del objetivo a la experiencia' },
   classroom: { note: '[FOTO horizontal: estudiantes de colegio con una cocinera del Caribe Sur preparando pan bon.]', kicker: 'Educación', title: 'Aprender también pasa fuera del aula' },
-  experience: { note: '[REEL 9:16: casi sin diálogo. Amanecer en el río, café, risas, agua. Solo sonido ambiente.]', kicker: 'Vívalo', title: 'Solo la experiencia' },
+  experience: { note: '[REEL 9:16: casi sin diálogo. Amanecer en el río, café, risas, agua. Solo sonido ambiente.]', kicker: 'Vívelo', title: 'Solo la experiencia' },
 };
 
 const spots: Record<SpotId, SpotText> = {
@@ -64,16 +138,19 @@ export const es = {
     ariaLabel: 'Principal',
     homeLabel: 'El Guía CR, inicio',
     links: navLinks,
-    cta: 'Cuéntenos qué necesita',
+    cta: 'Cuéntanos qué estás buscando',
     languageLabel: 'Idioma',
+    menuLabel: 'Menú',
+    menuOpen: 'Abrir menú',
+    menuClose: 'Cerrar menú',
   },
   hero: {
     eyebrow: 'elguiacr.com · Diseño y coordinación de experiencias en Costa Rica',
     titleBefore: 'Experiencias diseñadas con',
     titleEmphasis: 'propósito.',
-    intro: 'Usted nos cuenta qué quiere vivir, aprender o lograr en Costa Rica. El Guía se encarga de conectar las piezas: lugares, personas, aliados y logística.',
-    primaryCta: 'Cuéntenos qué tiene en mente',
-    secondaryCta: 'Ver cómo funciona',
+    intro: 'Tú nos cuentas qué quieres vivir, aprender o lograr en Costa Rica. El Guía se encarga de conectar las piezas: lugares, personas, aliados y logística.',
+    primaryCta: 'Cuéntanos qué estás buscando',
+    secondaryCta: 'Explora Costa Rica',
     segments: 'Viajeros · Locales · Empresas · Educación',
     videoLabel: 'Video hero · loop 15 s',
     videoNote: '[VIDEO: cortes de 2–3 s sin audio. Manos tostando café en una finca, un grupo cruzando un puente colgante en bosque nuboso, estudiantes midiendo un río con un especialista. Gente haciendo, no posando.]',
@@ -83,7 +160,7 @@ export const es = {
   },
   manifesto: {
     eyebrow: '01 · Qué hacemos',
-    statementBefore: 'No armamos tours sueltos. Primero entendemos qué quiere vivir, descubrir, aprender o lograr; después conectamos',
+    statementBefore: 'No armamos tours sueltos. Primero entendemos qué quieres vivir, descubrir, aprender o lograr; después conectamos',
     statementEmphasis: 'las personas, los lugares y los aliados',
     statementAfter: 'que lo hacen posible.',
     pillars,
@@ -96,7 +173,7 @@ export const es = {
   },
   how: {
     eyebrow: '03 · Cómo funciona',
-    title: 'Usted no tiene que diseñar nada. Para eso estamos.',
+    title: 'Tú no tienes que diseñar nada. Para eso estamos.',
     steps,
   },
   founder: {
@@ -107,15 +184,15 @@ export const es = {
     bio1: 'Bernald es el fundador de El Guía CR y quien está detrás del diseño de cada experiencia. Su formación en turismo, su trabajo como guía y su interés por la naturaleza lo han llevado a conocer Costa Rica no solo como destino, sino a través de sus personas, historias, comunidades y formas de vivirla.',
     bio2: 'El Guía CR nace de esa curiosidad por descubrir, aprender y conectar: escuchar lo que cada persona o grupo necesita y encontrar la mejor manera de convertirlo en una experiencia con sentido.',
     quote: 'Para Bernald, conocer Costa Rica nunca se trata solamente de llegar a un lugar, sino de entender qué hay detrás de él y con quién vale la pena compartirlo.',
-    cta: 'Hable con Bernald',
+    cta: 'Habla con Bernald',
   },
   destinations: {
     eyebrow: '04 · Destinos',
     title: 'Costa Rica, punto por punto.',
-    intro: 'Algunos de los lugares más visitados y queridos del país. Toque un punto: le contamos qué tiene y para quién funciona.',
+    intro: 'Algunos de los lugares más visitados y queridos del país. Toca un punto: te contamos qué tiene y para quién funciona.',
     idealFor: 'Funciona para:',
     pick: 'Me interesa este destino',
-    footnote: 'El mapa es un punto de partida. La experiencia se diseña alrededor de lo que usted busca, no al revés.',
+    footnote: 'El mapa es un punto de partida. La experiencia se diseña alrededor de lo que tú buscas, no al revés.',
   },
   map: {
     ariaLabel: 'Mapa de Costa Rica por provincias con destinos destacados',
@@ -129,10 +206,10 @@ export const es = {
   stories: {
     eyebrow: '05 · Historias',
     title: 'Mejor verlo que contarlo.',
-    intro: 'Siga bajando: las historias pasan de lado. Experiencias reales, aliados y el detrás de cámaras.',
+    intro: 'Sigue bajando: las historias pasan de lado. Experiencias reales, aliados y el detrás de cámaras.',
     regionLabel: 'Historias en video',
     closingTitle: '¿La próxima historia es la suya?',
-    closingCta: 'Cuéntenos qué tiene en mente',
+    closingCta: 'Cuéntanos qué estás buscando',
     items: storyItems,
   },
   values: {
@@ -143,21 +220,22 @@ export const es = {
   },
   contact: {
     eyebrow: '07 · Empecemos',
-    title: 'Cuéntenos qué tiene en mente.',
+    title: 'Cuéntanos qué estás buscando.',
     intro: 'No hace falta tener todo claro. Con esto arrancamos una conversación; presupuesto y detalles los vemos después, con calma.',
     steps: [
-      { lead: 'Le escribimos.', rest: 'Una persona, no un bot. [TIEMPO DE RESPUESTA]' },
+      { lead: 'Te escribimos.', rest: 'Una persona, no un bot. [TIEMPO DE RESPUESTA]' },
       { lead: 'Conversamos.', rest: 'Entendemos el propósito, el grupo y el contexto.' },
-      { lead: 'Le enviamos una propuesta', rest: 'diseñada para usted.' },
+      { lead: 'Te enviamos una propuesta', rest: 'diseñada para ti.' },
     ],
-    whoFor: '¿Para quién es?',
+    whoFor: '¿Para quién estás buscando esta experiencia?',
+    otherOption: 'Otro',
     nameLabel: 'Nombre',
-    namePlaceholder: 'Su nombre',
+    namePlaceholder: 'Tu nombre',
     contactLabel: 'WhatsApp o correo',
-    contactPlaceholder: 'Por dónde le escribimos',
-    whatLabel: '¿Qué quiere vivir, descubrir, aprender o lograr?',
+    contactPlaceholder: 'Por dónde te escribimos',
+    whatLabel: '¿Qué quieres vivir, descubrir, aprender o lograr?',
     whatPlaceholder: 'Ej.: celebrar los 15 años de la empresa con algo que no sea otra cena; una gira de biología para 30 estudiantes; nuestro primer viaje a Costa Rica, sin prisas.',
-    destinationPicked: 'Destino que le llamó la atención:',
+    destinationPicked: 'Destino que te llamó la atención:',
     destinationRemove: 'Quitar',
     peopleLabel: '¿Cuántas personas?',
     peoplePlaceholder: 'Aprox.',
@@ -165,21 +243,33 @@ export const es = {
     datePlaceholder: 'Ej.: marzo 2027',
     extraLabel: '¿Algo más que debamos saber?',
     optional: '(opcional)',
-    extraPlaceholder: 'Restricciones, ideas, lo que se le ocurra.',
+    extraPlaceholder: 'Restricciones, ideas, lo que se te ocurra.',
     submit: 'Quiero que El Guía me contacte',
-    privacy: 'Usamos sus datos solo para responderte.',
+    privacy: 'Usamos tus datos solo para responderte.',
     privacyLink: 'Privacidad',
     sentTitle: 'Listo. Ya estamos en eso.',
-    sentText: 'Recibimos su mensaje. Una persona de El Guía le va a escribir para conversar. Mientras tanto, no tiene que hacer nada más.',
+    sentText: 'Recibimos tu mensaje. Una persona de El Guía te va a escribir para conversar. Mientras tanto, no tienes que hacer nada más.',
     sentReset: 'Enviar otra consulta',
   },
   footer: {
     tagline: 'Experiencias diseñadas con propósito.',
     exploreHeading: 'Explorar',
-    legal: 'FAQ · Privacidad · Condiciones',
-    how: 'Cómo funciona',
-    destinations: 'Destinos',
+    legalHeading: 'Legal',
+    legalLinks,
     contactHeading: 'Contacto',
+    instagramLabel: 'Instagram @elguia.cr',
     madeIn: 'Hecho en Costa Rica',
   },
+  act: {
+    title: 'Tu próxima experiencia empieza con una conversación.',
+    text: 'Cuéntanos qué estás buscando. Una persona de El Guía te responde.',
+    whatsappCta: 'Escríbenos por WhatsApp',
+    whatsappMessage: 'Hola, estoy interesado/a en una experiencia con El Guía CR. ¿Me pueden ayudar?',
+  },
+  placeholder: {
+    eyebrow: 'Próximamente',
+    homeLink: 'Volver al inicio',
+    legalNote: 'El texto legal definitivo está pendiente de revisión.',
+  },
+  pages,
 };

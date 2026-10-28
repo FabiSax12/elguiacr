@@ -1,0 +1,37 @@
+---
+import Footer from './Footer.astro';
+import Nav from './Nav.astro';
+import Layout from '../layouts/Layout.astro';
+import { getContactPath, getPagePath, legalPageKeys, type PlaceholderPageKey } from '../data/routes';
+import { getLocale, useTranslations } from '../i18n/utils';
+
+interface Props {
+  pageKey: PlaceholderPageKey;
+}
+
+const { pageKey } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+const page = t.pages[pageKey];
+const isLegal = legalPageKeys.some((key) => key === pageKey);
+---
+
+<Layout title={page.title} description={page.description} pageKey={pageKey} noindex={isLegal}>
+  <div class="font-texto min-w-80 w-full overflow-x-clip bg-crema-luminoso leading-[normal] text-verde-oscuro">
+    <Nav pageKey={pageKey} />
+    <main class="flex min-h-[60svh] flex-col justify-center px-gutter py-seccion">
+      <div class="mx-auto w-full max-w-sitio">
+        <p class="text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{t.placeholder.eyebrow}</p>
+        <h1 class="mt-4 max-w-[820px] font-titulos text-titulo-a font-bold">{page.heading}</h1>
+        <div class="mt-8 h-px max-w-[820px] bg-mostaza-calido"></div>
+        <p class="mt-8 max-w-[620px] text-lg/[1.6]">{page.intro}</p>
+        {isLegal && <p class="mt-4 max-w-[620px] text-cuerpo text-gris-texto">{t.placeholder.legalNote}</p>}
+        <div class="mt-10 flex flex-wrap gap-3">
+          <a class="inline-flex min-h-12 items-center gap-2.5 rounded-full bg-verde-oscuro px-7 text-base font-semibold text-crema-luminoso no-underline hover:bg-verde-principal hover:text-crema-luminoso" href={getContactPath(locale)}>{t.nav.cta} <span class="inline-block" aria-hidden="true">→</span></a>
+          <a class="inline-flex min-h-12 items-center rounded-full border-2 border-verde-oscuro px-6 text-base font-semibold text-verde-oscuro no-underline hover:bg-verde-oscuro hover:text-crema-luminoso" href={getPagePath('home', locale)}>{t.placeholder.homeLink}</a>
+        </div>
+      </div>
+    </main>
+    <Footer />
+  </div>
+</Layout>

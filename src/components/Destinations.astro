@@ -2,7 +2,6 @@
 import { getLocale, useTranslations } from '../i18n/utils';
 import { getImage } from 'astro:assets';
 import CostaRicaMap from './CostaRicaMap.astro';
-import Leaves from './Leaves.astro';
 import { DEFAULT_SPOT_ID, getSpots } from '../data/spots';
 
 const locale = getLocale(Astro.currentLocale);
@@ -18,8 +17,6 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
 ---
 
 <section id="destinos" class="flex min-h-svh flex-col justify-center relative overflow-clip bg-arena px-gutter pt-seccion-alta pb-seccion-cierre">
-  <Leaves backFill="#17362d" backVein="#e0a632" backLeftClass="left-[6%] top-[50px] w-[38%]" backRightClass="right-[6%] top-[50px] w-[38%]" frontFill="#1f5c46" frontVein="#fff7e8" sideVeinOpacity=".5" />
-
   <div class="relative mx-auto w-full max-w-sitio">
     <div class="mx-auto w-full max-w-[780px] text-center">
       <p class="text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{t.destinations.eyebrow}</p>
@@ -36,7 +33,7 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
             <button type="button" class="group absolute top-(--y) left-(--x) -mt-[22px] -ml-[22px] flex size-11 cursor-pointer items-center justify-center p-0" data-spot={spot.id} data-marker aria-label={spot.name} aria-pressed={String(spot.id === initial.id)} style={`--x: ${spot.x}%; --y: ${spot.y}%;`}>
               <span class="absolute hidden size-5 animate-pulso rounded-full bg-mostaza-calido group-aria-pressed:block" aria-hidden="true"></span>
               <span class="relative hidden size-[22px] rounded-full border-4 border-crema-luminoso bg-mostaza-calido group-aria-pressed:block" aria-hidden="true"></span>
-              <span class="absolute bottom-10 left-1/2 hidden -translate-x-1/2 bg-verde-oscuro px-2.5 py-1 text-dato font-semibold whitespace-nowrap text-crema-luminoso group-aria-pressed:block" aria-hidden="true">{spot.short}</span>
+              <span class="absolute bottom-10 left-1/2 hidden -translate-x-1/2 rounded-md bg-verde-oscuro px-2.5 py-1 text-dato font-semibold whitespace-nowrap text-crema-luminoso group-aria-pressed:block" aria-hidden="true">{spot.short}</span>
               <span class="size-3.5 rounded-full border-3 border-verde-oscuro bg-mostaza-calido group-aria-pressed:hidden" aria-hidden="true"></span>
             </button>
           ))}
@@ -44,13 +41,13 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
         <!-- accessible / mobile list -->
         <div class="mt-5 flex flex-wrap gap-2">
           {resolved.map((spot) => (
-            <button type="button" class="min-h-10 cursor-pointer border-2 border-verde-oscuro bg-transparent px-3.5 text-dato font-medium text-verde-oscuro hover:bg-verde-oscuro hover:text-crema-luminoso aria-pressed:bg-verde-oscuro aria-pressed:text-crema-luminoso" data-spot={spot.id} aria-pressed={String(spot.id === initial.id)}>{spot.short}</button>
+            <button type="button" class="min-h-10 cursor-pointer rounded-full border-2 border-verde-oscuro bg-transparent px-3.5 text-dato font-medium text-verde-oscuro hover:bg-verde-oscuro hover:text-crema-luminoso aria-pressed:bg-verde-oscuro aria-pressed:text-crema-luminoso" data-spot={spot.id} aria-pressed={String(spot.id === initial.id)}>{spot.short}</button>
           ))}
         </div>
       </div>
 
       <!-- destination panel -->
-      <aside class="flex min-w-0 flex-[1_1_360px] flex-col bg-verde-oscuro text-crema-luminoso" aria-live="polite">
+      <aside class="flex min-w-0 flex-[1_1_360px] flex-col overflow-clip rounded-tarjeta bg-verde-oscuro text-crema-luminoso" aria-live="polite">
         <div class="relative h-[230px] overflow-clip bg-verde-principal">
           <img class="absolute inset-0 block size-full animate-foto-entra object-cover object-(--pos)" data-field="image" src={initial.imageSrc} alt={initial.alt} hidden={!initial.imageSrc} style={`--pos: ${initial.position ?? '50% 50%'};`} />
           <div data-field="placeholder" hidden={Boolean(initial.imageSrc)} class="absolute inset-0 flex items-end p-[18px]">
@@ -62,7 +59,7 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
           <h3 data-field="name" class="font-titulos text-[26px]/[1.05] font-bold">{initial.name}</h3>
           <p data-field="desc" class="text-base/[1.6]">{initial.desc}</p>
           <p class="mt-1.5 text-dato font-medium text-mostaza-calido">{t.destinations.idealFor} <span data-field="idealLabel">{initial.idealLabel}</span></p>
-          <a class="mt-auto inline-flex min-h-12 items-center gap-2.5 self-start bg-mostaza-calido px-[22px] text-subtitulo font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro" href="#contanos" data-pick-destination>{t.destinations.pick} <span class="inline-block" aria-hidden="true">→</span></a>
+          <a class="mt-auto inline-flex min-h-12 items-center gap-2.5 self-start rounded-full bg-mostaza-calido px-[22px] text-subtitulo font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro" href="#contanos" data-pick-destination>{t.destinations.pick} <span class="inline-block" aria-hidden="true">→</span></a>
         </div>
       </aside>
     </div>

@@ -5,7 +5,7 @@ const t = useTranslations(getLocale(Astro.currentLocale));
 ---
 <section class="flex min-h-svh flex-col justify-center bg-crema-luminoso px-gutter py-seccion">
   <div class="mx-auto w-full flex max-w-sitio flex-wrap items-center gap-9">
-    <div class="relative h-[350px] min-w-0 flex-[1_1_460px] overflow-clip bg-arena">
+    <div class="relative h-[350px] min-w-0 flex-[1_1_460px] overflow-clip rounded-imagen bg-arena">
       <div class="zoom-lento absolute inset-0 flex items-end bg-verde-niebla p-5">
         <p class="max-w-[360px] text-cuerpo text-verde-oscuro">{t.values.photoNote}</p>
       </div>
@@ -15,7 +15,7 @@ const t = useTranslations(getLocale(Astro.currentLocale));
       <blockquote class="revelar mt-5">
         <p class="font-titulos text-[length:clamp(24px,2.3vw,31px)]/[1.2] font-medium italic">{t.values.quote}</p>
       </blockquote>
-      <div class="mt-8 flex bg-arena">
+      <div class="mt-8 flex overflow-clip rounded-tarjeta bg-arena">
         <span class="shrink-0 grow-0 basis-barra bg-mostaza-calido" aria-hidden="true"></span>
         <p class="p-bloque text-parrafo">{t.values.text}</p>
       </div>

@@ -21,8 +21,8 @@
   --color-mostaza-sombra: #c48e22;
 
   /* Fonts */
-  --font-titulos: "Alegreya", Georgia, serif;
-  --font-texto: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-titulos: "Alegreya Variable", Georgia, serif;
+  --font-texto: "Source Sans 3 Variable", "Segoe UI", system-ui, sans-serif;
 
   /* Type scale (size + line height) */
   --text-eyebrow: 11px;
@@ -64,8 +64,10 @@
   --spacing-seccion-alta: clamp(48px, 8vw, 112px);
   --spacing-seccion-cierre: clamp(40px, 6.7vw, 85px);
 
-  /* Radius */
-  --radius-0: 0;
+  /* Radius: soft curves for cards, images, buttons and inputs */
+  --radius-tarjeta: 1rem;
+  --radius-imagen: 1rem;
+  --radius-campo: 0.5rem;
 
   /* Containers */
   --container-sitio: 1240px;
@@ -109,25 +111,10 @@
   0% { transform: scale(0.6); opacity: 0.9; }
   100% { transform: scale(2.4); opacity: 0; }
 }
-@keyframes hojaIzq {
-  from { transform: translate(0, 0) rotate(4deg); }
-  to { transform: translate(-62%, -38%) rotate(-28deg); }
-}
-@keyframes hojaDer {
-  from { transform: translate(0, 0) rotate(-4deg); }
-  to { transform: translate(62%, -38%) rotate(28deg); }
-}
-@keyframes hojaIzq2 {
-  from { transform: translate(8%, 10%) rotate(10deg); }
-  to { transform: translate(-70%, -10%) rotate(-40deg); }
-}
-@keyframes hojaDer2 {
-  from { transform: translate(-8%, 10%) rotate(-10deg); }
-  to { transform: translate(70%, -10%) rotate(40deg); }
-}
-@keyframes pxA { from { transform: translateY(70px); } to { transform: translateY(-70px); } }
-@keyframes pxB { from { transform: translateY(160px); } to { transform: translateY(-160px); } }
-@keyframes pxC { from { transform: translateY(-50px); } to { transform: translateY(90px); } }
+/* Subtle parallax: keep amplitude within about 24px. */
+@keyframes pxA { from { transform: translateY(16px); } to { transform: translateY(-16px); } }
+@keyframes pxB { from { transform: translateY(24px); } to { transform: translateY(-24px); } }
+@keyframes pxC { from { transform: translateY(-12px); } to { transform: translateY(12px); } }
 @keyframes revelar {
   from { opacity: 0; transform: translateY(48px); }
   to { opacity: 1; transform: none; }
@@ -192,77 +179,6 @@
   @supports (animation-timeline: view()) {
     animation: zoomLento linear both;
     animation-timeline: view();
-  }
-}
-
-/*
- * Leaves: open by default. With scroll-driven animations they open on scroll;
- * without them they start closed and open when [data-open] is set by script.
- */
-@utility hoja-izq {
-  transform-origin: 0% 60%;
-  transform: translate(-62%, -38%) rotate(-28deg);
-  @supports (animation-timeline: view()) {
-    animation: hojaIzq linear both;
-    animation-timeline: view();
-    animation-range: cover 18% cover 50%;
-  }
-  @supports not (animation-timeline: view()) {
-    transition: transform 1.8s cubic-bezier(0.3, 0.6, 0.2, 1) 0.35s;
-    transform: translate(0, 0) rotate(4deg);
-    [data-leaves][data-open] & {
-      transform: translate(-62%, -38%) rotate(-28deg);
-    }
-  }
-}
-@utility hoja-der {
-  transform-origin: 100% 60%;
-  transform: translate(62%, -38%) rotate(28deg);
-  @supports (animation-timeline: view()) {
-    animation: hojaDer linear both;
-    animation-timeline: view();
-    animation-range: cover 18% cover 50%;
-  }
-  @supports not (animation-timeline: view()) {
-    transition: transform 1.8s cubic-bezier(0.3, 0.6, 0.2, 1) 0.35s;
-    transform: translate(0, 0) rotate(-4deg);
-    [data-leaves][data-open] & {
-      transform: translate(62%, -38%) rotate(28deg);
-    }
-  }
-}
-@utility hoja-izq-2 {
-  transform-origin: 0% 60%;
-  transform: translate(-70%, -10%) rotate(-40deg);
-  @supports (animation-timeline: view()) {
-    animation: hojaIzq2 linear both;
-    animation-timeline: view();
-    animation-range: cover 12% cover 44%;
-  }
-  @supports not (animation-timeline: view()) {
-    transition: transform 1.8s cubic-bezier(0.3, 0.6, 0.2, 1) 0.35s;
-    transform: translate(8%, 10%) rotate(10deg);
-    [data-leaves][data-open] & {
-      transform: translate(-70%, -10%) rotate(-40deg);
-      transition-delay: 0.15s;
-    }
-  }
-}
-@utility hoja-der-2 {
-  transform-origin: 100% 60%;
-  transform: translate(70%, -10%) rotate(40deg);
-  @supports (animation-timeline: view()) {
-    animation: hojaDer2 linear both;
-    animation-timeline: view();
-    animation-range: cover 12% cover 44%;
-  }
-  @supports not (animation-timeline: view()) {
-    transition: transform 1.8s cubic-bezier(0.3, 0.6, 0.2, 1) 0.35s;
-    transform: translate(-8%, 10%) rotate(-10deg);
-    [data-leaves][data-open] & {
-      transform: translate(70%, -10%) rotate(40deg);
-      transition-delay: 0.15s;
-    }
   }
 }
 

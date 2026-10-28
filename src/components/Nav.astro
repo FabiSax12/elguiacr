@@ -1,29 +1,52 @@
 ---
-import { getRelativeLocaleUrl } from 'astro:i18n';
 import logo from '../assets/logo.svg';
 import { navLinks } from '../data/content';
+import { getContactPath, getPagePath, type PageKey } from '../data/routes';
 import { localeMeta, locales } from '../i18n/config';
 import { getLocale, useTranslations } from '../i18n/utils';
 
+interface Props {
+  pageKey?: PageKey;
+}
+
+const { pageKey = 'home' } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 const t = useTranslations(locale);
+
+// On the home page the CTA scrolls to the form; elsewhere it links back to it.
+const contactHref = pageKey === 'home' ? '#contanos' : getContactPath(locale);
 
 const navLink = 'text-crema-luminoso no-underline hover:text-mostaza-calido';
 ---
 
 <header class="oscuro relative z-50 border-b border-mostaza-calido/35 bg-verde-oscuro">
-  <nav aria-label={t.nav.ariaLabel} class="mx-auto flex max-w-sitio flex-wrap items-center justify-between gap-x-7 gap-y-3 px-gutter py-3.5">
-    <a href="#inicio" aria-label={t.nav.homeLabel} class="block leading-[0]"><img src={logo.src} alt="El Guía CR" width={logo.width} height={logo.height} class="block h-auto w-40" /></a>
-    <div class="flex flex-wrap items-center gap-x-7 gap-y-2 text-subtitulo font-medium">
-      {navLinks.map((link) => (
-        <a class:list={[navLink, 'py-2.5']} href={link.href}>{t.nav.links[link.key]}</a>
+  <nav aria-label={t.nav.ariaLabel} class="mx-auto flex max-w-sitio flex-wrap items-center gap-x-5 gap-y-2 px-gutter py-3.5" data-nav>
+    <a href={getPagePath('home', locale)} aria-label={t.nav.homeLabel} class="order-1 block leading-[0]"><img src={logo.src} alt="El Guía CR" width={logo.width} height={logo.height} class="block h-auto w-36" /></a>
+
+    <a class="order-3 inline-flex min-h-11 items-center justify-center rounded-full bg-mostaza-calido px-5 text-subtitulo font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro max-sm:basis-full sm:order-2 sm:ml-auto xl:order-3 xl:ml-0" href={contactHref}>{t.nav.cta}</a>
+
+    <button
+      type="button"
+      class="order-2 ml-auto inline-flex size-11 cursor-pointer items-center justify-center rounded-full border-2 border-crema-luminoso bg-transparent text-crema-luminoso hover:border-mostaza-calido hover:text-mostaza-calido sm:order-3 sm:ml-0 xl:hidden"
+      aria-expanded="false"
+      aria-controls="menu-principal"
+      aria-label={t.nav.menuOpen}
+      data-close-label={t.nav.menuClose}
+      data-menu-toggle
+    >
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5h14M3 10h14M3 15h14"></path></svg>
+    </button>
+
+    <div id="menu-principal" class="order-4 hidden basis-full flex-col gap-1 border-t border-mostaza-calido/25 pt-2 text-subtitulo font-medium data-[open]:flex xl:order-2 xl:ml-auto xl:flex xl:basis-auto xl:flex-row xl:items-center xl:gap-x-5 xl:border-0 xl:pt-0 xl:text-cuerpo" data-menu>
+      {navLinks.map((key) => (
+        <a class:list={[navLink, 'py-2.5 aria-[current=page]:font-bold aria-[current=page]:text-mostaza-calido']} href={getPagePath(key, locale)} aria-current={key === pageKey ? 'page' : undefined}>{t.nav.links[key]}</a>
       ))}
       <ul class="flex items-center" aria-label={t.nav.languageLabel}>
         {locales.map((code) => (
           <li class="not-first:before:text-crema-luminoso not-first:before:opacity-40 not-first:before:content-['|']">
             <a
               class:list={[navLink, 'inline-block min-w-11 py-2.5 text-center aria-[current=true]:font-bold aria-[current=true]:text-mostaza-calido']}
-              href={getRelativeLocaleUrl(code)}
+              href={getPagePath(pageKey, code)}
               lang={code}
               hreflang={code}
               aria-label={localeMeta[code].name}
@@ -32,7 +55,35 @@ const navLink = 'text-crema-luminoso no-underline hover:text-mostaza-calido';
           </li>
         ))}
       </ul>
-      <a class="inline-flex min-h-11 items-center bg-mostaza-calido px-5 text-subtitulo font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro" href="#contanos">{t.nav.cta}</a>
     </div>
   </nav>
 </header>
+
+<script>
+  // Mobile menu: toggles the panel, closes on link click or Escape.
+  const nav = document.querySelector<HTMLElement>('[data-nav]');
+  const toggle = nav?.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menu = nav?.querySelector<HTMLElement>('[data-menu]');
+
+  if (nav && toggle && menu) {
+    const openLabel = toggle.getAttribute('aria-label') ?? '';
+    const closeLabel = toggle.dataset.closeLabel ?? openLabel;
+
+    const setOpen = (open: boolean) => {
+      menu.toggleAttribute('data-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? closeLabel : openLabel);
+    };
+
+    toggle.addEventListener('click', () => setOpen(!menu.hasAttribute('data-open')));
+    menu.addEventListener('click', (event) => {
+      if ((event.target as Element).closest('a')) setOpen(false);
+    });
+    nav.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && menu.hasAttribute('data-open')) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+  }
+</script>

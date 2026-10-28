@@ -25,7 +25,7 @@ const storyTitle = 'mt-1 block font-titulos text-xl/[1.3] font-semibold';
         <div class="horiz-pista flex w-max gap-5 px-gutter pb-2 *:snap-start">
           {stories.map((story) => story.format === 'reel' ? (
             <figure class="w-[300px] flex-none">
-              <div class:list={['flex aspect-[9/16] flex-col justify-between p-[18px]', story.background]}>
+              <div class:list={['flex aspect-[9/16] flex-col justify-between rounded-imagen p-[18px]', story.background]}>
                 <span class="inline-flex size-13 items-center justify-center rounded-full border-2 border-crema-luminoso" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 16 16"><path d="M4 2.5 L13 8 L4 13.5 Z" fill="#fff7e8"></path></svg></span>
                 <p class="text-nota">{story.note}</p>
               </div>
@@ -33,13 +33,13 @@ const storyTitle = 'mt-1 block font-titulos text-xl/[1.3] font-semibold';
             </figure>
           ) : (
             <figure class="w-[520px] flex-none self-center">
-              <div class:list={['flex aspect-[4/3] flex-col justify-end p-[18px]', story.background, story.color]}>
+              <div class:list={['flex aspect-[4/3] flex-col justify-end rounded-imagen p-[18px]', story.background, story.color]}>
                 <p class="text-nota">{story.note}</p>
               </div>
               <figcaption class="mt-3.5"><span class={kicker}>{story.kicker}</span><span class={storyTitle}>{story.title}</span></figcaption>
             </figure>
           ))}
-          <a href="#contanos" class="flex aspect-square w-[320px] flex-none flex-col justify-between self-center bg-mostaza-calido p-7 text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro">
+          <a href="#contanos" class="flex aspect-square w-[320px] flex-none flex-col justify-between self-center rounded-tarjeta bg-mostaza-calido p-7 text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro">
             <span class="font-titulos text-4xl/[1.1] font-bold">{t.stories.closingTitle}</span>
             <span class="text-base font-semibold">{t.stories.closingCta} <span class="inline-block" aria-hidden="true">→</span></span>
           </a>

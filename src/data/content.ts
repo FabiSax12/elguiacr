@@ -1,17 +1,10 @@
 import type { Locale } from '../i18n/config';
 import { useTranslations } from '../i18n/utils';
 
-export const navLinkKeys = ['audiences', 'how', 'founder', 'destinations', 'stories'] as const;
-export type NavLinkKey = (typeof navLinkKeys)[number];
+import { navPageKeys, type NavPageKey } from './routes';
 
-// Anchor ids are language-neutral.
-export const navLinks: { href: string; key: NavLinkKey }[] = [
-  { href: '#para-quien', key: 'audiences' },
-  { href: '#como-funciona', key: 'how' },
-  { href: '#fundador', key: 'founder' },
-  { href: '#destinos', key: 'destinations' },
-  { href: '#historias', key: 'stories' },
-];
+// Main navigation: the brief's seven items, in order.
+export const navLinks: NavPageKey[] = [...navPageKeys];
 
 export const pillarIds = ['knowledge', 'allies', 'judgment', 'contact'] as const;
 export type PillarId = (typeof pillarIds)[number];

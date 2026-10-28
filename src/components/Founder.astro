@@ -13,7 +13,7 @@ const t = useTranslations(getLocale(Astro.currentLocale));
 
     <div class="mt-9 flex flex-wrap items-center gap-x-18 gap-y-12">
       <figure class="min-w-0 flex-[1_1_420px]">
-        <div class="relative aspect-[4/5] overflow-clip bg-verde-principal">
+        <div class="relative aspect-[4/5] overflow-clip rounded-imagen bg-verde-principal">
           <Image class="zoom-lento absolute inset-0 block size-full object-cover object-[68%_40%]" src={founder} width={1000} alt={t.founder.photoAlt} />
         </div>
         <svg viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true" class="mt-4 block h-10 w-full"><polyline class="trazar" pathLength="1" points="0,34 70,18 130,26 200,6 260,16 330,2 400,10" fill="none" stroke="#e0a632" stroke-width="3" vector-effect="non-scaling-stroke"></polyline></svg>
@@ -32,7 +32,7 @@ const t = useTranslations(getLocale(Astro.currentLocale));
         <blockquote class="revelar mt-8 border-l-4 border-mostaza-calido pl-[22px]">
           <p class="font-titulos text-[length:clamp(18px,1.5vw,20px)]/[1.4] font-medium text-crema-luminoso italic">{t.founder.quote}</p>
         </blockquote>
-        <a class="mt-9 inline-flex min-h-12 items-center gap-2.5 bg-mostaza-calido px-[22px] text-subtitulo font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro" href="#contanos">{t.founder.cta} <span class="inline-block" aria-hidden="true">→</span></a>
+        <a class="mt-9 inline-flex min-h-12 items-center gap-2.5 rounded-full bg-mostaza-calido px-[22px] text-subtitulo font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro" href="#contanos">{t.founder.cta} <span class="inline-block" aria-hidden="true">→</span></a>
       </div>
     </div>
   </div>
