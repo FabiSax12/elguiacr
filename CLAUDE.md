@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Static Astro 7 site for elguiacr.com, a Costa Rica experience-design business. Bilingual (Spanish default, English under `/en/`). No UI framework: plain `.astro` components, Tailwind v4 via `@tailwindcss/vite`, and small inline vanilla `<script>`s for interactivity. No backend; the contact form only toggles a confirmation state. Deployed on Vercel (`.vercel/`).
+Static Astro 7 site for elguiacr.com, a Costa Rica experience-design business. Bilingual (Spanish default, English under `/en/`). No UI framework: plain `.astro` components, Tailwind v4 via `@tailwindcss/vite`, and small inline vanilla `<script>`s for interactivity. No backend; the contact form only toggles a confirmation state.
 
 ## Commands
 
@@ -16,6 +16,12 @@ The package manager is pnpm (`packageManager` in `package.json`; the README's `n
 - There are no tests, linter or formatter configured. `pnpm build` does not type-check. Type errors (e.g. a missing dictionary key) only show in the editor or via `pnpm astro check`, which needs `@astrojs/check` and `typescript` (not installed yet).
 
 Always verify visual or animation changes against `pnpm build && pnpm preview`, not only dev. The production CSS pipeline (Lightning CSS minification) behaves differently from dev; see the scroll-driven animations note below.
+
+## Deployment
+
+Cloudflare Workers Builds, on every push to `main`: it runs `pnpm run build`, then `npx wrangler deploy`. `wrangler.jsonc` serves `dist/` as static assets (no adapter, no SSR). Keep that file: without it, `wrangler deploy` tries to auto-configure the project (`astro add cloudflare`, adding wrangler to `package.json`), which fails under pnpm with `ERR_PNPM_IGNORED_BUILDS`.
+
+Unknown URLs get the nearest `404.html` (`not_found_handling: "404-page"`). Astro emits the English one as `en/404/index.html`, so the `flattenLocale404` integration in `astro.config.mjs` moves it to `en/404.html` after the build. The 404 pages (`NotFoundPage.astro`, copy under `notFound` in the dictionaries) are not in `routes.ts` and render `<Nav />` without a `pageKey`.
 
 ## Architecture
 
