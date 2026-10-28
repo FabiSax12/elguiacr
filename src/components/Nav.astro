@@ -1,0 +1,16 @@
+---
+import logo from '../assets/logo.svg';
+import { navLinks } from '../data/content';
+---
+
+<header class="oscuro" style="position: relative; z-index: 50; background: #17362d; border-bottom: 1px solid rgba(224,166,50,.35);">
+  <nav aria-label="Principal" style="max-width: 1240px; margin: 0 auto; padding: 14px clamp(16px, 5vw, 64px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 28px;">
+    <a href="#inicio" aria-label="El Guía CR, inicio" style="display: block; line-height: 0;"><img src={logo.src} alt="El Guía CR" width={logo.width} height={logo.height} style="width: 160px; height: auto; display: block;" /></a>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 28px; font: 500 15px/24px 'Source Sans 3', system-ui, sans-serif;">
+      {navLinks.map((link) => (
+        <a class="nav-link" href={link.href} style="padding: 10px 0;">{link.label}</a>
+      ))}
+      <a class="btn-claro" href="#contanos" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; background: #e0a632; color: #17362d; font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif; text-decoration: none;">Cuéntenos qué necesita</a>
+    </div>
+  </nav>
+</header>

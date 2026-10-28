@@ -1,0 +1,152 @@
+/* Design tokens */
+:root {
+  --verde-principal:#1f5c46;
+  --crema-luminoso:#fff7e8;
+  --mostaza-calido:#e0a632;
+  --verde-oscuro:#17362d;
+  --arena:#f3ead8;
+  --verde-niebla:#e7efea;
+  --verde-salvia:#667d63;
+  --gris-texto:#5b625f;
+  --evitar-fondo:#f6ece9;
+  --evitar-texto:#9a5a50;
+  --preferir-fondo:#edf5ef;
+  --superficie:#fff7e8;
+  --superficie-alt:#f3ead8;
+  --superficie-tinte:#e7efea;
+  --superficie-marca:#1f5c46;
+  --superficie-profunda:#17362d;
+  --texto:#17362d;
+  --texto-marca:#1f5c46;
+  --texto-secundario:#5b625f;
+  --texto-sobre-oscuro:#fff7e8;
+  --acento:#e0a632;
+  --foco:#17362d;
+  --foco-sobre-oscuro:#fff7e8;
+  --area-viajeros:#1f5c46;
+  --area-locales:#17362d;
+  --area-empresas:#667d63;
+  --area-educacion:#e0a632;
+  --espacio-celda:11px;
+  --espacio-bloque:19px;
+  --espacio-separacion:24px;
+  --espacio-pagina:62px;
+  --radio-0:0;
+  --trazo-regla:1px;
+  --trazo-camino:4px;
+  --trazo-barra:15px;
+  --font-titulos:"Alegreya", Georgia, serif;
+  --font-texto:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --text-display:700 40px/62px var(--font-titulos);
+  --text-titulo-1:700 35px/54px var(--font-titulos);
+  --text-titulo-2:700 21px/32px var(--font-titulos);
+  --text-titulo-3:600 20px/31px var(--font-titulos);
+  --text-cita:italic 400 20px/31px var(--font-titulos);
+  --text-entrada:400 17px/26px var(--font-texto);
+  --text-subtitulo:600 15px/24px var(--font-texto);
+  --text-boton:600 15px/24px var(--font-texto);
+  --text-cuerpo:400 14px/21px var(--font-texto);
+  --text-dato:500 13px/20px var(--font-texto);
+  --text-pequeno:400 12px/19px var(--font-texto);
+  --text-eyebrow:600 11px/17px var(--font-texto);
+  --text-pie:600 10px/17px var(--font-texto);
+}
+
+/* Base and shared rules */
+body{margin:0;background:#17362d}
+html{scroll-behavior:smooth}
+a{color:#1f5c46}a:hover{color:#17362d}
+.landing *{box-sizing:border-box}
+.landing a:focus-visible,.landing button:focus-visible,.landing input:focus-visible,.landing textarea:focus-visible{outline:2px solid #17362d;outline-offset:2px}
+.oscuro a:focus-visible,.oscuro button:focus-visible{outline-color:#fff7e8}
+.nav-link{color:#fff7e8;text-decoration:none}
+.nav-link:hover{color:#e0a632}
+.btn-claro:hover{background:#fff7e8 !important;color:#17362d !important}
+.btn-marca:hover{background:#17362d !important}
+.btn-linea:hover{background:#fff7e8 !important;color:#17362d !important}
+.tarjeta-area{transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.tarjeta-area:hover{transform:translateY(-8px)}
+.tarjeta-area:hover .flecha{transform:translateX(6px)}
+.flecha{display:inline-block;transition:transform .3s ease}
+.chip-destino:not([aria-pressed="true"]):hover{background:#17362d !important;color:#fff7e8 !important}
+.campo{width:100%;border:0;border-bottom:2px solid #17362d;background:transparent;padding:10px 0;font:400 17px/26px "Source Sans 3",system-ui,sans-serif;color:#17362d;border-radius:0}
+.campo::placeholder{color:#5b625f}
+.campo:focus{border-bottom-color:#1f5c46;outline:none;background:#f3ead8}
+textarea.campo{resize:vertical;min-height:96px}
+
+/* camino que se dibuja al cargar */
+.dibujar{stroke-dasharray:1;stroke-dashoffset:1;animation:dibujar 2.6s cubic-bezier(.6,.1,.2,1) .4s forwards}
+@keyframes dibujar{to{stroke-dashoffset:0}}
+
+/* cinta de palabras */
+.cinta{display:flex;width:max-content;animation:cinta 38s linear infinite}
+@keyframes cinta{to{transform:translateX(-50%)}}
+
+/* pulso de los puntos del mapa */
+.pulso{animation:pulso 2.4s ease-out infinite}
+@keyframes pulso{0%{transform:scale(.6);opacity:.9}100%{transform:scale(2.4);opacity:0}}
+
+/* hojas: estado abierto por defecto (sin soporte de scroll = abiertas) */
+.hoja-izq{transform:translate(-62%,-38%) rotate(-28deg);transform-origin:0% 60%}
+.hoja-der{transform:translate(62%,-38%) rotate(28deg);transform-origin:100% 60%}
+.hoja-izq-2{transform:translate(-70%,-10%) rotate(-40deg);transform-origin:0% 60%}
+.hoja-der-2{transform:translate(70%,-10%) rotate(40deg);transform-origin:100% 60%}
+
+@supports (animation-timeline: view()){
+  .hoja-izq{animation:hojaIzq linear both;animation-timeline:view();animation-range:cover 18% cover 50%}
+  .hoja-der{animation:hojaDer linear both;animation-timeline:view();animation-range:cover 18% cover 50%}
+  .hoja-izq-2{animation:hojaIzq2 linear both;animation-timeline:view();animation-range:cover 12% cover 44%}
+  .hoja-der-2{animation:hojaDer2 linear both;animation-timeline:view();animation-range:cover 12% cover 44%}
+  .px-a{animation:pxA linear both;animation-timeline:view()}
+  .px-b{animation:pxB linear both;animation-timeline:view()}
+  .px-c{animation:pxC linear both;animation-timeline:view()}
+  .revelar{animation:revelar linear both;animation-timeline:view();animation-range:entry 70% cover 40%}
+  .trazar{stroke-dasharray:1;animation:trazar linear both;animation-timeline:view();animation-range:cover 20% cover 60%}
+  .zoom-lento{animation:zoomLento linear both;animation-timeline:view()}
+}
+@keyframes hojaIzq{from{transform:translate(0,0) rotate(4deg)}to{transform:translate(-62%,-38%) rotate(-28deg)}}
+@keyframes hojaDer{from{transform:translate(0,0) rotate(-4deg)}to{transform:translate(62%,-38%) rotate(28deg)}}
+@keyframes hojaIzq2{from{transform:translate(8%,10%) rotate(10deg)}to{transform:translate(-70%,-10%) rotate(-40deg)}}
+@keyframes hojaDer2{from{transform:translate(-8%,10%) rotate(-10deg)}to{transform:translate(70%,-10%) rotate(40deg)}}
+@keyframes pxA{from{transform:translateY(70px)}to{transform:translateY(-70px)}}
+@keyframes pxB{from{transform:translateY(160px)}to{transform:translateY(-160px)}}
+@keyframes pxC{from{transform:translateY(-50px)}to{transform:translateY(90px)}}
+@keyframes revelar{from{opacity:0;transform:translateY(48px)}to{opacity:1;transform:none}}
+@keyframes trazar{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes zoomLento{from{transform:scale(1.18)}to{transform:scale(1)}}
+
+/* hojas sin scroll-timeline (Safari/Firefox): se abren al entrar en pantalla */
+@supports not (animation-timeline: view()){
+  .hojas .hoja-izq,.hojas .hoja-der,.hojas .hoja-izq-2,.hojas .hoja-der-2{transition:transform 1.8s cubic-bezier(.3,.6,.2,1) .35s}
+  .hojas .hoja-izq{transform:translate(0,0) rotate(4deg)}
+  .hojas .hoja-der{transform:translate(0,0) rotate(-4deg)}
+  .hojas .hoja-izq-2{transform:translate(8%,10%) rotate(10deg)}
+  .hojas .hoja-der-2{transform:translate(-8%,10%) rotate(-10deg)}
+  .hojas.abiertas .hoja-izq{transform:translate(-62%,-38%) rotate(-28deg)}
+  .hojas.abiertas .hoja-der{transform:translate(62%,-38%) rotate(28deg)}
+  .hojas.abiertas .hoja-izq-2{transform:translate(-70%,-10%) rotate(-40deg);transition-delay:.15s}
+  .hojas.abiertas .hoja-der-2{transform:translate(70%,-10%) rotate(40deg);transition-delay:.15s}
+}
+
+/* foto del destino: entra con un fundido al cambiar de punto */
+.foto-destino{animation:fotoEntra .7s cubic-bezier(.2,.7,.2,1) both}
+@keyframes fotoEntra{from{opacity:0;transform:scale(1.06)}to{opacity:1;transform:none}}
+
+/* galería horizontal: el scroll vertical la mueve de lado */
+.horiz-vista{overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.horiz-track{display:flex;gap:20px;width:max-content;padding:0 clamp(16px,5vw,64px) 8px}
+.horiz-track > *{scroll-snap-align:start}
+@supports (animation-timeline: view()){
+  .horiz-outer{height:2600px;view-timeline-name:--horiz}
+  .horiz-sticky{position:sticky;top:24px}
+  .horiz-vista{overflow-x:clip}
+  .horiz-track{animation:horiz linear both;animation-timeline:--horiz;animation-range:contain 0% contain 100%}
+  .horiz-barra{animation:barra linear both;animation-timeline:--horiz;animation-range:contain 0% contain 100%}
+}
+@keyframes horiz{from{transform:translateX(0)}to{transform:translateX(calc(-100% + 100vw))}}
+@keyframes barra{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+@media (prefers-reduced-motion: reduce){
+  .landing *,.landing *::before,.landing *::after{animation:none !important;transition:none !important}
+  .dibujar,.trazar{stroke-dashoffset:0}
+}

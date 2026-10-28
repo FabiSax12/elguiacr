@@ -1,0 +1,11 @@
+---
+import { tickerWords } from '../data/content';
+
+const items = Array.from({ length: 4 }, () => tickerWords.flatMap((word) => [word, '·'])).flat();
+---
+
+<div aria-hidden="true" style="background: #e0a632; color: #17362d; overflow: clip; padding: 18px 0;">
+  <div class="cinta" style="font: 600 italic 36px/1 'Alegreya', Georgia, serif; white-space: nowrap; gap: 48px;">
+    {items.map((item) => <span>{item}</span>)}
+  </div>
+</div>
