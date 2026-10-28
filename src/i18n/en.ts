@@ -138,7 +138,7 @@ export const en: Dictionary = {
     title: 'Tell us what you\'re looking for.',
     intro: 'You do not need to have everything figured out. This is enough to start a conversation; we will go over budget and details later, calmly.',
     steps: [
-      { lead: 'We write to you.', rest: 'A person, not a bot. [RESPONSE TIME]' },
+      { lead: 'We write to you.', rest: 'A person, not a bot, within one business day.' },
       { lead: 'We talk.', rest: 'We understand the purpose, the group and the context.' },
       { lead: 'We send you a proposal', rest: 'designed for you.' },
     ],

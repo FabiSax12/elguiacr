@@ -224,7 +224,7 @@ export const es = {
     title: 'Cuéntanos qué estás buscando.',
     intro: 'No hace falta tener todo claro. Con esto arrancamos una conversación; presupuesto y detalles los vemos después, con calma.',
     steps: [
-      { lead: 'Te escribimos.', rest: 'Una persona, no un bot. [TIEMPO DE RESPUESTA]' },
+      { lead: 'Te escribimos.', rest: 'Una persona, no un bot, en menos de un día hábil.' },
       { lead: 'Conversamos.', rest: 'Entendemos el propósito, el grupo y el contexto.' },
       { lead: 'Te enviamos una propuesta', rest: 'diseñada para ti.' },
     ],
