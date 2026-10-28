@@ -2,7 +2,7 @@
 import { getLocale, useTranslations } from '../i18n/utils';
 import logo from '../assets/logo.svg';
 import { navLinks } from '../data/content';
-import { getPagePath, instagramUrl, legalPageKeys } from '../data/routes';
+import { landingPageKeys, getPagePath, instagramUrl, legalPageKeys } from '../data/routes';
 
 const locale = getLocale(Astro.currentLocale);
 const t = useTranslations(locale);
@@ -23,6 +23,14 @@ const navLink = 'inline-block py-1.5 text-crema-luminoso no-underline hover:text
           <ul class="flex flex-col gap-1 text-subtitulo">
             {navLinks.map((key) => (
               <li><a class={navLink} href={getPagePath(key, locale)}>{t.nav.links[key]}</a></li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <p class="mb-3 text-label font-semibold tracking-eyebrow text-mostaza-calido uppercase">{t.footer.servicesHeading}</p>
+          <ul class="flex flex-col gap-1 text-subtitulo">
+            {landingPageKeys.map((key) => (
+              <li><a class={navLink} href={getPagePath(key, locale)}>{t.footer.servicesLinks[key]}</a></li>
             ))}
           </ul>
         </div>

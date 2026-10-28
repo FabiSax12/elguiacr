@@ -1,0 +1,109 @@
+---
+import ActBand from './ActBand.astro';
+import ExperienceCard from './ExperienceCard.astro';
+import Footer from './Footer.astro';
+import Nav from './Nav.astro';
+import Layout from '../layouts/Layout.astro';
+import { getAudiences } from '../data/audiences';
+import { getCategories, getExperiences } from '../data/experiences';
+import { landingPageKeyByAudience } from '../data/landings';
+import { getContactPath, getPagePath } from '../data/routes';
+import { getLocale, useTranslations } from '../i18n/utils';
+
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+const page = t.pages.experiences;
+const labels = t.experiencesPage;
+const experiences = getExperiences(locale);
+const categories = getCategories(locale);
+const audiences = getAudiences(locale);
+
+const chip = 'min-h-11 cursor-pointer rounded-full border-2 border-verde-oscuro bg-transparent px-[18px] text-subtitulo font-semibold text-verde-oscuro not-aria-pressed:hover:bg-verde-oscuro not-aria-pressed:hover:text-crema-luminoso aria-pressed:border-verde-principal aria-pressed:bg-verde-principal aria-pressed:text-crema-luminoso';
+---
+
+<Layout title={page.title} description={page.description} pageKey="experiences">
+  <div class="font-texto min-w-80 w-full overflow-x-clip bg-crema-luminoso leading-[normal] text-verde-oscuro">
+    <Nav pageKey="experiences" />
+    <main>
+      <section class="px-gutter pt-seccion-alta pb-seccion">
+        <div class="mx-auto w-full max-w-sitio">
+          <p class="text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{labels.eyebrow}</p>
+          <h1 class="mt-4 max-w-[820px] font-titulos text-titulo-a font-bold">{page.heading}</h1>
+          <div class="mt-8 h-px max-w-[820px] bg-mostaza-calido"></div>
+          <p class="mt-8 max-w-[640px] text-lg/[1.6]">{page.intro}</p>
+        </div>
+      </section>
+
+      <section class="px-gutter pb-seccion">
+        <div class="oscuro mx-auto flex w-full max-w-sitio flex-wrap items-center justify-between gap-x-12 gap-y-8 rounded-tarjeta bg-verde-oscuro p-[clamp(32px,5vw,72px)] text-crema-luminoso">
+          <div class="min-w-0 flex-[1_1_420px]">
+            <h2 class="max-w-[640px] font-titulos text-titulo-b font-bold">{labels.tailoredTitle}</h2>
+            <p class="mt-5 max-w-[560px] text-lg/[1.6]">{labels.tailoredText}</p>
+          </div>
+          <a class="inline-flex min-h-12 items-center gap-2.5 rounded-full bg-mostaza-calido px-7 text-base font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro" href={getContactPath(locale)}>{labels.tailoredCta} <span class="inline-block" aria-hidden="true">→</span></a>
+        </div>
+      </section>
+
+      <section class="px-gutter pb-seccion" aria-labelledby="ejemplos">
+        <div class="mx-auto w-full max-w-sitio">
+          <p class="text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{labels.examplesEyebrow}</p>
+          <h2 id="ejemplos" class="mt-4 font-titulos text-titulo-b font-bold">{labels.examplesTitle}</h2>
+          <p class="mt-4 max-w-[620px] text-lg/[1.6]">{labels.examplesIntro}</p>
+
+          <div data-filter-bar hidden role="group" aria-label={labels.filterLabel} class="mt-8 flex flex-wrap gap-2.5">
+            <button type="button" class={chip} data-filter="all" aria-pressed="true">{labels.filterAll}</button>
+            {categories.map((category) => (
+              <button type="button" class={chip} data-filter={category.id} aria-pressed="false">{category.label}</button>
+            ))}
+          </div>
+
+          <div class="mt-10 grid grid-cols-[repeat(auto-fill,minmax(290px,1fr))] gap-6" data-experience-grid>
+            {experiences.map((experience) => <ExperienceCard experience={experience} />)}
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-arena px-gutter py-seccion" aria-labelledby="segun-quien">
+        <div class="mx-auto w-full max-w-sitio">
+          <p class="text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{labels.audiencesEyebrow}</p>
+          <h2 id="segun-quien" class="mt-4 font-titulos text-titulo-b font-bold">{labels.audiencesTitle}</h2>
+          <p class="mt-4 max-w-[620px] text-lg/[1.6]">{labels.audiencesIntro}</p>
+          <ul class="mt-10 grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-5">
+            {audiences.map((audience) => (
+              <li>
+                <a class="flex h-full flex-col gap-2 rounded-tarjeta border-2 border-verde-oscuro bg-crema-luminoso p-6 text-verde-oscuro no-underline hover:bg-verde-oscuro hover:text-crema-luminoso" href={getPagePath(landingPageKeyByAudience[audience.id], locale)}>
+                  <span class="text-label font-semibold tracking-eyebrow uppercase">{audience.segment}</span>
+                  <span class="font-titulos text-[24px]/[1.15] font-bold">{t.footer.servicesLinks[landingPageKeyByAudience[audience.id]]}</span>
+                  <span class="mt-auto pt-3 text-subtitulo font-semibold">{t.audiences.learnMore} <span aria-hidden="true">→</span></span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    </main>
+    <ActBand contactHref={getContactPath(locale)} />
+    <Footer />
+  </div>
+</Layout>
+
+<script>
+  // Progressive enhancement: the filter bar stays hidden, and every card visible, without JS.
+  const bar = document.querySelector<HTMLElement>('[data-filter-bar]');
+  const cards = document.querySelectorAll<HTMLElement>('[data-experience]');
+
+  if (bar) {
+    bar.hidden = false;
+    const buttons = bar.querySelectorAll<HTMLButtonElement>('[data-filter]');
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const selected = button.dataset.filter ?? 'all';
+        buttons.forEach((other) => other.setAttribute('aria-pressed', String(other === button)));
+        cards.forEach((card) => {
+          card.hidden = selected !== 'all' && card.dataset.category !== selected;
+        });
+      });
+    });
+  }
+</script>

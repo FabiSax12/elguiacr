@@ -1,0 +1,124 @@
+---
+import ActBand from './ActBand.astro';
+import ExperienceCard from './ExperienceCard.astro';
+import Footer from './Footer.astro';
+import Nav from './Nav.astro';
+import Layout from '../layouts/Layout.astro';
+import type { AudienceId } from '../data/audiences';
+import { getExperiences } from '../data/experiences';
+import { getLanding, landingPageKeyByAudience } from '../data/landings';
+import { getContactPath, getPagePath } from '../data/routes';
+import { getLocale, useTranslations } from '../i18n/utils';
+
+interface Props {
+  audience: AudienceId;
+}
+
+const { audience } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+const landing = getLanding(audience, locale);
+const pageKey = landingPageKeyByAudience[audience];
+const contactHref = getContactPath(locale, audience);
+const experiences = getExperiences(locale, audience);
+const stepTitles = [t.how.steps.understand.title, t.how.steps.design.title, t.how.steps.coordinate.title];
+
+// Built from the same FAQ data that renders on the page.
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: landing.faq.map(({ question, answer }) => ({
+    '@type': 'Question',
+    name: question,
+    acceptedAnswer: { '@type': 'Answer', text: answer },
+  })),
+};
+---
+
+<Layout title={landing.title} description={landing.description} pageKey={pageKey}>
+  <div class="font-texto min-w-80 w-full overflow-x-clip bg-crema-luminoso leading-[normal] text-verde-oscuro">
+    <Nav pageKey={pageKey} />
+    <main>
+      <section class="px-gutter pt-seccion-alta pb-seccion">
+        <div class="mx-auto w-full max-w-sitio">
+          <p class="text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{landing.eyebrow}</p>
+          <h1 class="mt-4 max-w-[900px] font-titulos text-titulo-a font-bold">{landing.h1}</h1>
+          <div class="mt-8 h-px max-w-[900px] bg-mostaza-calido"></div>
+          <div class="mt-8 flex max-w-[680px] flex-col gap-4 text-lg/[1.6]">
+            {landing.intro.map((paragraph) => <p>{paragraph}</p>)}
+          </div>
+          <a class="mt-10 inline-flex min-h-12 items-center gap-2.5 rounded-full bg-verde-oscuro px-7 text-base font-semibold text-crema-luminoso no-underline hover:bg-verde-principal hover:text-crema-luminoso" href={contactHref}>{t.nav.cta} <span class="inline-block" aria-hidden="true">→</span></a>
+        </div>
+      </section>
+
+      <section class="bg-arena px-gutter py-seccion" aria-labelledby="que-disenamos">
+        <div class="mx-auto w-full max-w-sitio">
+          <h2 id="que-disenamos" class="max-w-[720px] font-titulos text-titulo-b font-bold">{landing.designHeading}</h2>
+          <ul class="mt-10 grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-5">
+            {landing.design.map((item) => (
+              <li class="rounded-tarjeta bg-crema-luminoso p-6">
+                <h3 class="font-titulos text-[24px]/[1.15] font-bold">{item.title}</h3>
+                <p class="mt-3 text-subtitulo/[23px]">{item.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section class="px-gutter py-seccion" aria-labelledby="como-trabajamos">
+        <div class="mx-auto w-full max-w-sitio">
+          <h2 id="como-trabajamos" class="font-titulos text-titulo-b font-bold">{t.landing.howHeading}</h2>
+          <ol class="mt-10 grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-8">
+            {landing.how.map((line, index) => (
+              <li class="border-t-2 border-mostaza-calido pt-4">
+                <p class="font-titulos text-[40px]/[1] font-extrabold text-mostaza-calido" aria-hidden="true">{String(index + 1).padStart(2, '0')}</p>
+                <h3 class="mt-3 font-titulos text-[26px]/[1.1] font-bold">{stepTitles[index]}</h3>
+                <p class="mt-2 text-subtitulo/[23px]">{line}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {experiences.length > 0 && (
+        <section class="px-gutter pb-seccion" aria-labelledby="ejemplos-landing">
+          <div class="mx-auto w-full max-w-sitio">
+            <h2 id="ejemplos-landing" class="font-titulos text-titulo-b font-bold">{landing.examplesHeading}</h2>
+            <p class="mt-4 max-w-[620px] text-lg/[1.6]">{landing.examplesIntro}</p>
+            <div class="mt-10 grid grid-cols-[repeat(auto-fill,minmax(290px,1fr))] gap-6">
+              {experiences.map((experience) => <ExperienceCard experience={experience} />)}
+            </div>
+            <a class="mt-8 inline-block text-subtitulo font-semibold text-verde-principal underline underline-offset-4" href={getPagePath('experiences', locale)}>{t.landing.allExperiences} <span aria-hidden="true">→</span></a>
+          </div>
+        </section>
+      )}
+
+      <section class="bg-verde-niebla px-gutter py-seccion" aria-labelledby="faq-landing">
+        <div class="mx-auto w-full max-w-[860px]">
+          <h2 id="faq-landing" class="font-titulos text-titulo-b font-bold">{t.landing.faqHeading}</h2>
+          <div class="mt-8 flex flex-col gap-3">
+            {landing.faq.map((item) => (
+              <details class="group rounded-tarjeta bg-crema-luminoso px-6 py-4">
+                <summary class="cursor-pointer list-none text-lg font-semibold marker:content-none">{item.question}</summary>
+                <p class="mt-3 text-subtitulo/[23px]">{item.answer}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="oscuro px-gutter py-seccion bg-verde-principal text-crema-luminoso">
+        <div class="mx-auto flex w-full max-w-sitio flex-wrap items-center justify-between gap-x-12 gap-y-8">
+          <div class="min-w-0 flex-[1_1_420px]">
+            <h2 class="max-w-[640px] font-titulos text-titulo-b font-bold">{landing.ctaTitle}</h2>
+            <p class="mt-4 max-w-[520px] text-lg/[1.5]">{landing.ctaText}</p>
+          </div>
+          <a class="inline-flex min-h-12 items-center gap-2.5 rounded-full bg-mostaza-calido px-7 text-base font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro" href={contactHref}>{t.nav.cta} <span class="inline-block" aria-hidden="true">→</span></a>
+        </div>
+      </section>
+    </main>
+    <ActBand contactHref={contactHref} />
+    <Footer />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </div>
+</Layout>

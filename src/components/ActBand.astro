@@ -2,6 +2,11 @@
 import { getWhatsappUrl } from '../data/routes';
 import { getLocale, useTranslations } from '../i18n/utils';
 
+interface Props {
+  contactHref?: string;
+}
+
+const { contactHref = '#contanos' } = Astro.props;
 const t = useTranslations(getLocale(Astro.currentLocale));
 ---
 
@@ -12,7 +17,7 @@ const t = useTranslations(getLocale(Astro.currentLocale));
       <p class="mt-4 max-w-[520px] text-lg/[1.5]">{t.act.text}</p>
     </div>
     <div class="flex flex-wrap gap-3">
-      <a class="inline-flex min-h-12 items-center gap-2.5 rounded-full bg-verde-oscuro px-7 text-base font-semibold text-crema-luminoso no-underline hover:bg-verde-principal hover:text-crema-luminoso" href="#contanos">{t.nav.cta} <span class="inline-block" aria-hidden="true">→</span></a>
+      <a class="inline-flex min-h-12 items-center gap-2.5 rounded-full bg-verde-oscuro px-7 text-base font-semibold text-crema-luminoso no-underline hover:bg-verde-principal hover:text-crema-luminoso" href={contactHref}>{t.nav.cta} <span class="inline-block" aria-hidden="true">→</span></a>
       <a class="inline-flex min-h-12 items-center rounded-full border-2 border-verde-oscuro px-6 text-base font-semibold text-verde-oscuro no-underline hover:bg-verde-oscuro hover:text-crema-luminoso" href={getWhatsappUrl(t.act.whatsappMessage)} rel="noopener" target="_blank">{t.act.whatsappCta}</a>
     </div>
   </div>

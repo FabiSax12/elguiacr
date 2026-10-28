@@ -1,0 +1,32 @@
+---
+import type { Experience } from '../data/experiences';
+import { getLocale, useTranslations } from '../i18n/utils';
+
+interface Props {
+  experience: Experience;
+}
+
+const { experience } = Astro.props;
+const t = useTranslations(getLocale(Astro.currentLocale));
+const labels = t.experiencesPage;
+---
+
+<article class="flex flex-col overflow-clip rounded-tarjeta border border-verde-oscuro/15 bg-white" data-experience data-category={experience.category}>
+  {experience.image ? (
+    <img class="block aspect-[4/3] w-full object-cover" src={experience.image.src} width={experience.image.width} height={experience.image.height} alt={experience.image.alt} loading="lazy" decoding="async" />
+  ) : (
+    <div class="flex aspect-[4/3] items-end border-b border-dashed border-verde-oscuro/30 bg-arena p-3.5" role="img" aria-label={labels.photoPending}>
+      <p class="text-nota text-gris-texto"><span class="font-semibold">{labels.photoPending}.</span> {experience.photoNote}</p>
+    </div>
+  )}
+  <div class="flex grow flex-col gap-3 px-[22px] pt-5 pb-6">
+    <p class="text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{experience.categoryLabel}</p>
+    <h3 class="font-titulos text-[26px]/[1.1] font-bold">{experience.title}</h3>
+    <p class="text-subtitulo/[23px]">{experience.description}</p>
+    <dl class="mt-1 flex flex-wrap gap-x-6 gap-y-1 text-cuerpo text-gris-texto">
+      <div class="flex gap-1.5"><dt class="font-semibold">{labels.durationLabel}:</dt><dd>{experience.duration}</dd></div>
+      <div class="flex gap-1.5"><dt class="font-semibold">{labels.forLabel}:</dt><dd>{experience.audiences.map((audience) => audience.label).join(' · ')}</dd></div>
+    </dl>
+    <a class="mt-auto inline-flex min-h-11 items-center gap-2.5 self-start pt-3 text-subtitulo font-semibold text-verde-principal underline-offset-4 hover:underline" href={experience.contactHref}>{t.nav.cta} <span class="inline-block" aria-hidden="true">→</span></a>
+  </div>
+</article>

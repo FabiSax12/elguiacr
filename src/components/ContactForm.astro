@@ -86,6 +86,12 @@ const textareaShort = `${campo} min-h-[72px] resize-y`;
     let destination: string | null = null;
     let sent = false;
 
+    // Pages elsewhere on the site preselect a segment via ?segment=<id>.
+    const requestedSegment = new URLSearchParams(window.location.search).get('segment');
+    if (requestedSegment && Array.from(chips).some((chip) => chip.dataset.chip === requestedSegment)) {
+      segment = requestedSegment;
+    }
+
     const render = () => {
       chips.forEach((chip) => chip.setAttribute('aria-pressed', String(chip.dataset.chip === segment)));
       if (destinationRow && destinationName) {
@@ -96,6 +102,8 @@ const textareaShort = `${campo} min-h-[72px] resize-y`;
         view.hidden = (view.dataset.formView === 'sent') !== sent;
       });
     };
+
+    render();
 
     chips.forEach((chip) => {
       chip.addEventListener('click', () => {

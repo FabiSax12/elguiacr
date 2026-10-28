@@ -1,7 +1,7 @@
 import { getAbsoluteLocaleUrl, getRelativeLocaleUrl } from 'astro:i18n';
 import type { Locale } from '../i18n/config';
 
-export const pageKeys = ['home', 'experiences', 'destinations', 'transport', 'about', 'blog', 'faq', 'privacy', 'terms', 'cookies', 'cancellations'] as const;
+export const pageKeys = ['home', 'experiences', 'destinations', 'transport', 'about', 'blog', 'faq', 'privacy', 'terms', 'cookies', 'cancellations', 'customTrips', 'localExperiences', 'teamBuilding', 'educationalTrips'] as const;
 export type PageKey = (typeof pageKeys)[number];
 
 export const navPageKeys = ['home', 'experiences', 'destinations', 'transport', 'about', 'blog', 'faq'] as const;
@@ -10,7 +10,11 @@ export type NavPageKey = (typeof navPageKeys)[number];
 export const legalPageKeys = ['privacy', 'terms', 'cookies', 'cancellations'] as const;
 export type LegalPageKey = (typeof legalPageKeys)[number];
 
-export type PlaceholderPageKey = Exclude<PageKey, 'home'>;
+// SEO landing pages, one per audience. They live outside the main menu.
+export const landingPageKeys = ['customTrips', 'localExperiences', 'teamBuilding', 'educationalTrips'] as const;
+export type LandingPageKey = (typeof landingPageKeys)[number];
+
+export type PlaceholderPageKey = Exclude<PageKey, 'home' | LandingPageKey>;
 
 // Path segment of each page per locale ('' is the locale root).
 const slugs: Record<PageKey, Record<Locale, string>> = {
@@ -25,6 +29,10 @@ const slugs: Record<PageKey, Record<Locale, string>> = {
   terms: { es: 'terminos', en: 'terms' },
   cookies: { es: 'cookies', en: 'cookies' },
   cancellations: { es: 'cancelaciones', en: 'cancellations' },
+  customTrips: { es: 'viajes-personalizados-costa-rica', en: 'custom-trips-costa-rica' },
+  localExperiences: { es: 'experiencias-para-locales-costa-rica', en: 'experiences-for-locals-costa-rica' },
+  teamBuilding: { es: 'team-building-costa-rica', en: 'team-building-costa-rica' },
+  educationalTrips: { es: 'giras-educativas-costa-rica', en: 'educational-trips-costa-rica' },
 };
 
 export function getPagePath(key: PageKey, locale: Locale) {
@@ -36,8 +44,10 @@ export function getPageUrl(key: PageKey, locale: Locale) {
 }
 
 // The primary CTA targets the contact form, which lives on the home page.
-export function getContactPath(locale: Locale) {
-  return `${getPagePath('home', locale)}#contanos`;
+// An optional segment is passed as a query param that the form reads on load.
+export function getContactPath(locale: Locale, segment?: string) {
+  const query = segment ? `?segment=${segment}` : '';
+  return `${getPagePath('home', locale)}${query}#contanos`;
 }
 
 export const instagramUrl = 'https://instagram.com/elguia.cr';

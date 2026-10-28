@@ -1,7 +1,7 @@
 import type { PlaceholderPageText } from './ui';
 import type { AudienceId, AudienceText } from '../data/audiences';
 import type { PillarId, PillarText, StepId, StepText, StoryId, StoryText } from '../data/content';
-import type { LegalPageKey, NavPageKey, PlaceholderPageKey } from '../data/routes';
+import type { LandingPageKey, LegalPageKey, NavPageKey, PlaceholderPageKey } from '../data/routes';
 import type { SpotId, SpotText } from '../data/spots';
 
 const navLinks: Record<NavPageKey, string> = {
@@ -23,10 +23,10 @@ const legalLinks: Record<LegalPageKey, string> = {
 
 const pages: Record<PlaceholderPageKey, PlaceholderPageText> = {
   experiences: {
-    title: 'Experiencias · El Guía CR',
-    description: 'Experiencias en Costa Rica diseñadas con propósito para viajeros, locales, empresas y educación.',
-    heading: 'Experiencias',
-    intro: 'Estamos preparando esta sección con las experiencias que diseñamos para viajeros, locales, empresas y centros educativos. Mientras tanto, cuéntanos qué estás buscando y armamos algo a tu medida.',
+    title: 'Experiencias a medida en Costa Rica | El Guía CR',
+    description: 'Experiencias en Costa Rica diseñadas a tu medida para viajeros, locales, empresas y educación. Explora ideas y cuéntanos qué buscas.',
+    heading: 'Experiencias diseñadas a tu medida',
+    intro: 'Cada experiencia que armamos parte de una conversación contigo, no de un catálogo. Puedes pedirnos algo completamente a tu medida; los ejemplos de esta página son una inspiración, no paquetes cerrados.',
   },
   destinations: {
     title: 'Destinos · El Guía CR',
@@ -169,6 +169,7 @@ export const es = {
     eyebrow: '02 · Para quién',
     title: 'Una marca, cuatro puertas de entrada.',
     intro: 'Lo que cambia es el objetivo. La forma de trabajar es la misma: escuchar, diseñar, coordinar.',
+    learnMore: 'Saber más',
     items: audienceItems,
   },
   how: {
@@ -256,6 +257,13 @@ export const es = {
     exploreHeading: 'Explorar',
     legalHeading: 'Legal',
     legalLinks,
+    servicesHeading: 'Servicios',
+    servicesLinks: {
+      customTrips: 'Viajes personalizados',
+      localExperiences: 'Experiencias para locales',
+      teamBuilding: 'Team building',
+      educationalTrips: 'Giras educativas',
+    } satisfies Record<LandingPageKey, string>,
     contactHeading: 'Contacto',
     instagramLabel: 'Instagram @elguia.cr',
     madeIn: 'Hecho en Costa Rica',
@@ -265,6 +273,28 @@ export const es = {
     text: 'Cuéntanos qué estás buscando. Una persona de El Guía te responde.',
     whatsappCta: 'Escríbenos por WhatsApp',
     whatsappMessage: 'Hola, estoy interesado/a en una experiencia con El Guía CR. ¿Me pueden ayudar?',
+  },
+  experiencesPage: {
+    eyebrow: 'Experiencias',
+    tailoredTitle: 'Lo que imaginas, diseñado a tu medida.',
+    tailoredText: 'No hay un menú del que tengas que elegir. Cuéntanos para quién es, qué quieren vivir y cuánto tiempo tienen, y armamos algo pensado para ustedes. Las ideas de más abajo son solo un punto de partida.',
+    tailoredCta: 'Diseñemos algo juntos',
+    examplesEyebrow: 'Ideas para inspirarte',
+    examplesTitle: 'Ejemplos de lo que podemos diseñar.',
+    examplesIntro: 'No son paquetes cerrados: los combinamos, los cambiamos o los descartamos según lo que busques.',
+    filterLabel: 'Filtrar por categoría',
+    filterAll: 'Todas',
+    durationLabel: 'Duración aprox.',
+    forLabel: 'Para',
+    photoPending: 'Foto pendiente',
+    audiencesEyebrow: 'Según quién viaja',
+    audiencesTitle: 'Guías para cada tipo de grupo.',
+    audiencesIntro: 'Si ya sabes quién eres en esta historia, estas páginas te cuentan cómo trabajamos con cada grupo.',
+  },
+  landing: {
+    howHeading: 'Cómo trabajamos',
+    faqHeading: 'Preguntas frecuentes',
+    allExperiences: 'Ver todas las experiencias',
   },
   placeholder: {
     eyebrow: 'Próximamente',
