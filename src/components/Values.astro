@@ -3,21 +3,21 @@ import { getLocale, useTranslations } from '../i18n/utils';
 
 const t = useTranslations(getLocale(Astro.currentLocale));
 ---
-<section style="background: #fff7e8; padding: clamp(80px, 10vw, 144px) clamp(16px, 5vw, 64px);">
-  <div style="max-width: 1240px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 56px; align-items: center;">
-    <div style="flex: 1 1 460px; min-width: 0; height: 520px; overflow: clip; position: relative; background: #f3ead8;">
-      <div class="zoom-lento" style="position: absolute; inset: 0; background: #e7efea; display: flex; align-items: flex-end; padding: 20px;">
-        <p style="margin: 0; max-width: 360px; font: 400 14px/21px 'Source Sans 3', system-ui, sans-serif; color: #17362d;">{t.values.photoNote}</p>
+<section class="bg-crema-luminoso px-gutter py-seccion">
+  <div class="mx-auto flex max-w-sitio flex-wrap items-center gap-14">
+    <div class="relative h-[520px] min-w-0 flex-[1_1_460px] overflow-clip bg-arena">
+      <div class="zoom-lento absolute inset-0 flex items-end bg-verde-niebla p-5">
+        <p class="max-w-[360px] text-cuerpo text-verde-oscuro">{t.values.photoNote}</p>
       </div>
     </div>
-    <div style="flex: 1 1 440px; min-width: 0;">
-      <p style="margin: 0; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #1f5c46;">{t.values.eyebrow}</p>
-      <blockquote class="revelar" style="margin: 20px 0 0; padding: 0;">
-        <p style="margin: 0; font: 500 italic clamp(30px, 3.4vw, 46px)/1.2 'Alegreya', Georgia, serif;">{t.values.quote}</p>
+    <div class="min-w-0 flex-[1_1_440px]">
+      <p class="text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{t.values.eyebrow}</p>
+      <blockquote class="revelar mt-5">
+        <p class="font-titulos text-[length:clamp(30px,3.4vw,46px)]/[1.2] font-medium italic">{t.values.quote}</p>
       </blockquote>
-      <div style="margin-top: 32px; background: #f3ead8; display: flex;">
-        <span style="flex: 0 0 15px; background: #e0a632;" aria-hidden="true"></span>
-        <p style="margin: 0; padding: 19px; font: 400 15px/23px 'Source Sans 3', system-ui, sans-serif;">{t.values.text}</p>
+      <div class="mt-8 flex bg-arena">
+        <span class="shrink-0 grow-0 basis-barra bg-mostaza-calido" aria-hidden="true"></span>
+        <p class="p-bloque text-parrafo">{t.values.text}</p>
       </div>
     </div>
   </div>

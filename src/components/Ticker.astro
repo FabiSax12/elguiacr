@@ -7,8 +7,8 @@ const tickerWords = getAudiences(locale).map((audience) => audience.word);
 const items = Array.from({ length: 4 }, () => tickerWords.flatMap((word) => [word, '·'])).flat();
 ---
 
-<div aria-hidden="true" style="background: #e0a632; color: #17362d; overflow: clip; padding: 18px 0;">
-  <div class="cinta" style="font: 600 italic 36px/1 'Alegreya', Georgia, serif; white-space: nowrap; gap: 48px;">
+<div aria-hidden="true" class="overflow-clip bg-mostaza-calido py-[18px] text-verde-oscuro">
+  <div class="flex w-max animate-cinta gap-12 font-titulos text-[36px]/[1] font-semibold whitespace-nowrap italic">
     {items.map((item) => <span>{item}</span>)}
   </div>
 </div>

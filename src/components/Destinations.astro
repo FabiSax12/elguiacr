@@ -17,83 +17,60 @@ const resolved = await Promise.all(
 const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved[0];
 ---
 
-<section id="destinos" style="position: relative; background: #f3ead8; overflow: clip; padding: clamp(96px, 12vw, 168px) clamp(16px, 5vw, 64px) clamp(80px, 10vw, 128px);">
-  <Leaves backFill="#17362d" backVein="#e0a632" backInset="6%" backTop="50px" backWidth="38%" frontFill="#1f5c46" frontVein="#fff7e8" sideVeinOpacity=".5" />
+<section id="destinos" class="relative overflow-clip bg-arena px-gutter pt-seccion-alta pb-seccion-cierre">
+  <Leaves backFill="#17362d" backVein="#e0a632" backLeftClass="left-[6%] top-[50px] w-[38%]" backRightClass="right-[6%] top-[50px] w-[38%]" frontFill="#1f5c46" frontVein="#fff7e8" sideVeinOpacity=".5" />
 
-  <div style="position: relative; max-width: 1240px; margin: 0 auto;">
-    <div style="text-align: center; max-width: 780px; margin: 0 auto;">
-      <p style="margin: 0; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #1f5c46;">{t.destinations.eyebrow}</p>
-      <h2 style="margin: 16px 0 0; font: 700 clamp(38px, 5vw, 68px)/1.04 'Alegreya', Georgia, serif;">{t.destinations.title}</h2>
-      <p style="margin: 20px auto 0; max-width: 580px; font: 400 18px/1.6 'Source Sans 3', system-ui, sans-serif;">{t.destinations.intro}</p>
+  <div class="relative mx-auto max-w-sitio">
+    <div class="mx-auto max-w-[780px] text-center">
+      <p class="text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{t.destinations.eyebrow}</p>
+      <h2 class="mt-4 font-titulos text-titulo-a font-bold">{t.destinations.title}</h2>
+      <p class="mx-auto mt-5 max-w-[580px] text-lg/[1.6]">{t.destinations.intro}</p>
     </div>
 
-    <div style="margin-top: 64px; display: flex; flex-wrap: wrap; gap: 40px; align-items: stretch;">
+    <div class="mt-16 flex flex-wrap items-stretch gap-10">
       <!-- map -->
-      <div style="flex: 1 1 560px; min-width: 0;">
-        <div style="position: relative; width: 100%; aspect-ratio: 648.3 / 613;">
+      <div class="min-w-0 flex-[1_1_560px]">
+        <div class="relative aspect-[648.3/613] w-full">
           <CostaRicaMap />
           {resolved.map((spot) => (
-            <button type="button" class="marker" data-spot={spot.id} aria-label={spot.name} aria-pressed={String(spot.id === initial.id)} style={`position: absolute; left: ${spot.x}%; top: ${spot.y}%; width: 44px; height: 44px; margin: -22px 0 0 -22px; padding: 0; border: 0; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center;`}>
-              <span class="pulso on" aria-hidden="true" style="position: absolute; width: 20px; height: 20px; border-radius: 50%; background: #e0a632;"></span>
-              <span class="on" aria-hidden="true" style="position: relative; width: 22px; height: 22px; border-radius: 50%; background: #e0a632; border: 4px solid #fff7e8; box-sizing: border-box;"></span>
-              <span class="on" aria-hidden="true" style="position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%); white-space: nowrap; background: #17362d; color: #fff7e8; padding: 4px 10px; font: 600 13px/20px 'Source Sans 3', system-ui, sans-serif;">{spot.short}</span>
-              <span class="off" aria-hidden="true" style="width: 14px; height: 14px; border-radius: 50%; background: #e0a632; border: 3px solid #17362d; box-sizing: border-box;"></span>
+            <button type="button" class="group absolute top-(--y) left-(--x) -mt-[22px] -ml-[22px] flex size-11 cursor-pointer items-center justify-center p-0" data-spot={spot.id} data-marker aria-label={spot.name} aria-pressed={String(spot.id === initial.id)} style={`--x: ${spot.x}%; --y: ${spot.y}%;`}>
+              <span class="absolute hidden size-5 animate-pulso rounded-full bg-mostaza-calido group-aria-pressed:block" aria-hidden="true"></span>
+              <span class="relative hidden size-[22px] rounded-full border-4 border-crema-luminoso bg-mostaza-calido group-aria-pressed:block" aria-hidden="true"></span>
+              <span class="absolute bottom-10 left-1/2 hidden -translate-x-1/2 bg-verde-oscuro px-2.5 py-1 text-dato font-semibold whitespace-nowrap text-crema-luminoso group-aria-pressed:block" aria-hidden="true">{spot.short}</span>
+              <span class="size-3.5 rounded-full border-3 border-verde-oscuro bg-mostaza-calido group-aria-pressed:hidden" aria-hidden="true"></span>
             </button>
           ))}
         </div>
         <!-- accessible / mobile list -->
-        <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px;">
+        <div class="mt-5 flex flex-wrap gap-2">
           {resolved.map((spot) => (
-            <button type="button" class="chip chip-destino" data-spot={spot.id} aria-pressed={String(spot.id === initial.id)}>{spot.short}</button>
+            <button type="button" class="min-h-10 cursor-pointer border-2 border-verde-oscuro bg-transparent px-3.5 text-dato font-medium text-verde-oscuro hover:bg-verde-oscuro hover:text-crema-luminoso aria-pressed:bg-verde-oscuro aria-pressed:text-crema-luminoso" data-spot={spot.id} aria-pressed={String(spot.id === initial.id)}>{spot.short}</button>
           ))}
         </div>
       </div>
 
       <!-- destination panel -->
-      <aside class="ficha" aria-live="polite" style="flex: 1 1 360px; min-width: 0; background: #17362d; color: #fff7e8; display: flex; flex-direction: column;">
-        <div style="height: 340px; background: #1f5c46; overflow: clip; position: relative;">
-          <img class="foto-destino" data-field="image" src={initial.imageSrc} alt={initial.alt} hidden={!initial.imageSrc} style={`position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: ${initial.position ?? '50% 50%'}; display: block;`} />
-          <div data-field="placeholder" hidden={Boolean(initial.imageSrc)} style="position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 18px;">
-            <p data-field="photoNote" style="margin: 0; font: 400 13px/19px 'Source Sans 3', system-ui, sans-serif; color: #fff7e8;">{initial.photoNote}</p>
+      <aside class="flex min-w-0 flex-[1_1_360px] flex-col bg-verde-oscuro text-crema-luminoso" aria-live="polite">
+        <div class="relative h-[340px] overflow-clip bg-verde-principal">
+          <img class="absolute inset-0 block size-full animate-foto-entra object-cover object-(--pos)" data-field="image" src={initial.imageSrc} alt={initial.alt} hidden={!initial.imageSrc} style={`--pos: ${initial.position ?? '50% 50%'};`} />
+          <div data-field="placeholder" hidden={Boolean(initial.imageSrc)} class="absolute inset-0 flex items-end p-[18px]">
+            <p data-field="photoNote" class="text-nota text-crema-luminoso">{initial.photoNote}</p>
           </div>
         </div>
-        <div style="padding: 28px 28px 32px; display: flex; flex-direction: column; gap: 14px; flex-grow: 1;">
-          <p data-field="region" style="margin: 0; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #e0a632;">{initial.region}</p>
-          <h3 data-field="name" style="margin: 0; font: 700 38px/1.05 'Alegreya', Georgia, serif;">{initial.name}</h3>
-          <p data-field="desc" style="margin: 0; font: 400 16px/1.6 'Source Sans 3', system-ui, sans-serif;">{initial.desc}</p>
-          <p style="margin: 6px 0 0; font: 500 13px/20px 'Source Sans 3', system-ui, sans-serif; color: #e0a632;">{t.destinations.idealFor} <span data-field="idealLabel">{initial.idealLabel}</span></p>
-          <a class="btn-claro" href="#contanos" data-pick-destination style="margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; background: #e0a632; color: #17362d; font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif; text-decoration: none;">{t.destinations.pick} <span class="flecha" aria-hidden="true">→</span></a>
+        <div class="flex grow flex-col gap-3.5 px-7 pt-7 pb-8">
+          <p data-field="region" class="text-label font-semibold tracking-eyebrow text-mostaza-calido uppercase">{initial.region}</p>
+          <h3 data-field="name" class="font-titulos text-[38px]/[1.05] font-bold">{initial.name}</h3>
+          <p data-field="desc" class="text-base/[1.6]">{initial.desc}</p>
+          <p class="mt-1.5 text-dato font-medium text-mostaza-calido">{t.destinations.idealFor} <span data-field="idealLabel">{initial.idealLabel}</span></p>
+          <a class="mt-auto inline-flex min-h-12 items-center gap-2.5 self-start bg-mostaza-calido px-[22px] text-subtitulo font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro" href="#contanos" data-pick-destination>{t.destinations.pick} <span class="inline-block" aria-hidden="true">→</span></a>
         </div>
       </aside>
     </div>
-    <p style="margin: 28px 0 0; font: 400 14px/21px 'Source Sans 3', system-ui, sans-serif; color: #5b625f; text-align: center;">{t.destinations.footnote}</p>
+    <p class="mt-7 text-center text-cuerpo text-gris-texto">{t.destinations.footnote}</p>
   </div>
 </section>
 
 <script is:inline type="application/json" id="spots-data" set:html={JSON.stringify(resolved)} />
-
-<style>
-  [hidden] {
-    display: none !important;
-  }
-  .marker[aria-pressed='true'] .off,
-  .marker[aria-pressed='false'] .on {
-    display: none;
-  }
-  .chip {
-    min-height: 40px;
-    padding: 0 14px;
-    border: 2px solid #17362d;
-    background: transparent;
-    color: #17362d;
-    font: 500 13px/20px 'Source Sans 3', system-ui, sans-serif;
-    cursor: pointer;
-  }
-  .chip[aria-pressed='true'] {
-    background: #17362d;
-    color: #fff7e8;
-  }
-</style>
 
 <script>
   interface ClientSpot {
@@ -116,7 +93,7 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
     const field = (name: string) => section.querySelector<HTMLElement>(`[data-field="${name}"]`);
     const image = field('image') as HTMLImageElement | null;
     const placeholder = field('placeholder');
-    let selectedId = section.querySelector<HTMLElement>('.marker[aria-pressed="true"]')?.dataset.spot;
+    let selectedId = section.querySelector<HTMLElement>('[data-marker][aria-pressed="true"]')?.dataset.spot;
 
     const select = (id: string) => {
       const spot = spots.find((candidate) => candidate.id === id);
@@ -138,11 +115,11 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
         if (spot.imageSrc) {
           image.src = spot.imageSrc;
           image.alt = spot.alt ?? '';
-          image.style.objectPosition = spot.position ?? '50% 50%';
+          image.style.setProperty('--pos', spot.position ?? '50% 50%');
           // Replay the fade-in, as the original remounted the image on each change.
-          image.classList.remove('foto-destino');
+          image.classList.remove('animate-foto-entra');
           void image.offsetWidth;
-          image.classList.add('foto-destino');
+          image.classList.add('animate-foto-entra');
         }
       }
     };

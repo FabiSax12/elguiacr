@@ -56,13 +56,14 @@ export interface Story extends StoryText, StoryStyle {
   id: StoryId;
 }
 
+// Tailwind class names; kept as full literals so the compiler can detect them.
 const storyStyles: Record<StoryId, StoryStyle> = {
-  criteria: { format: 'reel', background: '#1f5c46' },
-  team: { format: 'photo', background: '#e0a632', color: '#17362d' },
-  network: { format: 'reel', background: '#24473c' },
-  objective: { format: 'reel', background: '#1f5c46' },
-  classroom: { format: 'photo', background: '#f3ead8', color: '#17362d' },
-  experience: { format: 'reel', background: '#24473c' },
+  criteria: { format: 'reel', background: 'bg-verde-principal' },
+  team: { format: 'photo', background: 'bg-mostaza-calido', color: 'text-verde-oscuro' },
+  network: { format: 'reel', background: 'bg-selva' },
+  objective: { format: 'reel', background: 'bg-verde-principal' },
+  classroom: { format: 'photo', background: 'bg-arena', color: 'text-verde-oscuro' },
+  experience: { format: 'reel', background: 'bg-selva' },
 };
 
 export function getStories(locale: Locale): Story[] {

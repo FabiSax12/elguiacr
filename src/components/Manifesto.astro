@@ -7,15 +7,15 @@ const t = useTranslations(locale);
 const pillars = getPillars(locale);
 ---
 
-<section style="background: #fff7e8; padding: clamp(80px, 10vw, 144px) clamp(16px, 5vw, 64px);">
-  <div style="max-width: 1240px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 48px 64px; align-items: flex-start;">
-    <p style="flex: 0 0 auto; margin: 0; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #1f5c46;">{t.manifesto.eyebrow}</p>
-    <div style="flex: 1 1 640px; min-width: 0;">
-      <p class="revelar" style="margin: 0; font: 600 clamp(30px, 3.8vw, 54px)/1.18 'Alegreya', Georgia, serif; color: #17362d;">{t.manifesto.statementBefore} <span style="color: #1f5c46; font-style: italic;">{t.manifesto.statementEmphasis}</span> {t.manifesto.statementAfter}</p>
-      <div style="margin-top: 56px; height: 1px; background: #e0a632;"></div>
-      <div style="margin-top: 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 24px;">
+<section class="bg-crema-luminoso px-gutter py-seccion">
+  <div class="mx-auto flex max-w-sitio flex-wrap items-start gap-x-16 gap-y-12">
+    <p class="shrink-0 grow-0 basis-auto text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{t.manifesto.eyebrow}</p>
+    <div class="min-w-0 flex-[1_1_640px]">
+      <p class="revelar font-titulos text-[length:clamp(30px,3.8vw,54px)]/[1.18] font-semibold text-verde-oscuro">{t.manifesto.statementBefore} <span class="text-verde-principal italic">{t.manifesto.statementEmphasis}</span> {t.manifesto.statementAfter}</p>
+      <div class="mt-14 h-px bg-mostaza-calido"></div>
+      <div class="mt-8 grid grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-6">
         {pillars.map((pillar) => (
-          <div><p style="margin: 0; font: 700 36px/1 'Alegreya', Georgia, serif; color: #e0a632;" aria-hidden="true">{pillar.symbol}</p><p style="margin: 10px 0 0; font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif;">{pillar.title}</p><p style="margin: 4px 0 0; font: 400 14px/21px 'Source Sans 3', system-ui, sans-serif; color: #5b625f;">{pillar.text}</p></div>
+          <div><p class="font-titulos text-[36px]/[1] font-bold text-mostaza-calido" aria-hidden="true">{pillar.symbol}</p><p class="mt-2.5 text-subtitulo font-semibold">{pillar.title}</p><p class="mt-1 text-cuerpo text-gris-texto">{pillar.text}</p></div>
         ))}
       </div>
     </div>

@@ -12,6 +12,7 @@ export interface AudienceText {
   photoNote: string;
 }
 
+// Tailwind class names; kept as full literals so the compiler can detect them.
 interface AudienceStyle {
   photoBg: string;
   photoNoteColor: string;
@@ -19,7 +20,7 @@ interface AudienceStyle {
   headColor: string;
   wordColor: string;
   headBorder: string;
-  segmentWeight: number;
+  segmentWeight: string;
 }
 
 export interface Audience extends AudienceText, AudienceStyle {
@@ -27,10 +28,10 @@ export interface Audience extends AudienceText, AudienceStyle {
 }
 
 const styles: Record<AudienceId, AudienceStyle> = {
-  travelers: { photoBg: '#1f5c46', photoNoteColor: '#fff7e8', headBg: '#1f5c46', headColor: '#fff7e8', wordColor: '#e0a632', headBorder: 'rgba(255,247,232,.25)', segmentWeight: 600 },
-  locals: { photoBg: '#24473c', photoNoteColor: '#fff7e8', headBg: '#17362d', headColor: '#fff7e8', wordColor: '#e0a632', headBorder: 'rgba(255,247,232,.25)', segmentWeight: 600 },
-  companies: { photoBg: '#4f634c', photoNoteColor: '#fff7e8', headBg: '#667d63', headColor: '#fff7e8', wordColor: '#fff7e8', headBorder: 'rgba(255,247,232,.25)', segmentWeight: 700 },
-  education: { photoBg: '#c48e22', photoNoteColor: '#17362d', headBg: '#e0a632', headColor: '#17362d', wordColor: '#17362d', headBorder: 'rgba(23,54,45,.25)', segmentWeight: 600 },
+  travelers: { photoBg: 'bg-verde-principal', photoNoteColor: 'text-crema-luminoso', headBg: 'bg-verde-principal', headColor: 'text-crema-luminoso', wordColor: 'text-mostaza-calido', headBorder: 'border-crema-luminoso/25', segmentWeight: 'font-semibold' },
+  locals: { photoBg: 'bg-selva', photoNoteColor: 'text-crema-luminoso', headBg: 'bg-verde-oscuro', headColor: 'text-crema-luminoso', wordColor: 'text-mostaza-calido', headBorder: 'border-crema-luminoso/25', segmentWeight: 'font-semibold' },
+  companies: { photoBg: 'bg-musgo', photoNoteColor: 'text-crema-luminoso', headBg: 'bg-verde-salvia', headColor: 'text-crema-luminoso', wordColor: 'text-crema-luminoso', headBorder: 'border-crema-luminoso/25', segmentWeight: 'font-bold' },
+  education: { photoBg: 'bg-mostaza-sombra', photoNoteColor: 'text-verde-oscuro', headBg: 'bg-mostaza-calido', headColor: 'text-verde-oscuro', wordColor: 'text-verde-oscuro', headBorder: 'border-verde-oscuro/25', segmentWeight: 'font-semibold' },
 };
 
 export function getAudiences(locale: Locale): Audience[] {

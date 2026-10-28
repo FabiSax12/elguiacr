@@ -7,22 +7,22 @@ const t = useTranslations(locale);
 const steps = getSteps(locale);
 ---
 
-<section id="como-funciona" style="background: #fff7e8; padding: clamp(80px, 10vw, 144px) clamp(16px, 5vw, 64px);">
-  <div style="max-width: 1240px; margin: 0 auto;">
-    <p style="margin: 0; font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #1f5c46;">{t.how.eyebrow}</p>
-    <h2 class="revelar" style="margin: 16px 0 0; max-width: 820px; font: 700 clamp(36px, 4.6vw, 64px)/1.05 'Alegreya', Georgia, serif;">{t.how.title}</h2>
-    <div style="height: 1px; background: #e0a632; margin-top: 32px;"></div>
+<section id="como-funciona" class="bg-crema-luminoso px-gutter py-seccion">
+  <div class="mx-auto max-w-sitio">
+    <p class="text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{t.how.eyebrow}</p>
+    <h2 class="revelar mt-4 max-w-[820px] font-titulos text-titulo-b font-bold">{t.how.title}</h2>
+    <div class="mt-8 h-px bg-mostaza-calido"></div>
 
-    <div style="position: relative; margin-top: 64px;">
-      <svg viewBox="0 0 1000 90" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; left: 0; top: 4px; width: 100%; height: 90px;">
+    <div class="relative mt-16">
+      <svg viewBox="0 0 1000 90" preserveAspectRatio="none" aria-hidden="true" class="absolute top-1 left-0 h-[90px] w-full">
         <polyline class="trazar" pathLength="1" points="0,70 130,44 250,62 380,20 500,40 630,12 760,36 880,8 1000,24" fill="none" stroke="#e0a632" stroke-width="4" vector-effect="non-scaling-stroke"></polyline>
       </svg>
-      <ol style="position: relative; list-style: none; margin: 0; padding: 120px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px 32px;">
+      <ol class="relative grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-x-8 gap-y-10 pt-30">
         {steps.map((step) => (
           <li class="revelar">
-            <p style="margin: 0; font: 800 72px/1 'Alegreya', Georgia, serif; color: #e0a632;">{step.number}</p>
-            <h3 style="margin: 14px 0 0; font: 600 24px/1.3 'Alegreya', Georgia, serif;">{step.title}</h3>
-            <p style="margin: 8px 0 0; font: 400 15px/23px 'Source Sans 3', system-ui, sans-serif; color: #17362d;">{step.text}</p>
+            <p class="font-titulos text-[72px]/[1] font-extrabold text-mostaza-calido">{step.number}</p>
+            <h3 class="mt-3.5 font-titulos text-2xl/[1.3] font-semibold">{step.title}</h3>
+            <p class="mt-2 text-parrafo text-verde-oscuro">{step.text}</p>
           </li>
         ))}
       </ol>

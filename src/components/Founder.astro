@@ -6,33 +6,33 @@ import founder from '../assets/founder.webp';
 const t = useTranslations(getLocale(Astro.currentLocale));
 ---
 
-<section id="fundador" class="oscuro" style="position: relative; background: #17362d; color: #fff7e8; overflow: clip; padding: clamp(80px, 10vw, 144px) clamp(16px, 5vw, 64px);">
-  <div style="max-width: 1240px; margin: 0 auto;">
-    <h2 class="revelar" style="margin: 0; max-width: 760px; font: 700 clamp(38px, 5vw, 68px)/1.04 'Alegreya', Georgia, serif;">{t.founder.title}</h2>
-    <div style="height: 1px; background: #e0a632; margin-top: 32px;"></div>
+<section id="fundador" class="oscuro relative overflow-clip bg-verde-oscuro px-gutter py-seccion text-crema-luminoso">
+  <div class="mx-auto max-w-sitio">
+    <h2 class="revelar max-w-[760px] font-titulos text-titulo-a font-bold">{t.founder.title}</h2>
+    <div class="mt-8 h-px bg-mostaza-calido"></div>
 
-    <div style="margin-top: 56px; display: flex; flex-wrap: wrap; gap: 48px 72px; align-items: center;">
-      <figure style="flex: 1 1 420px; min-width: 0; margin: 0;">
-        <div style="position: relative; aspect-ratio: 4 / 5; overflow: clip; background: #1f5c46;">
-          <Image class="zoom-lento" src={founder} width={1000} alt={t.founder.photoAlt} style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 68% 40%; display: block;" />
+    <div class="mt-14 flex flex-wrap items-center gap-x-18 gap-y-12">
+      <figure class="min-w-0 flex-[1_1_420px]">
+        <div class="relative aspect-[4/5] overflow-clip bg-verde-principal">
+          <Image class="zoom-lento absolute inset-0 block size-full object-cover object-[68%_40%]" src={founder} width={1000} alt={t.founder.photoAlt} />
         </div>
-        <svg viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true" style="display: block; width: 100%; height: 40px; margin-top: 16px;"><polyline class="trazar" pathLength="1" points="0,34 70,18 130,26 200,6 260,16 330,2 400,10" fill="none" stroke="#e0a632" stroke-width="3" vector-effect="non-scaling-stroke"></polyline></svg>
+        <svg viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true" class="mt-4 block h-10 w-full"><polyline class="trazar" pathLength="1" points="0,34 70,18 130,26 200,6 260,16 330,2 400,10" fill="none" stroke="#e0a632" stroke-width="3" vector-effect="non-scaling-stroke"></polyline></svg>
       </figure>
 
-      <div style="flex: 1 1 460px; min-width: 0;">
-        <div class="revelar" style="display: flex; align-items: baseline; gap: 18px;">
-          <span style="font: 800 clamp(64px, 7vw, 96px)/0.9 'Alegreya', Georgia, serif; color: #e0a632;" aria-hidden="true">01</span>
-          <span style="font: 600 12px/17px 'Source Sans 3', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #e0a632;">{t.founder.role}</span>
+      <div class="min-w-0 flex-[1_1_460px]">
+        <div class="revelar flex items-baseline gap-[18px]">
+          <span class="font-titulos text-[length:clamp(64px,7vw,96px)]/[0.9] font-extrabold text-mostaza-calido" aria-hidden="true">01</span>
+          <span class="text-label font-semibold tracking-eyebrow text-mostaza-calido uppercase">{t.founder.role}</span>
         </div>
-        <h3 class="revelar" style="margin: 18px 0 0; font: 700 clamp(34px, 3.6vw, 48px)/1.05 'Alegreya', Georgia, serif;">{t.founder.name}</h3>
-        <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 18px; font: 400 17px/1.65 'Source Sans 3', system-ui, sans-serif;">
-          <p class="revelar" style="margin: 0;">{t.founder.bio1}</p>
-          <p class="revelar" style="margin: 0;">{t.founder.bio2}</p>
+        <h3 class="revelar mt-[18px] font-titulos text-[length:clamp(34px,3.6vw,48px)]/[1.05] font-bold">{t.founder.name}</h3>
+        <div class="mt-6 flex flex-col gap-[18px] text-entrada/[1.65]">
+          <p class="revelar">{t.founder.bio1}</p>
+          <p class="revelar">{t.founder.bio2}</p>
         </div>
-        <blockquote class="revelar" style="margin: 32px 0 0; padding: 0 0 0 22px; border-left: 4px solid #e0a632;">
-          <p style="margin: 0; font: 500 italic clamp(22px, 2.2vw, 28px)/1.4 'Alegreya', Georgia, serif; color: #fff7e8;">{t.founder.quote}</p>
+        <blockquote class="revelar mt-8 border-l-4 border-mostaza-calido pl-[22px]">
+          <p class="font-titulos text-[length:clamp(22px,2.2vw,28px)]/[1.4] font-medium text-crema-luminoso italic">{t.founder.quote}</p>
         </blockquote>
-        <a class="btn-claro" href="#contanos" style="margin-top: 36px; display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; background: #e0a632; color: #17362d; font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif; text-decoration: none;">{t.founder.cta} <span class="flecha" aria-hidden="true">→</span></a>
+        <a class="mt-9 inline-flex min-h-12 items-center gap-2.5 bg-mostaza-calido px-[22px] text-subtitulo font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro" href="#contanos">{t.founder.cta} <span class="inline-block" aria-hidden="true">→</span></a>
       </div>
     </div>
   </div>

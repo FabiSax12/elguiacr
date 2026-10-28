@@ -2,26 +2,25 @@
 interface Props {
   backFill: string;
   backVein: string;
-  backInset: string;
-  backTop: string;
-  backWidth: string;
+  backLeftClass: string;
+  backRightClass: string;
   frontFill: string;
   frontVein: string;
   sideVeinOpacity: string;
 }
 
-const { backFill, backVein, backInset, backTop, backWidth, frontFill, frontVein, sideVeinOpacity } = Astro.props;
+const { backFill, backVein, backLeftClass, backRightClass, frontFill, frontVein, sideVeinOpacity } = Astro.props;
 
 const leafOutline = 'M10 150 C 120 20, 380 -10, 590 60 C 470 230, 220 300, 10 150 Z';
 const midrib = 'M10 150 C 200 120, 400 90, 590 60';
 const sideVeins = 'M160 132 C 200 90, 250 70, 300 60 M260 118 C 300 160, 360 180, 420 178 M360 100 C 400 70, 450 58, 500 60';
 ---
 
-<div class="hojas" aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 0; height: 520px; pointer-events: none; z-index: 3;">
-  <svg class="hoja-izq-2" viewBox="0 0 600 300" style={`position: absolute; left: ${backInset}; top: ${backTop}; width: ${backWidth}; height: auto;`}><path d={leafOutline} fill={backFill}></path><path d={midrib} fill="none" stroke={backVein} stroke-width="3"></path></svg>
-  <svg class="hoja-der-2" viewBox="0 0 600 300" style={`position: absolute; right: ${backInset}; top: ${backTop}; width: ${backWidth}; height: auto;`}><g transform="translate(600 0) scale(-1 1)"><path d={leafOutline} fill={backFill}></path><path d={midrib} fill="none" stroke={backVein} stroke-width="3"></path></g></svg>
-  <svg class="hoja-izq" viewBox="0 0 600 300" style="position: absolute; left: -2%; top: 0; width: 56%; height: auto;"><path d={leafOutline} fill={frontFill}></path><path d={midrib} fill="none" stroke={frontVein} stroke-width="3"></path><path d={sideVeins} fill="none" stroke="#17362d" stroke-width="2" opacity={sideVeinOpacity}></path></svg>
-  <svg class="hoja-der" viewBox="0 0 600 300" style="position: absolute; right: -2%; top: 0; width: 56%; height: auto;"><g transform="translate(600 0) scale(-1 1)"><path d={leafOutline} fill={frontFill}></path><path d={midrib} fill="none" stroke={frontVein} stroke-width="3"></path><path d={sideVeins} fill="none" stroke="#17362d" stroke-width="2" opacity={sideVeinOpacity}></path></g></svg>
+<div data-leaves class="pointer-events-none absolute inset-x-0 top-0 z-[3] h-[520px]" aria-hidden="true">
+  <svg class:list={['hoja-izq-2 absolute h-auto', backLeftClass]} viewBox="0 0 600 300"><path d={leafOutline} fill={backFill}></path><path d={midrib} fill="none" stroke={backVein} stroke-width="3"></path></svg>
+  <svg class:list={['hoja-der-2 absolute h-auto', backRightClass]} viewBox="0 0 600 300"><g transform="translate(600 0) scale(-1 1)"><path d={leafOutline} fill={backFill}></path><path d={midrib} fill="none" stroke={backVein} stroke-width="3"></path></g></svg>
+  <svg class="hoja-izq absolute -left-[2%] top-0 h-auto w-[56%]" viewBox="0 0 600 300"><path d={leafOutline} fill={frontFill}></path><path d={midrib} fill="none" stroke={frontVein} stroke-width="3"></path><path d={sideVeins} fill="none" stroke="#17362d" stroke-width="2" opacity={sideVeinOpacity}></path></svg>
+  <svg class="hoja-der absolute -right-[2%] top-0 h-auto w-[56%]" viewBox="0 0 600 300"><g transform="translate(600 0) scale(-1 1)"><path d={leafOutline} fill={frontFill}></path><path d={midrib} fill="none" stroke={frontVein} stroke-width="3"></path><path d={sideVeins} fill="none" stroke="#17362d" stroke-width="2" opacity={sideVeinOpacity}></path></g></svg>
 </div>
 
 <script>
@@ -33,12 +32,12 @@ const sideVeins = 'M160 132 C 200 90, 250 70, 300 60 M260 118 C 300 160, 360 180
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          entry.target.querySelector('.hojas')?.classList.add('abiertas');
+          entry.target.querySelector('[data-leaves]')?.setAttribute('data-open', '');
         });
       },
       { threshold: 0.4 },
     );
 
-    document.querySelectorAll('section:has(> .hojas)').forEach((section) => observer.observe(section));
+    document.querySelectorAll('section:has(> [data-leaves])').forEach((section) => observer.observe(section));
   }
 </script>

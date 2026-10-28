@@ -7,20 +7,22 @@ import { getLocale, useTranslations } from '../i18n/utils';
 
 const locale = getLocale(Astro.currentLocale);
 const t = useTranslations(locale);
+
+const navLink = 'text-crema-luminoso no-underline hover:text-mostaza-calido';
 ---
 
-<header class="oscuro" style="position: relative; z-index: 50; background: #17362d; border-bottom: 1px solid rgba(224,166,50,.35);">
-  <nav aria-label={t.nav.ariaLabel} style="max-width: 1240px; margin: 0 auto; padding: 14px clamp(16px, 5vw, 64px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 28px;">
-    <a href="#inicio" aria-label={t.nav.homeLabel} style="display: block; line-height: 0;"><img src={logo.src} alt="El Guía CR" width={logo.width} height={logo.height} style="width: 160px; height: auto; display: block;" /></a>
-    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 28px; font: 500 15px/24px 'Source Sans 3', system-ui, sans-serif;">
+<header class="oscuro relative z-50 border-b border-mostaza-calido/35 bg-verde-oscuro">
+  <nav aria-label={t.nav.ariaLabel} class="mx-auto flex max-w-sitio flex-wrap items-center justify-between gap-x-7 gap-y-3 px-gutter py-3.5">
+    <a href="#inicio" aria-label={t.nav.homeLabel} class="block leading-[0]"><img src={logo.src} alt="El Guía CR" width={logo.width} height={logo.height} class="block h-auto w-40" /></a>
+    <div class="flex flex-wrap items-center gap-x-7 gap-y-2 text-subtitulo font-medium">
       {navLinks.map((link) => (
-        <a class="nav-link" href={link.href} style="padding: 10px 0;">{t.nav.links[link.key]}</a>
+        <a class:list={[navLink, 'py-2.5']} href={link.href}>{t.nav.links[link.key]}</a>
       ))}
-      <ul class="lang-switch" aria-label={t.nav.languageLabel}>
+      <ul class="flex items-center" aria-label={t.nav.languageLabel}>
         {locales.map((code) => (
-          <li>
+          <li class="not-first:before:text-crema-luminoso not-first:before:opacity-40 not-first:before:content-['|']">
             <a
-              class="nav-link"
+              class:list={[navLink, 'inline-block min-w-11 py-2.5 text-center aria-[current=true]:font-bold aria-[current=true]:text-mostaza-calido']}
               href={getRelativeLocaleUrl(code)}
               lang={code}
               hreflang={code}
@@ -30,32 +32,7 @@ const t = useTranslations(locale);
           </li>
         ))}
       </ul>
-      <a class="btn-claro" href="#contanos" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; background: #e0a632; color: #17362d; font: 600 15px/24px 'Source Sans 3', system-ui, sans-serif; text-decoration: none;">{t.nav.cta}</a>
+      <a class="inline-flex min-h-11 items-center bg-mostaza-calido px-5 text-subtitulo font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro" href="#contanos">{t.nav.cta}</a>
     </div>
   </nav>
 </header>
-
-<style>
-  .lang-switch {
-    display: flex;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .lang-switch li + li::before {
-    content: '|';
-    color: #fff7e8;
-    opacity: 0.4;
-  }
-  .lang-switch a {
-    display: inline-block;
-    min-width: 44px;
-    padding: 10px 0;
-    text-align: center;
-  }
-  .lang-switch a[aria-current='true'] {
-    color: #e0a632;
-    font-weight: 700;
-  }
-</style>
