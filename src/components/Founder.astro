@@ -6,12 +6,12 @@ import founder from '../assets/founder.webp';
 const t = useTranslations(getLocale(Astro.currentLocale));
 ---
 
-<section id="fundador" class="oscuro relative overflow-clip bg-verde-oscuro px-gutter py-seccion text-crema-luminoso">
-  <div class="mx-auto max-w-sitio">
+<section id="fundador" class="flex min-h-svh flex-col justify-center oscuro relative overflow-clip bg-verde-oscuro px-gutter py-seccion text-crema-luminoso">
+  <div class="mx-auto w-full max-w-sitio">
     <h2 class="revelar max-w-[760px] font-titulos text-titulo-a font-bold">{t.founder.title}</h2>
     <div class="mt-8 h-px bg-mostaza-calido"></div>
 
-    <div class="mt-14 flex flex-wrap items-center gap-x-18 gap-y-12">
+    <div class="mt-9 flex flex-wrap items-center gap-x-18 gap-y-12">
       <figure class="min-w-0 flex-[1_1_420px]">
         <div class="relative aspect-[4/5] overflow-clip bg-verde-principal">
           <Image class="zoom-lento absolute inset-0 block size-full object-cover object-[68%_40%]" src={founder} width={1000} alt={t.founder.photoAlt} />
@@ -21,16 +21,16 @@ const t = useTranslations(getLocale(Astro.currentLocale));
 
       <div class="min-w-0 flex-[1_1_460px]">
         <div class="revelar flex items-baseline gap-[18px]">
-          <span class="font-titulos text-[length:clamp(64px,7vw,96px)]/[0.9] font-extrabold text-mostaza-calido" aria-hidden="true">01</span>
+          <span class="font-titulos text-[length:clamp(44px,4.7vw,64px)]/[0.9] font-extrabold text-mostaza-calido" aria-hidden="true">01</span>
           <span class="text-label font-semibold tracking-eyebrow text-mostaza-calido uppercase">{t.founder.role}</span>
         </div>
-        <h3 class="revelar mt-[18px] font-titulos text-[length:clamp(34px,3.6vw,48px)]/[1.05] font-bold">{t.founder.name}</h3>
+        <h3 class="revelar mt-[18px] font-titulos text-[length:clamp(24px,2.4vw,32px)]/[1.05] font-bold">{t.founder.name}</h3>
         <div class="mt-6 flex flex-col gap-[18px] text-entrada/[1.65]">
           <p class="revelar">{t.founder.bio1}</p>
           <p class="revelar">{t.founder.bio2}</p>
         </div>
         <blockquote class="revelar mt-8 border-l-4 border-mostaza-calido pl-[22px]">
-          <p class="font-titulos text-[length:clamp(22px,2.2vw,28px)]/[1.4] font-medium text-crema-luminoso italic">{t.founder.quote}</p>
+          <p class="font-titulos text-[length:clamp(18px,1.5vw,20px)]/[1.4] font-medium text-crema-luminoso italic">{t.founder.quote}</p>
         </blockquote>
         <a class="mt-9 inline-flex min-h-12 items-center gap-2.5 bg-mostaza-calido px-[22px] text-subtitulo font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro" href="#contanos">{t.founder.cta} <span class="inline-block" aria-hidden="true">→</span></a>
       </div>

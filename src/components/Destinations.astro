@@ -17,11 +17,11 @@ const resolved = await Promise.all(
 const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved[0];
 ---
 
-<section id="destinos" class="relative overflow-clip bg-arena px-gutter pt-seccion-alta pb-seccion-cierre">
+<section id="destinos" class="flex min-h-svh flex-col justify-center relative overflow-clip bg-arena px-gutter pt-seccion-alta pb-seccion-cierre">
   <Leaves backFill="#17362d" backVein="#e0a632" backLeftClass="left-[6%] top-[50px] w-[38%]" backRightClass="right-[6%] top-[50px] w-[38%]" frontFill="#1f5c46" frontVein="#fff7e8" sideVeinOpacity=".5" />
 
-  <div class="relative mx-auto max-w-sitio">
-    <div class="mx-auto max-w-[780px] text-center">
+  <div class="relative mx-auto w-full max-w-sitio">
+    <div class="mx-auto w-full max-w-[780px] text-center">
       <p class="text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{t.destinations.eyebrow}</p>
       <h2 class="mt-4 font-titulos text-titulo-a font-bold">{t.destinations.title}</h2>
       <p class="mx-auto mt-5 max-w-[580px] text-lg/[1.6]">{t.destinations.intro}</p>
@@ -51,7 +51,7 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
 
       <!-- destination panel -->
       <aside class="flex min-w-0 flex-[1_1_360px] flex-col bg-verde-oscuro text-crema-luminoso" aria-live="polite">
-        <div class="relative h-[340px] overflow-clip bg-verde-principal">
+        <div class="relative h-[230px] overflow-clip bg-verde-principal">
           <img class="absolute inset-0 block size-full animate-foto-entra object-cover object-(--pos)" data-field="image" src={initial.imageSrc} alt={initial.alt} hidden={!initial.imageSrc} style={`--pos: ${initial.position ?? '50% 50%'};`} />
           <div data-field="placeholder" hidden={Boolean(initial.imageSrc)} class="absolute inset-0 flex items-end p-[18px]">
             <p data-field="photoNote" class="text-nota text-crema-luminoso">{initial.photoNote}</p>
@@ -59,7 +59,7 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
         </div>
         <div class="flex grow flex-col gap-3.5 px-7 pt-7 pb-8">
           <p data-field="region" class="text-label font-semibold tracking-eyebrow text-mostaza-calido uppercase">{initial.region}</p>
-          <h3 data-field="name" class="font-titulos text-[38px]/[1.05] font-bold">{initial.name}</h3>
+          <h3 data-field="name" class="font-titulos text-[26px]/[1.05] font-bold">{initial.name}</h3>
           <p data-field="desc" class="text-base/[1.6]">{initial.desc}</p>
           <p class="mt-1.5 text-dato font-medium text-mostaza-calido">{t.destinations.idealFor} <span data-field="idealLabel">{initial.idealLabel}</span></p>
           <a class="mt-auto inline-flex min-h-12 items-center gap-2.5 self-start bg-mostaza-calido px-[22px] text-subtitulo font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro" href="#contanos" data-pick-destination>{t.destinations.pick} <span class="inline-block" aria-hidden="true">→</span></a>

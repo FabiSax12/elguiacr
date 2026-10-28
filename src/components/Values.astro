@@ -3,9 +3,9 @@ import { getLocale, useTranslations } from '../i18n/utils';
 
 const t = useTranslations(getLocale(Astro.currentLocale));
 ---
-<section class="bg-crema-luminoso px-gutter py-seccion">
-  <div class="mx-auto flex max-w-sitio flex-wrap items-center gap-14">
-    <div class="relative h-[520px] min-w-0 flex-[1_1_460px] overflow-clip bg-arena">
+<section class="flex min-h-svh flex-col justify-center bg-crema-luminoso px-gutter py-seccion">
+  <div class="mx-auto w-full flex max-w-sitio flex-wrap items-center gap-9">
+    <div class="relative h-[350px] min-w-0 flex-[1_1_460px] overflow-clip bg-arena">
       <div class="zoom-lento absolute inset-0 flex items-end bg-verde-niebla p-5">
         <p class="max-w-[360px] text-cuerpo text-verde-oscuro">{t.values.photoNote}</p>
       </div>
@@ -13,7 +13,7 @@ const t = useTranslations(getLocale(Astro.currentLocale));
     <div class="min-w-0 flex-[1_1_440px]">
       <p class="text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{t.values.eyebrow}</p>
       <blockquote class="revelar mt-5">
-        <p class="font-titulos text-[length:clamp(30px,3.4vw,46px)]/[1.2] font-medium italic">{t.values.quote}</p>
+        <p class="font-titulos text-[length:clamp(24px,2.3vw,31px)]/[1.2] font-medium italic">{t.values.quote}</p>
       </blockquote>
       <div class="mt-8 flex bg-arena">
         <span class="shrink-0 grow-0 basis-barra bg-mostaza-calido" aria-hidden="true"></span>

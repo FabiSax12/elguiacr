@@ -16,7 +16,7 @@ const midrib = 'M10 150 C 200 120, 400 90, 590 60';
 const sideVeins = 'M160 132 C 200 90, 250 70, 300 60 M260 118 C 300 160, 360 180, 420 178 M360 100 C 400 70, 450 58, 500 60';
 ---
 
-<div data-leaves class="pointer-events-none absolute inset-x-0 top-0 z-[3] h-[520px]" aria-hidden="true">
+<div data-leaves class="pointer-events-none absolute inset-x-0 top-0 z-[3] h-[350px]" aria-hidden="true">
   <svg class:list={['hoja-izq-2 absolute h-auto', backLeftClass]} viewBox="0 0 600 300"><path d={leafOutline} fill={backFill}></path><path d={midrib} fill="none" stroke={backVein} stroke-width="3"></path></svg>
   <svg class:list={['hoja-der-2 absolute h-auto', backRightClass]} viewBox="0 0 600 300"><g transform="translate(600 0) scale(-1 1)"><path d={leafOutline} fill={backFill}></path><path d={midrib} fill="none" stroke={backVein} stroke-width="3"></path></g></svg>
   <svg class="hoja-izq absolute -left-[2%] top-0 h-auto w-[56%]" viewBox="0 0 600 300"><path d={leafOutline} fill={frontFill}></path><path d={midrib} fill="none" stroke={frontVein} stroke-width="3"></path><path d={sideVeins} fill="none" stroke="#17362d" stroke-width="2" opacity={sideVeinOpacity}></path></svg>

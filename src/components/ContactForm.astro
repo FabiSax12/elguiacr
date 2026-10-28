@@ -11,11 +11,11 @@ const textarea = `${campo} min-h-24 resize-y`;
 const textareaShort = `${campo} min-h-[72px] resize-y`;
 ---
 
-<section id="contanos" class="bg-crema-luminoso px-gutter pb-[clamp(80px,10vw,144px)]">
-  <div class="mx-auto flex max-w-sitio flex-wrap items-stretch">
+<section id="contanos" class="flex min-h-svh flex-col justify-center bg-crema-luminoso px-gutter py-seccion">
+  <div class="mx-auto w-full flex max-w-sitio flex-wrap items-stretch">
     <div class="oscuro relative min-w-0 flex-[1_1_400px] overflow-clip bg-verde-principal p-[clamp(32px,4vw,56px)] text-crema-luminoso">
       <p class="text-label font-semibold tracking-eyebrow text-crema-luminoso uppercase">{t.contact.eyebrow}</p>
-      <h2 class="mt-4 font-titulos text-[length:clamp(36px,4vw,56px)]/[1.05] font-bold">{t.contact.title}</h2>
+      <h2 class="mt-4 font-titulos text-[length:clamp(26px,2.7vw,37px)]/[1.05] font-bold">{t.contact.title}</h2>
       <p class="mt-5 text-entrada/[1.6]">{t.contact.intro}</p>
       <ol class="mt-10 flex flex-col gap-[22px]">
         {[0, 1, 2].map((index) => (
@@ -61,9 +61,9 @@ const textareaShort = `${campo} min-h-[72px] resize-y`;
         </div>
       </div>
 
-      <div data-form-view="sent" hidden class="flex min-h-[520px] flex-col justify-center gap-[18px]">
+      <div data-form-view="sent" hidden class="flex min-h-[350px] flex-col justify-center gap-[18px]">
         <svg viewBox="0 0 300 60" aria-hidden="true" class="h-11 w-[220px]"><polyline class="dibujar" pathLength="1" points="0,50 60,30 110,40 165,12 215,24 270,4 300,10" fill="none" stroke="#e0a632" stroke-width="4"></polyline></svg>
-        <h3 class="font-titulos text-[44px]/[1.05] font-bold">{t.contact.sentTitle}</h3>
+        <h3 class="font-titulos text-[30px]/[1.05] font-bold">{t.contact.sentTitle}</h3>
         <p class="max-w-[460px] text-entrada/[1.6]">{t.contact.sentText}</p>
         <button type="button" data-reset class="min-h-11 cursor-pointer self-start border-0 bg-transparent p-0 text-subtitulo font-semibold text-verde-principal underline">{t.contact.sentReset}</button>
       </div>

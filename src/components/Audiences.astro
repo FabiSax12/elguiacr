@@ -8,11 +8,11 @@ const t = useTranslations(locale);
 const audiences = getAudiences(locale);
 ---
 
-<section id="para-quien" class="oscuro relative overflow-clip bg-verde-oscuro px-gutter pt-seccion-alta pb-seccion-cierre text-crema-luminoso">
+<section id="para-quien" class="flex min-h-svh flex-col justify-center oscuro relative overflow-clip bg-verde-oscuro px-gutter pt-seccion-alta pb-seccion-cierre text-crema-luminoso">
   <Leaves backFill="#667d63" backVein="#17362d" backLeftClass="left-[4%] top-10 w-[40%]" backRightClass="right-[4%] top-10 w-[40%]" frontFill="#1f5c46" frontVein="#e0a632" sideVeinOpacity=".6" />
 
-  <div class="relative mx-auto max-w-sitio">
-    <div class="mx-auto max-w-[760px] text-center">
+  <div class="relative mx-auto w-full max-w-sitio">
+    <div class="mx-auto w-full max-w-[760px] text-center">
       <p class="text-label font-semibold tracking-eyebrow text-mostaza-calido uppercase">{t.audiences.eyebrow}</p>
       <h2 class="mt-4 font-titulos text-titulo-a font-bold">{t.audiences.title}</h2>
       <p class="mx-auto mt-5 max-w-[560px] text-lg/[1.6]">{t.audiences.intro}</p>
@@ -21,10 +21,10 @@ const audiences = getAudiences(locale);
     <div class="mt-18 grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-5">
       {audiences.map((audience) => (
         <a class="group flex flex-col bg-crema-luminoso text-verde-oscuro no-underline transition-transform duration-500 ease-[cubic-bezier(.2,.7,.2,1)] hover:-translate-y-2" href="#contanos" data-segment={audience.id}>
-          <div class:list={['relative flex h-[230px] items-end overflow-clip p-3.5', audience.photoBg]}><p class:list={['text-nota', audience.photoNoteColor]}>{audience.photoNote}</p></div>
+          <div class:list={['relative flex h-[155px] items-end overflow-clip p-3.5', audience.photoBg]}><p class:list={['text-nota', audience.photoNoteColor]}>{audience.photoNote}</p></div>
           <div class:list={['border-t px-[22px] pt-1 pb-5', audience.headBg, audience.headColor, audience.headBorder]}>
             <p class:list={['mt-3.5 text-label tracking-eyebrow uppercase', audience.segmentWeight]}>{audience.segment}</p>
-            <p class:list={['mt-1 font-titulos text-[44px]/[1] font-bold', audience.wordColor]}>{audience.word}</p>
+            <p class:list={['mt-1 font-titulos text-[30px]/[1] font-bold', audience.wordColor]}>{audience.word}</p>
           </div>
           <div class="flex grow flex-col gap-4 px-[22px] pt-5 pb-6">
             <p class="text-subtitulo/[23px]">{audience.description}</p>
