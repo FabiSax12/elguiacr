@@ -85,10 +85,10 @@ const pages: Record<PlaceholderPageKey, PlaceholderPageText> = {
 };
 
 const audienceItems: Record<AudienceId, AudienceText> = {
-  travelers: { segment: 'Viajeros', word: 'Vivir', description: 'Viajes hechos a tu ritmo, presupuesto e intereses, coordinados de principio a fin.', cta: 'Quiero mi viaje a medida', photoNote: '[FOTO: pareja de viajeros aprendiendo a hacer tortillas con una familia en San Carlos.]' },
-  locals: { segment: 'Locales', word: 'Descubrir', description: 'Escapadas, celebraciones y planes para ver tu propio país con otros ojos.', cta: 'Quiero algo diferente', photoNote: '[FOTO: familia tica celebrando un cumpleaños en un río de la Zona Norte.]' },
-  companies: { segment: 'Empresas', word: 'Conectar', description: 'Integración, bienestar, reconocimiento o retiros, diseñados a partir del objetivo del equipo.', cta: 'Hablemos de tu equipo', photoNote: '[FOTO: equipo resolviendo un reto en una finca, sin poses.]' },
-  education: { segment: 'Educación', word: 'Aprender', description: 'Giras construidas desde el curso, la carrera y los objetivos de aprendizaje.', cta: 'Planear una gira', photoNote: '[FOTO: estudiantes universitarios tomando muestras con un biólogo en bosque nuboso.]' },
+  travelers: { segment: 'Viajeros', word: 'Vivir', description: 'Viajes hechos a tu ritmo, presupuesto e intereses, coordinados de principio a fin.', cta: 'Quiero mi viaje a medida', alt: 'Cocinera con delantal anaranjado doblando una tortilla sobre un comal grande' },
+  locals: { segment: 'Locales', word: 'Descubrir', description: 'Escapadas, celebraciones y planes para ver tu propio país con otros ojos.', cta: 'Quiero algo diferente', alt: 'Persona lanzándose desde un columpio de cuerda a un río en medio del bosque, con más gente bañándose' },
+  companies: { segment: 'Empresas', word: 'Conectar', description: 'Integración, bienestar, reconocimiento o retiros, diseñados a partir del objetivo del equipo.', cta: 'Hablemos de tu equipo', alt: 'Grupo jalando juntos en un juego de equipo sobre un campo de zacate, en un día soleado' },
+  education: { segment: 'Educación', word: 'Aprender', description: 'Giras construidas desde el curso, la carrera y los objetivos de aprendizaje.', cta: 'Planear una gira', alt: 'Guía con sombrero señalando hacia las copas de los árboles en un sendero rocoso, con dos caminantes detrás' },
 };
 
 const pillars: Record<PillarId, PillarText> = {
@@ -107,10 +107,10 @@ const steps: Record<StepId, StepText> = {
 
 const storyItems: Record<StoryId, StoryText> = {
   criteria: { note: '[REEL 9:16: Bernald frente a cámara explicando cuándo conviene ir a Río Celeste y cuándo no.]', kicker: 'El Guía te cuenta', title: 'Criterio, no catálogo' },
-  team: { note: '[FOTO horizontal: grupo de una empresa terminando una caminata, riendo, sudados, nadie posando.]', kicker: 'Empresas', title: 'Un equipo que se conoce afuera de la oficina' },
+  team: { alt: 'Cuatro amigos con mochilas riéndose durante una caminata entre montañas rocosas', kicker: 'Empresas', title: 'Un equipo que se conoce afuera de la oficina' },
   network: { note: '[REEL 9:16: visita a una finca aliada en La Fortuna; quiénes son, qué ofrecen, para quién funciona.]', kicker: 'El Guía descubre', title: 'La red, de cerca' },
   objective: { note: '[REEL 9:16: de la necesidad a la solución. Una gira académica, del brief del profesor al día en campo.]', kicker: 'Así se diseñó', title: 'Del objetivo a la experiencia' },
-  classroom: { note: '[FOTO horizontal: estudiantes de colegio con una cocinera del Caribe Sur preparando pan bon.]', kicker: 'Educación', title: 'Aprender también pasa fuera del aula' },
+  classroom: { alt: 'Grupo de jóvenes descansando sobre troncos en medio del bosque', kicker: 'Educación', title: 'Aprender también pasa fuera del aula' },
   experience: { note: '[REEL 9:16: casi sin diálogo. Amanecer en el río, café, risas, agua. Solo sonido ambiente.]', kicker: 'Vívelo', title: 'Solo la experiencia' },
 };
 
@@ -121,11 +121,11 @@ const spots: Record<SpotId, SpotText> = {
   monteverde: { short: 'Monteverde', name: 'Monteverde', region: 'Puntarenas · Cordillera de Tilarán', desc: 'Bosque nuboso, puentes colgantes y una comunidad con larga tradición en conservación e investigación.', alt: 'Persona caminando sobre un puente colgante en el bosque nuboso de Monteverde', photoNote: '[FOTO: estudiantes en un puente colgante dentro de la niebla.]' },
   tortuguero: { short: 'Tortuguero', name: 'Tortuguero', region: 'Caribe Norte · Limón', desc: 'Canales, selva del Caribe y anidación de tortugas marinas en temporada. Se llega en bote o avioneta, así que la logística importa.', alt: 'Tortugas recién nacidas avanzando sobre la arena oscura', photoNote: '[FOTO: bote recorriendo un canal al amanecer.]' },
   tamarindo: { short: 'Costa de Guanacaste', name: 'Costa de Guanacaste', region: 'Pacífico Norte', desc: 'Playas, atardeceres y una temporada seca marcada. Funciona para descansar, para el surf y para retiros de equipo.', photoNote: '[FOTO: equipo en una sesión de trabajo al aire libre frente al mar.]' },
-  santateresa: { short: 'Santa Teresa', name: 'Santa Teresa · Península de Nicoya', region: 'Puntarenas', desc: 'Pueblo costero al sur de la península, con surf, ritmo lento y caminos de tierra entre playas.', photoNote: '[FOTO: tabla de surf apoyada en una cerca, luz de tarde.]' },
-  sanjose: { short: 'San José', name: 'San José y el Valle Central', region: 'Valle Central', desc: 'Museos, mercados y cafetales a menos de una hora. La puerta de entrada para la mayoría de visitantes y una sede natural para empresas e instituciones.', photoNote: '[FOTO: grupo recorriendo un beneficio de café con su productor.]' },
-  manuel: { short: 'Manuel Antonio', name: 'Manuel Antonio', region: 'Pacífico Central · Quepos', desc: 'Un parque nacional pequeño donde el bosque llega hasta la playa. De los más visitados del país: elegir hora y guía hace la diferencia.', photoNote: '[FOTO: guía mostrando fauna por telescopio a una familia.]' },
+  santateresa: { short: 'Santa Teresa', name: 'Santa Teresa · Península de Nicoya', region: 'Puntarenas', desc: 'Pueblo costero al sur de la península, con surf, ritmo lento y caminos de tierra entre playas.', alt: 'Surfistas con sus tablas entrando al mar desde una playa de piedras bordeada de palmeras', photoNote: '[FOTO: tabla de surf apoyada en una cerca, luz de tarde.]' },
+  sanjose: { short: 'San José', name: 'San José y el Valle Central', region: 'Valle Central', desc: 'Museos, mercados y cafetales a menos de una hora. La puerta de entrada para la mayoría de visitantes y una sede natural para empresas e instituciones.', alt: 'Granos de café maduros, rojos y verdes, en la rama de un cafeto', photoNote: '[FOTO: grupo recorriendo un beneficio de café con su productor.]' },
+  manuel: { short: 'Manuel Antonio', name: 'Manuel Antonio', region: 'Pacífico Central · Quepos', desc: 'Un parque nacional pequeño donde el bosque llega hasta la playa. De los más visitados del país: elegir hora y guía hace la diferencia.', alt: 'Vista aérea de una punta cubierta de bosque entre dos bahías de agua turquesa', photoNote: '[FOTO: guía mostrando fauna por telescopio a una familia.]' },
   uvita: { short: 'Uvita · Marino Ballena', name: 'Uvita · Parque Nacional Marino Ballena', region: 'Pacífico Sur', desc: 'La punta con forma de cola de ballena y temporadas de avistamiento de ballenas jorobadas.', photoNote: '[FOTO: bote pequeño con biólogo marino explicando a un grupo.]' },
-  osa: { short: 'Osa · Corcovado', name: 'Península de Osa · Corcovado', region: 'Pacífico Sur · Puntarenas', desc: 'De las zonas con mayor biodiversidad del país. Remota: pide guía certificado, buena planificación y tiempo.', photoNote: '[FOTO: grupo cruzando un río en la península con su guía.]' },
+  osa: { short: 'Osa · Corcovado', name: 'Península de Osa · Corcovado', region: 'Pacífico Sur · Puntarenas', desc: 'De las zonas con mayor biodiversidad del país. Remota: pide guía certificado, buena planificación y tiempo.', alt: 'Playa de arena oscura con rocas y palmeras al borde de la selva en el Parque Nacional Corcovado', photoNote: '[FOTO: grupo cruzando un río en la península con su guía.]' },
   puertoviejo: { short: 'Caribe Sur', name: 'Puerto Viejo · Caribe Sur', region: 'Limón', desc: 'Cultura afrocaribeña, cocina propia, cacao y playas del sur del Caribe.', photoNote: '[FOTO: cocinera preparando rice and beans con coco para un grupo.]' },
 };
 
@@ -156,7 +156,7 @@ export const es = {
     videoNote: '[VIDEO: cortes de 2–3 s sin audio. Manos tostando café en una finca, un grupo cruzando un puente colgante en bosque nuboso, estudiantes midiendo un río con un especialista. Gente haciendo, no posando.]',
     photoLabel: 'Foto',
     photoNoteMain: '[FOTO: Bernald conversando con un anfitrión local en su finca, luz de tarde.]',
-    photoNoteSecondary: '[FOTO: equipo de trabajo cocinando juntos.]',
+    photoAltSecondary: 'Grupo picando hierbas frescas juntos para preparar una comida al aire libre',
   },
   manifesto: {
     eyebrow: '01 · Qué hacemos',
@@ -192,6 +192,7 @@ export const es = {
     title: 'Costa Rica, punto por punto.',
     intro: 'Algunos de los lugares más visitados y queridos del país. Toca un punto: te contamos qué tiene y para quién funciona.',
     idealFor: 'Funciona para:',
+    photoCredit: 'Foto',
     pick: 'Me interesa este destino',
     footnote: 'El mapa es un punto de partida. La experiencia se diseña alrededor de lo que tú buscas, no al revés.',
   },
@@ -214,7 +215,7 @@ export const es = {
     items: storyItems,
   },
   values: {
-    photoNote: '[FOTO horizontal: un anfitrión recibiendo a un grupo en la entrada de su finca. Documental, luz natural, nadie mirando a cámara.]',
+    photoAlt: 'Un finquero señalando sus potreros, con pacas de heno en el campo',
     eyebrow: '06 · Lo que nos importa',
     quote: '“Premium no significa lujo. Significa más personalización, cuidado, calidad, coordinación y atención.”',
     text: 'Trabajamos con personas, lugares y especialistas que conocemos y en los que confiamos. Si hay que sumar lujo o especialización, se suma; no es requisito.',

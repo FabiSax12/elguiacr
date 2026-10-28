@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import teamCooking from '../assets/team-cooking-outdoors.webp';
 import { getPagePath } from '../data/routes';
 import { getLocale, useTranslations } from '../i18n/utils';
 
@@ -32,9 +34,8 @@ const t = useTranslations(locale);
         <p class="mb-1.5 text-eyebrow font-semibold tracking-eyebrow-sm text-verde-principal uppercase">{t.hero.photoLabel}</p>
         <p class="text-nota">{t.hero.photoNoteMain}</p>
       </div>
-      <div class="parallax-c absolute top-7 left-[12%] flex h-[125px] w-[34%] flex-col justify-end rounded-imagen border-[6px] border-verde-oscuro bg-mostaza-calido p-3.5 text-verde-oscuro">
-        <p class="mb-1.5 text-eyebrow font-semibold tracking-eyebrow-sm uppercase">{t.hero.photoLabel}</p>
-        <p class="text-nota">{t.hero.photoNoteSecondary}</p>
+      <div class="parallax-c absolute top-7 left-[12%] h-[125px] w-[34%] overflow-clip rounded-imagen border-[6px] border-verde-oscuro bg-mostaza-calido">
+        <Image class="block size-full object-cover" src={teamCooking} width={600} alt={t.hero.photoAltSecondary} loading="eager" />
       </div>
     </div>
   </div>

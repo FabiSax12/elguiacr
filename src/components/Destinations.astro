@@ -53,6 +53,9 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
           <div data-field="placeholder" hidden={Boolean(initial.imageSrc)} class="absolute inset-0 flex items-end p-[18px]">
             <p data-field="photoNote" class="text-nota text-crema-luminoso">{initial.photoNote}</p>
           </div>
+          <p data-field="credit" hidden={!initial.imageSrc || !initial.credit} class="absolute right-2 bottom-2 rounded-md bg-verde-oscuro/60 px-2 py-0.5 text-eyebrow text-crema-luminoso/85">
+            {t.destinations.photoCredit}: <a data-field="creditAuthor" href={initial.credit?.photoUrl} class="text-crema-luminoso underline-offset-2 hover:underline" target="_blank" rel="noopener">{initial.credit?.author}</a> · <a data-field="creditLicense" href={initial.credit?.licenseUrl} class="text-crema-luminoso underline-offset-2 hover:underline" target="_blank" rel="noopener">{initial.credit?.license}</a>
+          </p>
         </div>
         <div class="flex grow flex-col gap-3.5 px-7 pt-7 pb-8">
           <p data-field="region" class="text-label font-semibold tracking-eyebrow text-mostaza-calido uppercase">{initial.region}</p>
@@ -80,6 +83,7 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
     imageSrc?: string;
     alt?: string;
     position?: string;
+    credit?: { author: string; photoUrl: string; license?: string; licenseUrl?: string };
   }
 
   const section = document.getElementById('destinos');
@@ -90,6 +94,9 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
     const field = (name: string) => section.querySelector<HTMLElement>(`[data-field="${name}"]`);
     const image = field('image') as HTMLImageElement | null;
     const placeholder = field('placeholder');
+    const credit = field('credit');
+    const creditAuthor = field('creditAuthor') as HTMLAnchorElement | null;
+    const creditLicense = field('creditLicense') as HTMLAnchorElement | null;
     let selectedId = section.querySelector<HTMLElement>('[data-marker][aria-pressed="true"]')?.dataset.spot;
 
     const select = (id: string) => {
@@ -117,6 +124,16 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
           image.classList.remove('animate-foto-entra');
           void image.offsetWidth;
           image.classList.add('animate-foto-entra');
+        }
+      }
+
+      if (credit && creditAuthor && creditLicense) {
+        credit.hidden = !spot.imageSrc || !spot.credit;
+        if (spot.credit) {
+          creditAuthor.href = spot.credit.photoUrl;
+          creditAuthor.textContent = spot.credit.author;
+          creditLicense.href = spot.credit.licenseUrl ?? '';
+          creditLicense.textContent = spot.credit.license ?? '';
         }
       }
     };

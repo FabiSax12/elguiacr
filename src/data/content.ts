@@ -1,3 +1,6 @@
+import type { ImageMetadata } from 'astro';
+import forestRestGroup from '../assets/forest-rest-group.webp';
+import friendsHikeLaughing from '../assets/friends-hike-laughing.webp';
 import type { Locale } from '../i18n/config';
 import { useTranslations } from '../i18n/utils';
 
@@ -34,7 +37,9 @@ export function getSteps(locale: Locale) {
 export const storyIds = ['criteria', 'team', 'network', 'objective', 'classroom', 'experience'] as const;
 export type StoryId = (typeof storyIds)[number];
 export interface StoryText {
-  note: string;
+  // Placeholder text until the story has media; alt text once it has a photo.
+  note?: string;
+  alt?: string;
   kicker: string;
   title: string;
 }
@@ -43,6 +48,7 @@ interface StoryStyle {
   format: 'reel' | 'photo';
   background: string;
   color?: string;
+  image?: ImageMetadata;
 }
 
 export interface Story extends StoryText, StoryStyle {
@@ -52,10 +58,10 @@ export interface Story extends StoryText, StoryStyle {
 // Tailwind class names; kept as full literals so the compiler can detect them.
 const storyStyles: Record<StoryId, StoryStyle> = {
   criteria: { format: 'reel', background: 'bg-verde-principal' },
-  team: { format: 'photo', background: 'bg-mostaza-calido', color: 'text-verde-oscuro' },
+  team: { format: 'photo', background: 'bg-mostaza-calido', color: 'text-verde-oscuro', image: friendsHikeLaughing },
   network: { format: 'reel', background: 'bg-selva' },
   objective: { format: 'reel', background: 'bg-verde-principal' },
-  classroom: { format: 'photo', background: 'bg-arena', color: 'text-verde-oscuro' },
+  classroom: { format: 'photo', background: 'bg-arena', color: 'text-verde-oscuro', image: forestRestGroup },
   experience: { format: 'reel', background: 'bg-selva' },
 };
 

@@ -2,6 +2,12 @@ import arenal from '../assets/arenal.webp';
 import monteverde from '../assets/monteverde.webp';
 import rioCeleste from '../assets/rio-celeste.webp';
 import tortuguero from '../assets/tortuguero.webp';
+import coffeeHarvest from '../assets/coffee-harvest.webp';
+import teamHikeRidge from '../assets/team-hike-ridge.webp';
+import forestClearingRetreat from '../assets/forest-clearing-retreat.webp';
+import sharedTable from '../assets/shared-table.webp';
+import limonSign from '../assets/limon-sign.webp';
+import riverRafting from '../assets/river-rafting.webp';
 import type { Locale } from '../i18n/config';
 import { useTranslations } from '../i18n/utils';
 import type { AudienceId } from './audiences';
@@ -105,6 +111,7 @@ const experiences: ExperienceSource[] = [
       en: 'A morning on a farm with the grower: how it is cultivated, processed and prepared, with a tasting built into the plan we design.',
     },
     duration: { es: 'Medio día', en: 'Half a day' },
+    image: { asset: coffeeHarvest, alt: { es: 'Manos de un productor sosteniendo un balde lleno de granos de café maduros', en: 'A grower\'s hands holding a bucket full of ripe coffee cherries' } },
     photoNote: { es: '[FOTO: grupo recorriendo un beneficio de café con su productor.]', en: '[PHOTO: a group touring a coffee mill with the grower.]' },
   },
   {
@@ -117,6 +124,7 @@ const experiences: ExperienceSource[] = [
       en: 'Market, stove and a shared table with a local family. A way to understand Costa Rican food from the people who cook it every day.',
     },
     duration: { es: 'Medio día', en: 'Half a day' },
+    image: { asset: sharedTable, alt: { es: 'Mesa servida con muchos platos de comida casera: huevos, frijoles, aguacate y ensaladas', en: 'A table laid with many plates of home cooking: eggs, beans, avocado and salads' } },
     photoNote: { es: '[FOTO: cocinera preparando el almuerzo para un grupo.]', en: '[PHOTO: a cook preparing lunch for a group.]' },
   },
   {
@@ -129,6 +137,7 @@ const experiences: ExperienceSource[] = [
       en: 'Outdoor activities shaped around the team\'s goal: bringing a new group together, loosening up communication or simply getting to know each other away from the office.',
     },
     duration: { es: 'Medio día a 1 día', en: 'Half a day to 1 day' },
+    image: { asset: teamHikeRidge, alt: { es: 'Equipo con camisetas iguales subiendo un cerro entre la niebla', en: 'A team in matching shirts hiking up a misty hillside' } },
     photoNote: { es: '[FOTO: equipo resolviendo un reto en una finca, sin poses.]', en: '[PHOTO: a team solving a challenge on a farm, no posing.]' },
   },
   {
@@ -141,6 +150,7 @@ const experiences: ExperienceSource[] = [
       en: 'A calm retreat with gentle movement, nature and room for quiet or for work, depending on what the group needs.',
     },
     duration: { es: '1 a 2 días', en: '1 to 2 days' },
+    image: { asset: forestClearingRetreat, alt: { es: 'Grupo reunido en un claro del bosque, con el sol de la tarde colándose entre los árboles', en: 'A group gathered in a forest clearing as late sunlight filters through the trees' } },
     photoNote: { es: '[FOTO: grupo en una sesión al aire libre frente al bosque.]', en: '[PHOTO: a group in an outdoor session facing the forest.]' },
   },
   {
@@ -153,6 +163,7 @@ const experiences: ExperienceSource[] = [
       en: 'Celebrate at a river, a farm or a beach, with food, activities and logistics sorted so the person with the birthday gets to enjoy it too.',
     },
     duration: { es: '1 día', en: '1 day' },
+    image: { asset: riverRafting, alt: { es: 'Grupo con cascos y chalecos salvavidas remando en una balsa por los rápidos de un río', en: 'A group in helmets and life jackets paddling a raft through river rapids' } },
     photoNote: { es: '[FOTO: familia celebrando junto a un río.]', en: '[PHOTO: a family celebrating beside a river.]' },
   },
   {
@@ -165,6 +176,7 @@ const experiences: ExperienceSource[] = [
       en: 'Food, cacao and conversations with people from the community to learn about the history and everyday life of the South Caribbean.',
     },
     duration: { es: '2 días', en: '2 days' },
+    image: { asset: limonSign, alt: { es: 'Letras de colores que forman la palabra Limón en un parque con árboles', en: 'Colorful letters spelling Limón in a tree-lined park' } },
     photoNote: { es: '[FOTO: cocinera preparando rice and beans con coco para un grupo.]', en: '[PHOTO: a cook preparing rice and beans with coconut for a group.]' },
   },
 ];

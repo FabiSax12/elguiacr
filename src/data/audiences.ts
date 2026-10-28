@@ -1,3 +1,8 @@
+import type { ImageMetadata } from 'astro';
+import griddleCooking from '../assets/griddle-cooking.webp';
+import riverRopeSwing from '../assets/river-rope-swing.webp';
+import teamGameField from '../assets/team-game-field.webp';
+import forestTrailGuide from '../assets/forest-trail-guide.webp';
 import type { Locale } from '../i18n/config';
 import { useTranslations } from '../i18n/utils';
 
@@ -9,7 +14,9 @@ export interface AudienceText {
   word: string;
   description: string;
   cta: string;
-  photoNote: string;
+  // Placeholder text until the audience has a photo; alt text once it does.
+  photoNote?: string;
+  alt?: string;
 }
 
 // Tailwind class names; kept as full literals so the compiler can detect them.
@@ -25,7 +32,15 @@ interface AudienceStyle {
 
 export interface Audience extends AudienceText, AudienceStyle {
   id: AudienceId;
+  image?: ImageMetadata;
 }
+
+const images: Partial<Record<AudienceId, ImageMetadata>> = {
+  travelers: griddleCooking,
+  locals: riverRopeSwing,
+  companies: teamGameField,
+  education: forestTrailGuide,
+};
 
 const styles: Record<AudienceId, AudienceStyle> = {
   travelers: { photoBg: 'bg-verde-principal', photoNoteColor: 'text-crema-luminoso', headBg: 'bg-verde-principal', headColor: 'text-crema-luminoso', wordColor: 'text-mostaza-calido', headBorder: 'border-crema-luminoso/25', segmentWeight: 'font-semibold' },
@@ -36,7 +51,7 @@ const styles: Record<AudienceId, AudienceStyle> = {
 
 export function getAudiences(locale: Locale): Audience[] {
   const { audiences } = useTranslations(locale);
-  return audienceIds.map((id) => ({ id, ...audiences.items[id], ...styles[id] }));
+  return audienceIds.map((id) => ({ id, image: images[id], ...audiences.items[id], ...styles[id] }));
 }
 
 export function getSegments(locale: Locale): { id: AudienceId | 'other'; label: string }[] {

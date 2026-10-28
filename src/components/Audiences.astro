@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { getLocale, useTranslations } from '../i18n/utils';
 import { getAudiences } from '../data/audiences';
 import { landingPageKeyByAudience } from '../data/landings';
@@ -20,7 +21,13 @@ const audiences = getAudiences(locale);
     <div class="mt-18 grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-5">
       {audiences.map((audience) => (
         <div class="group relative flex flex-col overflow-clip rounded-tarjeta bg-crema-luminoso text-verde-oscuro transition-transform duration-500 ease-[cubic-bezier(.2,.7,.2,1)] hover:-translate-y-2">
-          <div class:list={['relative flex h-[155px] items-end overflow-clip p-3.5', audience.photoBg]}><p class:list={['text-nota', audience.photoNoteColor]}>{audience.photoNote}</p></div>
+          <div class:list={['relative flex h-[155px] items-end overflow-clip p-3.5', audience.photoBg]}>
+            {audience.image ? (
+              <Image class="absolute inset-0 block size-full object-cover" src={audience.image} width={800} alt={audience.alt ?? ''} />
+            ) : (
+              <p class:list={['text-nota', audience.photoNoteColor]}>{audience.photoNote}</p>
+            )}
+          </div>
           <div class:list={['border-t px-[22px] pt-1 pb-5', audience.headBg, audience.headColor, audience.headBorder]}>
             <p class:list={['mt-3.5 text-label tracking-eyebrow uppercase', audience.segmentWeight]}>{audience.segment}</p>
             <p class:list={['mt-1 font-titulos text-[30px]/[1] font-bold', audience.wordColor]}>{audience.word}</p>

@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import farmerPasture from '../assets/farmer-pasture.webp';
 import { getLocale, useTranslations } from '../i18n/utils';
 
 const t = useTranslations(getLocale(Astro.currentLocale));
@@ -6,9 +8,7 @@ const t = useTranslations(getLocale(Astro.currentLocale));
 <section class="flex min-h-svh flex-col justify-center bg-crema-luminoso px-gutter py-seccion">
   <div class="mx-auto w-full flex max-w-sitio flex-wrap items-center gap-9">
     <div class="relative h-[350px] min-w-0 flex-[1_1_460px] overflow-clip rounded-imagen bg-arena">
-      <div class="zoom-lento absolute inset-0 flex items-end bg-verde-niebla p-5">
-        <p class="max-w-[360px] text-cuerpo text-verde-oscuro">{t.values.photoNote}</p>
-      </div>
+      <Image class="zoom-lento absolute inset-0 block size-full object-cover" src={farmerPasture} width={1200} alt={t.values.photoAlt} />
     </div>
     <div class="min-w-0 flex-[1_1_440px]">
       <p class="text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{t.values.eyebrow}</p>
