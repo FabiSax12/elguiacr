@@ -60,7 +60,7 @@ const chip = 'min-h-11 cursor-pointer rounded-full border-2 border-verde-oscuro 
           </div>
 
           <div class="mt-10 grid grid-cols-[repeat(auto-fill,minmax(290px,1fr))] gap-6" data-experience-grid>
-            {experiences.map((experience) => <ExperienceCard experience={experience} />)}
+            {experiences.map((experience, index) => <ExperienceCard experience={experience} index={index} />)}
           </div>
         </div>
       </section>

@@ -111,6 +111,8 @@
   0% { transform: scale(0.6); opacity: 0.9; }
   100% { transform: scale(2.4); opacity: 0; }
 }
+/* Slow vertical bob for floating cards (see the flotar utility). */
+@keyframes flotar { to { --flotar-y: -6px; } }
 /* Subtle parallax: keep amplitude within about 24px. */
 @keyframes pxA { from { transform: translateY(16px); } to { transform: translateY(-16px); } }
 @keyframes pxB { from { transform: translateY(24px); } to { transform: translateY(-24px); } }
@@ -130,6 +132,47 @@
   to { transform: translateX(calc(-100% + 100vw)); }
 }
 @keyframes barra { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* Floating card: slow vertical bob plus a soft green-tinted shadow that deepens on hover.
+   It moves the card with the `translate` property, so it composes with `transform`
+   animations (zoom-lento, foto-entra) on the card or its children.
+   Tune per element: --flotar-delay (desync neighbours; negative values start mid-cycle),
+   --flotar-duration (default 7s) and --flotar-hover (hover lift, default -4px). */
+@property --flotar-y {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --flotar-alza {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@utility flotar {
+  translate: 0 calc(var(--flotar-y) + var(--flotar-alza));
+  box-shadow:
+    0 1px 2px rgb(12 32 26 / 0.12),
+    0 6px 14px -4px rgb(12 32 26 / 0.22),
+    0 22px 40px -14px rgb(12 32 26 / 0.38);
+  transition-property: box-shadow, --flotar-alza;
+  transition-duration: 400ms;
+  transition-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+  &:hover {
+    --flotar-alza: var(--flotar-hover, -4px);
+    box-shadow:
+      0 2px 4px rgb(12 32 26 / 0.14),
+      0 12px 22px -6px rgb(12 32 26 / 0.26),
+      0 32px 56px -16px rgb(12 32 26 / 0.46);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    animation-name: flotar;
+    animation-duration: var(--flotar-duration, 7s);
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-delay: var(--flotar-delay, 0s);
+  }
+}
 
 /* Path that draws itself on load */
 @utility dibujar {

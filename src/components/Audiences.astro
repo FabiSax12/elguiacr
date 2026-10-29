@@ -19,8 +19,8 @@ const audiences = getAudiences(locale);
     </div>
 
     <div class="mt-18 grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-5">
-      {audiences.map((audience) => (
-        <div class="group relative flex flex-col overflow-clip rounded-tarjeta bg-crema-luminoso text-verde-oscuro transition-transform duration-500 ease-[cubic-bezier(.2,.7,.2,1)] hover:-translate-y-2">
+      {audiences.map((audience, index) => (
+        <div class="flotar group relative flex flex-col overflow-clip rounded-tarjeta bg-crema-luminoso text-verde-oscuro [--flotar-hover:-8px]" style={`--flotar-delay: ${index * -1.7}s;`}>
           <div class:list={['relative flex h-[155px] items-end overflow-clip p-3.5', audience.photoBg]}>
             {audience.image ? (
               <Image class="absolute inset-0 block size-full object-cover" src={audience.image} widths={[400, 800]} sizes="(min-width: 1280px) 300px, (min-width: 600px) 50vw, 100vw" alt={audience.alt ?? ''} />
