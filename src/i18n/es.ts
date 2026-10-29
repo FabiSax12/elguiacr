@@ -187,7 +187,6 @@ export const es = {
   },
   destinations: {
     listLabel: 'Destinos del mapa',
-    idealFor: 'Funciona para:',
     photoCredit: 'Foto',
     pick: 'Me interesa',
   },

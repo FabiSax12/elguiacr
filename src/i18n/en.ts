@@ -81,7 +81,6 @@ export const en: Dictionary = {
   },
   destinations: {
     listLabel: 'Destinations on the map',
-    idealFor: 'Works for:',
     photoCredit: 'Photo',
     pick: "I'm interested",
   },

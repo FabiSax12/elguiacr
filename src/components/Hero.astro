@@ -1,14 +1,28 @@
 ---
+import { getHeroSpots } from '../data/heroSpots';
 import { getPagePath } from '../data/routes';
 import HeroMap from './HeroMap.astro';
 import { getLocale, useTranslations } from '../i18n/utils';
 
 const locale = getLocale(Astro.currentLocale);
 const t = useTranslations(locale);
+const { spots, initial } = await getHeroSpots(locale);
+const backdrop = initial.backdrop;
 ---
-<section id="inicio" class="oscuro relative flex min-h-svh flex-col justify-center overflow-clip bg-verde-oscuro text-crema-luminoso">
-  <div class="mx-auto grid w-full max-w-sitio items-start gap-x-12 gap-y-10 px-gutter pt-hero pb-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
-    <div class="relative z-[2] min-w-0">
+<section id="inicio" class="oscuro relative isolate flex min-h-svh flex-col justify-center overflow-clip bg-verde-oscuro text-crema-luminoso">
+  <!-- Full-bleed photo of the selected spot. HeroMap's script crossfades it (it adds a second layer on the first change).
+       Decorative: the map and its markers carry the meaning. -->
+  <div class="hero-fondo absolute inset-0 -z-10" data-hero-backdrop aria-hidden="true">
+    {backdrop && (
+      <img class="absolute inset-0 block size-full object-cover object-(--pos) opacity-100 transition-opacity duration-900 ease-out" data-backdrop-layer src={backdrop.src} srcset={backdrop.srcset} sizes="100vw" alt="" loading="eager" fetchpriority="high" decoding="async" style={`--pos: ${backdrop.position};`} />
+    )}
+  </div>
+  <!-- Readability shade: vertical and stronger while the copy spans the full width, a left-hand black fade from lg up. -->
+  <div class="absolute inset-0 -z-10 bg-linear-to-b from-black/70 via-black/60 to-black/80 lg:bg-linear-to-r lg:from-black/85 lg:via-black/50 lg:via-35% lg:to-black/0 lg:to-70%" aria-hidden="true"></div>
+  <div class="absolute inset-0 -z-10 bg-black/15" aria-hidden="true"></div>
+
+  <div class="mx-auto w-full max-w-sitio px-gutter pt-hero pb-24">
+    <div class="relative z-10 max-w-[620px] min-w-0 lg:max-w-[min(620px,calc(100%-var(--mapa-w)-4rem))]">
       <p class="mb-4 text-label font-semibold tracking-eyebrow text-mostaza-calido uppercase">{t.hero.eyebrow}</p>
       <h1 class="font-titulos text-hero font-extrabold tracking-[-0.02em]">{t.hero.titleBefore} <em class="font-semibold text-mostaza-calido italic">{t.hero.titleEmphasis}</em> {t.hero.titleAfter}</h1>
       <p class="mt-5 max-w-[420px] text-[length:clamp(15px,1.1vw,17px)]/[1.55] text-crema-luminoso">{t.hero.intro}</p>
@@ -19,13 +33,72 @@ const t = useTranslations(locale);
       <p class="mt-7 text-dato font-medium text-crema-luminoso opacity-85">{t.hero.segments}</p>
     </div>
 
-    <div class="relative z-[1] min-w-0">
-      <HeroMap />
+    <!-- Below the copy on small screens, pinned to the hero's top-right corner from lg up. -->
+    <div class="relative z-20 mx-auto mt-12 w-full max-w-[340px] lg:absolute lg:top-6 lg:right-(--mapa-derecha) lg:mx-0 lg:mt-0 lg:w-(--mapa-w) lg:max-w-none">
+      <HeroMap spots={spots} initial={initial} />
     </div>
   </div>
+
+  <!-- Required for CC-BY photos: credits whichever photo is currently in the background. -->
+  <p data-hero-credit hidden={!initial.credit} class="absolute right-gutter bottom-2 z-10 max-w-[calc(100%-2*var(--spacing-gutter))] rounded-md bg-black/55 px-2 py-0.5 text-eyebrow text-crema-luminoso/85">
+    {t.destinations.photoCredit}: <a data-credit-author href={initial.credit?.photoUrl} class="text-crema-luminoso underline-offset-2 hover:text-crema-luminoso hover:underline" target="_blank" rel="noopener">{initial.credit?.author}</a> · <a data-credit-license href={initial.credit?.licenseUrl} class="text-crema-luminoso underline-offset-2 hover:text-crema-luminoso hover:underline" target="_blank" rel="noopener">{initial.credit?.license}</a>
+  </p>
 
   <!-- the path draws itself -->
   <svg viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true" class="absolute bottom-3 left-0 h-20 w-full">
     <polyline class="dibujar" pathLength="1" points="0,104 180,70 340,88 520,34 700,60 880,22 1060,50 1240,8 1440,30" fill="none" stroke="#e0a632" stroke-width="4" vector-effect="non-scaling-stroke"></polyline>
   </svg>
 </section>
+
+<style is:global>
+  /* Hero map sizing and the explore state. HeroMap's script sets [data-explorando] on #inicio while a mouse
+     is over the map or keyboard focus is in it. Tune here: --mapa-w (corner map width), --mapa-escala
+     (growth while exploring, smaller below xl so it covers less copy) and --fondo-blur (background blur while exploring). */
+  #inicio {
+    --mapa-w: 260px;
+    --mapa-escala: 1.45;
+    --fondo-blur: 4px;
+    --mapa-derecha: max(var(--spacing-gutter), calc((100% - var(--container-sitio)) / 2 + var(--spacing-gutter)));
+    --explorar-curva: cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  @media (min-width: 80rem) {
+    #inicio {
+      --mapa-w: 290px;
+      --mapa-escala: 1.7;
+    }
+  }
+
+  /* Only the corner layout explores: below lg the map sits in the flow under the copy. */
+  @media (min-width: 64rem) {
+    #inicio .hero-fondo {
+      transition-property: filter, scale;
+      transition-duration: 500ms;
+      transition-timing-function: var(--explorar-curva);
+    }
+
+    #inicio [data-map-panel] {
+      transform-origin: top right;
+      transition: scale 450ms var(--explorar-curva);
+    }
+
+    #inicio [data-map-foot] {
+      transition: translate 450ms var(--explorar-curva);
+    }
+
+    #inicio[data-explorando] .hero-fondo {
+      filter: blur(var(--fondo-blur));
+      /* Slight zoom so the blurred edges never reveal the green behind. */
+      scale: 1.04;
+    }
+
+    #inicio[data-explorando] [data-map-panel] {
+      scale: var(--mapa-escala);
+    }
+
+    /* The pill follows the grown panel's bottom edge. Panel height = 2 * 8px padding + inner width * (613 / 648.3). */
+    #inicio[data-explorando] [data-map-foot] {
+      translate: 0 calc((var(--mapa-escala) - 1) * (16px + (var(--mapa-w) - 16px) * 0.9456));
+    }
+  }
+</style>

@@ -1,38 +1,34 @@
 ---
-import { getImage } from 'astro:assets';
 import CostaRicaMap from './CostaRicaMap.astro';
-import { DEFAULT_SPOT_ID, TOUR_ORDER, getSpots } from '../data/spots';
+import type { HeroSpot } from '../data/heroSpots';
 import { getLocale, useTranslations } from '../i18n/utils';
 
+interface Props {
+  // In tour order (see getHeroSpots): the client script visits them in array order.
+  spots: HeroSpot[];
+  initial: HeroSpot;
+}
+
+const { spots, initial } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 const t = useTranslations(locale);
-const spots = getSpots(locale).sort((a, b) => TOUR_ORDER.indexOf(a.id) - TOUR_ORDER.indexOf(b.id));
-// Kept in tour order: the client script visits them in array order.
-const resolved = await Promise.all(
-  spots.map(async (spot) => {
-    const { image, ...rest } = spot;
-    const optimized = image ? await getImage({ src: image, width: 800 }) : undefined;
-    return { ...rest, imageSrc: optimized?.src, imageWidth: optimized?.attributes.width, imageHeight: optimized?.attributes.height };
-  }),
-);
-const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved[0];
 ---
 
 <div id="destinos" class="w-full scroll-mt-24">
-  <div class="relative mx-auto max-w-[450px] lg:mr-0 lg:w-3/4 lg:max-w-none">
+  <div data-map-panel class="rounded-tarjeta bg-verde-oscuro/50 p-2 shadow-[0_12px_32px_-12px_rgb(0_0_0/0.6)] ring-1 ring-crema-luminoso/15 backdrop-blur-sm">
     <div class="relative aspect-[648.3/613] w-full" role="group" aria-label={t.destinations.listLabel}>
       <CostaRicaMap />
-      {resolved.map((spot) => (
+      {spots.map((spot) => (
         <button type="button" class="group absolute top-(--y) left-(--x) -mt-[22px] -ml-[22px] flex size-11 cursor-pointer items-center justify-center p-0" data-spot={spot.id} data-marker aria-label={spot.name} aria-pressed={spot.id === initial.id ? 'true' : 'false'} style={`--x: ${spot.x}%; --y: ${spot.y}%;`}>
-          <span class="absolute hidden size-5 animate-pulso rounded-full bg-mostaza-calido group-aria-pressed:block" aria-hidden="true"></span>
-          <span class="relative hidden size-[22px] rounded-full border-4 border-crema-luminoso bg-mostaza-calido group-aria-pressed:block" aria-hidden="true"></span>
-          <span class="absolute bottom-10 left-1/2 z-10 hidden -translate-x-1/2 rounded-md bg-crema-luminoso px-2.5 py-1 text-dato font-semibold whitespace-nowrap text-verde-oscuro group-aria-pressed:block" aria-hidden="true">{spot.short}</span>
-          <span class="size-3.5 rounded-full border-3 border-verde-oscuro bg-mostaza-calido group-aria-pressed:hidden" aria-hidden="true"></span>
+          <span class="absolute hidden size-4 animate-pulso rounded-full bg-mostaza-calido group-aria-pressed:block" aria-hidden="true"></span>
+          <span class="relative hidden size-[18px] rounded-full border-3 border-crema-luminoso bg-mostaza-calido group-aria-pressed:block" aria-hidden="true"></span>
+          <span class="absolute bottom-9 left-1/2 z-10 hidden -translate-x-1/2 rounded-md bg-crema-luminoso px-2 py-0.5 text-eyebrow font-semibold whitespace-nowrap text-verde-oscuro group-aria-pressed:block" aria-hidden="true">{spot.short}</span>
+          <span class="size-3 rounded-full border-2 border-verde-oscuro bg-mostaza-calido group-aria-pressed:hidden" aria-hidden="true"></span>
         </button>
       ))}
 
-      <!-- Traveler jeep: drives between spots and selects each one on arrival. It parks just below the selected marker. -->
-      <div data-traveler class="pointer-events-none absolute top-(--y) left-(--x) z-[5] mt-2 -ml-6 w-12" style={`--x: ${initial.x}%; --y: ${initial.y}%;`} aria-hidden="true">
+      <!-- Traveler jeep: drives between photo spots and selects each one on arrival. It parks just below the selected marker. -->
+      <div data-traveler class="pointer-events-none absolute top-(--y) left-(--x) z-[5] mt-1.5 -ml-[18px] w-9" style={`--x: ${initial.x}%; --y: ${initial.y}%;`} aria-hidden="true">
         <div data-traveler-flip>
           <svg data-traveler-body viewBox="0 0 40 26" class="block w-full overflow-visible drop-shadow-[0_2px_2px_rgb(12_32_26/0.5)]">
             <rect x="12" y="0.75" width="11" height="2.5" rx="1" class="fill-crema-luminoso stroke-verde-oscuro" stroke-width="1.2" />
@@ -47,32 +43,18 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Selected destination photo: below the map on small screens, floating over its south-west (ocean) corner on wide ones.
-         The text fields stay in #spots-data; the hero only shows the photo and the CTA. -->
-    <aside class="flotar relative z-20 mt-3 aspect-4/3 w-full overflow-clip rounded-tarjeta bg-verde-principal xl:absolute xl:-bottom-24 xl:-left-18 xl:mt-0 xl:w-80">
-      <img class="absolute inset-0 block size-full animate-foto-entra object-cover object-(--pos)" data-field="image" src={initial.imageSrc} width={initial.imageWidth} height={initial.imageHeight} alt={initial.alt} loading="eager" fetchpriority="high" decoding="async" hidden={!initial.imageSrc} style={`--pos: ${initial.position ?? '50% 50%'};`} />
-      <p data-field="credit" hidden={!initial.imageSrc || !initial.credit} class="absolute top-1.5 right-1.5 left-1.5 rounded-md bg-verde-oscuro/70 px-2 py-0.5 text-eyebrow text-crema-luminoso/85">
-        {t.destinations.photoCredit}: <a data-field="creditAuthor" href={initial.credit?.photoUrl} class="text-crema-luminoso underline-offset-2 hover:text-crema-luminoso hover:underline" target="_blank" rel="noopener">{initial.credit?.author}</a> · <a data-field="creditLicense" href={initial.credit?.licenseUrl} class="text-crema-luminoso underline-offset-2 hover:text-crema-luminoso hover:underline" target="_blank" rel="noopener">{initial.credit?.license}</a>
-      </p>
-      <a class="absolute bottom-3 left-3 inline-flex min-h-10 items-center gap-2 rounded-full bg-mostaza-calido px-4 py-1.5 text-nota font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro" href="#contanos" data-pick-destination>{t.destinations.pick} <span class="inline-block" aria-hidden="true">→</span></a>
-    </aside>
+  <!-- The top padding (not a margin) keeps the pointer inside #destinos between the map and the pill, so the explore state holds. -->
+  <div data-map-foot class="flex justify-center pt-3 lg:justify-end">
+    <a class="inline-flex min-h-10 items-center gap-2 rounded-full bg-mostaza-calido px-4 py-1.5 text-nota font-semibold text-verde-oscuro no-underline shadow-[0_6px_16px_-6px_rgb(0_0_0/0.6)] hover:bg-crema-luminoso hover:text-verde-oscuro" href="#contanos" data-pick-destination><span>{t.destinations.pick} · <span data-pick-name>{initial.short}</span></span> <span class="inline-block" aria-hidden="true">→</span></a>
   </div>
 </div>
 
-<script is:inline type="application/json" id="spots-data" set:html={JSON.stringify(resolved)} />
+<script is:inline type="application/json" id="spots-data" set:html={JSON.stringify(spots)} />
 
 <script>
-  interface ClientSpot {
-    id: string;
-    name: string;
-    x: number;
-    y: number;
-    imageSrc?: string;
-    alt?: string;
-    position?: string;
-    credit?: { author: string; photoUrl: string; license?: string; licenseUrl?: string };
-  }
+  import type { HeroSpot } from '../data/heroSpots';
 
   interface Point {
     x: number;
@@ -81,28 +63,105 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
 
   type Phase =
     | { kind: 'parked'; elapsed: number }
-    | { kind: 'driving'; elapsed: number; from: Point; to: ClientSpot; duration: number };
+    | { kind: 'driving'; elapsed: number; from: Point; to: HeroSpot; duration: number };
 
   const PARKED_MS = 3500;
   // Driving time per map percent travelled, clamped so short hops and cross-country trips both read well.
   const MS_PER_PERCENT = 45;
   const MIN_DRIVE_MS = 1200;
   const MAX_DRIVE_MS = 3200;
+  // Matches the layers' duration-900 class.
+  const CROSSFADE_MS = 900;
 
+  const hero = document.getElementById('inicio');
   const root = document.getElementById('destinos');
   const dataEl = document.getElementById('spots-data');
   const traveler = root?.querySelector<HTMLElement>('[data-traveler]');
   const travelerFlip = root?.querySelector<HTMLElement>('[data-traveler-flip]');
   const travelerBody = root?.querySelector<SVGElement>('[data-traveler-body]');
+  const pickName = root?.querySelector<HTMLElement>('[data-pick-name]');
 
-  if (root && dataEl?.textContent && traveler && travelerFlip && travelerBody) {
-    const spots: ClientSpot[] = JSON.parse(dataEl.textContent);
-    const field = (name: string) => root.querySelector<HTMLElement>(`[data-field="${name}"]`);
-    const image = field('image') as HTMLImageElement | null;
-    const credit = field('credit');
-    const creditAuthor = field('creditAuthor') as HTMLAnchorElement | null;
-    const creditLicense = field('creditLicense') as HTMLAnchorElement | null;
+  if (hero && root && dataEl?.textContent && traveler && travelerFlip && travelerBody) {
+    const spots: HeroSpot[] = JSON.parse(dataEl.textContent);
     let selectedId = root.querySelector<HTMLElement>('[data-marker][aria-pressed="true"]')?.dataset.spot;
+
+    // --- Background photo (rendered by Hero.astro) -------------------------
+
+    const backdrop = hero.querySelector<HTMLElement>('[data-hero-backdrop]');
+    const credit = hero.querySelector<HTMLElement>('[data-hero-credit]');
+    const creditAuthor = hero.querySelector<HTMLAnchorElement>('[data-credit-author]');
+    const creditLicense = hero.querySelector<HTMLAnchorElement>('[data-credit-license]');
+    let front = backdrop?.querySelector<HTMLImageElement>('[data-backdrop-layer]') ?? undefined;
+    let back: HTMLImageElement | undefined;
+    let shownId = selectedId;
+    let requestedId = selectedId;
+    let fading: Promise<void> = Promise.resolve();
+
+    const loadInto = (img: HTMLImageElement, spot: HeroSpot) => {
+      if (!spot.backdrop) return;
+      img.sizes = '100vw';
+      img.srcset = spot.backdrop.srcset;
+      img.src = spot.backdrop.src;
+      img.style.setProperty('--pos', spot.backdrop.position);
+    };
+
+    const preload = (spot: HeroSpot) => {
+      if (spot.backdrop) loadInto(new Image(), spot);
+    };
+
+    const showCredit = (spot: HeroSpot) => {
+      if (!credit || !creditAuthor || !creditLicense) return;
+      credit.hidden = !spot.credit;
+      if (!spot.credit) return;
+      creditAuthor.href = spot.credit.photoUrl;
+      creditAuthor.textContent = spot.credit.author;
+      creditLicense.href = spot.credit.licenseUrl ?? '';
+      creditLicense.textContent = spot.credit.license ?? '';
+    };
+
+    // Two stacked layers: the new photo loads in the one underneath, then fades in on top. The old
+    // photo stays opaque below it, so the green section background never shows between photos.
+    const showBackdrop = async (spot: HeroSpot) => {
+      if (!spot.backdrop || !front || spot.id === requestedId) return;
+      requestedId = spot.id;
+      // Never swap out the layer under a photo that is still fading in.
+      await fading;
+      if (requestedId !== spot.id) return;
+
+      if (!back) {
+        back = front.cloneNode() as HTMLImageElement;
+        back.removeAttribute('fetchpriority');
+        front.style.zIndex = '1';
+        front.after(back);
+      }
+      const incoming = back;
+      incoming.style.transition = 'none';
+      incoming.style.opacity = '0';
+      incoming.style.zIndex = '0';
+      loadInto(incoming, spot);
+      try {
+        await incoming.decode();
+      } catch {
+        // Broken image: keep the current photo.
+        if (requestedId === spot.id) requestedId = shownId;
+        return;
+      }
+      // A newer request took over while this one was loading.
+      if (requestedId !== spot.id || !front) return;
+
+      const outgoing = front;
+      // Flush the hidden state so the fade runs even when decode() resolved right away.
+      void incoming.offsetWidth;
+      incoming.style.transition = '';
+      incoming.style.zIndex = '1';
+      outgoing.style.zIndex = '0';
+      incoming.style.opacity = '1';
+      front = incoming;
+      back = outgoing;
+      shownId = spot.id;
+      showCredit(spot);
+      fading = new Promise((resolve) => window.setTimeout(resolve, CROSSFADE_MS));
+    };
 
     const select = (id: string) => {
       const spot = spots.find((candidate) => candidate.id === id);
@@ -112,29 +171,9 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
       root.querySelectorAll<HTMLElement>('[data-spot]').forEach((el) => {
         el.setAttribute('aria-pressed', String(el.dataset.spot === id));
       });
-
-      if (image) {
-        image.hidden = !spot.imageSrc;
-        if (spot.imageSrc) {
-          image.src = spot.imageSrc;
-          image.alt = spot.alt ?? '';
-          image.style.setProperty('--pos', spot.position ?? '50% 50%');
-          // Replay the fade-in on every change.
-          image.classList.remove('animate-foto-entra');
-          void image.offsetWidth;
-          image.classList.add('animate-foto-entra');
-        }
-      }
-
-      if (credit && creditAuthor && creditLicense) {
-        credit.hidden = !spot.imageSrc || !spot.credit;
-        if (spot.credit) {
-          creditAuthor.href = spot.credit.photoUrl;
-          creditAuthor.textContent = spot.credit.author;
-          creditLicense.href = spot.credit.licenseUrl ?? '';
-          creditLicense.textContent = spot.credit.license ?? '';
-        }
-      }
+      if (pickName) pickName.textContent = spot.short;
+      // Spots without a photo keep the previous background.
+      void showBackdrop(spot);
     };
 
     // --- Traveler tour ---------------------------------------------------
@@ -148,6 +187,12 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     // The tour stops while any of these hold, so it never moves while someone reads or uses the map.
     const pauses = { hovered: false, focused: false, offscreen: true, tabHidden: document.hidden };
+    // Mouse hover or keyboard focus on the map panel (not the CTA) grows the map and blurs the photo (CSS in Hero.astro).
+    // Touch is left out: a tap would leave the map grown until the next tap elsewhere.
+    // Once grown, moving the mouse down onto the CTA keeps it grown; reaching the CTA first does not grow it.
+    const panel = root.querySelector<HTMLElement>('[data-map-panel]');
+    let exploringByMouse = false;
+    let panelFocused = false;
 
     const moveTraveler = (point: Point) => {
       position = point;
@@ -162,18 +207,28 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
     const easeInOut = (progress: number) =>
       progress < 0.5 ? 2 * progress * progress : 1 - (-2 * progress + 2) ** 2 / 2;
 
-    const startDriving = () => {
+    // The tour only visits spots with a photo, since each arrival changes the background.
+    const nextPhotoSpot = () => {
       const current = spots.findIndex((spot) => spot.id === selectedId);
-      const to = spots[(current + 1) % spots.length];
+      for (let step = 1; step <= spots.length; step++) {
+        const candidate = spots[(current + step) % spots.length];
+        if (candidate.backdrop) return candidate;
+      }
+      return undefined;
+    };
+
+    const startDriving = () => {
+      const to = nextPhotoSpot();
+      if (!to) return;
       const distance = Math.hypot(to.x - position.x, to.y - position.y);
       const duration = Math.min(Math.max(distance * MS_PER_PERCENT, MIN_DRIVE_MS), MAX_DRIVE_MS);
-      if (to.imageSrc) new Image().src = to.imageSrc;
+      preload(to);
       travelerFlip.style.transform = to.x < position.x ? 'scaleX(-1)' : '';
       phase = { kind: 'driving', elapsed: 0, from: position, to, duration };
       setDriving(true);
     };
 
-    const arrive = (spot: ClientSpot) => {
+    const arrive = (spot: HeroSpot) => {
       moveTraveler({ x: spot.x, y: spot.y });
       select(spot.id);
       phase = { kind: 'parked', elapsed: 0 };
@@ -197,6 +252,8 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
     };
 
     const syncTour = () => {
+      hero.toggleAttribute('data-explorando', exploringByMouse || panelFocused);
+
       const shouldRun = !reducedMotion.matches && !Object.values(pauses).some(Boolean);
       if (shouldRun && frame === undefined) {
         lastFrameAt = undefined;
@@ -209,16 +266,39 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
       }
     };
 
-    root.addEventListener('pointerenter', () => { pauses.hovered = true; syncTour(); });
-    root.addEventListener('pointerleave', () => { pauses.hovered = false; syncTour(); });
+    root.addEventListener('pointerenter', () => {
+      pauses.hovered = true;
+      syncTour();
+    });
+    root.addEventListener('pointerleave', () => {
+      pauses.hovered = false;
+      exploringByMouse = false;
+      syncTour();
+    });
+    panel?.addEventListener('pointerenter', (event) => {
+      if (event.pointerType !== 'mouse') return;
+      exploringByMouse = true;
+      syncTour();
+    });
     // Only keyboard focus pauses: a mouse click leaves focus on the marker and would freeze the tour for good.
     root.addEventListener('focusin', (event) => {
-      if (!(event.target instanceof Element && event.target.matches(':focus-visible'))) return;
+      if (!(event.target instanceof Element && event.target.matches(':focus-visible'))) {
+        // A mouse click after keyboard navigation hands focus over without a focusout leaving the map: drop the keyboard state.
+        pauses.focused = false;
+        panelFocused = false;
+        syncTour();
+        return;
+      }
       pauses.focused = true;
+      panelFocused = Boolean(panel?.contains(event.target));
       syncTour();
     });
     root.addEventListener('focusout', (event) => {
-      if (root.contains(event.relatedTarget as Node | null)) return;
+      panelFocused = Boolean(panel?.contains(event.relatedTarget as Node | null));
+      if (root.contains(event.relatedTarget as Node | null)) {
+        syncTour();
+        return;
+      }
       pauses.focused = false;
       syncTour();
     });

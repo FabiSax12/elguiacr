@@ -75,7 +75,6 @@
   /* Animations (keyframes below) */
   --animate-pulso: pulso 2.4s ease-out infinite;
   --animate-cinta: cinta 38s linear infinite;
-  --animate-foto-entra: fotoEntra 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   --animate-traqueteo: traqueteo 0.3s ease-in-out infinite alternate;
 }
 
@@ -121,10 +120,6 @@
 }
 @keyframes trazar { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 @keyframes zoomLento { from { transform: scale(1.18); } to { transform: scale(1); } }
-@keyframes fotoEntra {
-  from { opacity: 0; transform: scale(1.06); }
-  to { opacity: 1; transform: none; }
-}
 @keyframes horiz {
   from { transform: translateX(0); }
   to { transform: translateX(calc(-100% + 100vw)); }
@@ -133,7 +128,7 @@
 
 /* Floating card: slow vertical bob plus a soft green-tinted shadow that deepens on hover.
    It moves the card with the `translate` property, so it composes with `transform`
-   animations (zoom-lento, foto-entra) on the card or its children.
+   animations (e.g. zoom-lento) on the card or its children.
    Tune per element: --flotar-delay (desync neighbours; negative values start mid-cycle),
    --flotar-duration (default 7s) and --flotar-hover (hover lift, default -4px). */
 @property --flotar-y {

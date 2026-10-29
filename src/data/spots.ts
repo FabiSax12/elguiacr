@@ -35,9 +35,7 @@ interface SpotBase {
   credit?: PhotoCredit;
 }
 
-export interface Spot extends SpotBase, SpotText {
-  idealLabel: string;
-}
+export type Spot = SpotBase & SpotText;
 
 export const DEFAULT_SPOT_ID: SpotId = 'arenal';
 
@@ -61,9 +59,5 @@ const base: SpotBase[] = [
 
 export function getSpots(locale: Locale): Spot[] {
   const t = useTranslations(locale);
-  return base.map((spot) => ({
-    ...spot,
-    ...t.spots[spot.id],
-    idealLabel: spot.ideal.map((id) => t.audiences.items[id].segment).join(' · '),
-  }));
+  return base.map((spot) => ({ ...spot, ...t.spots[spot.id] }));
 }
