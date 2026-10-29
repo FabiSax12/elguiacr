@@ -1,19 +1,22 @@
 ---
+import { Image } from 'astro:assets';
 import type { Experience } from '../data/experiences';
 import { getLocale, useTranslations } from '../i18n/utils';
 
 interface Props {
   experience: Experience;
+  /** Position in the grid, used to desync the floating animation of neighbouring cards. */
+  index?: number;
 }
 
-const { experience } = Astro.props;
+const { experience, index = 0 } = Astro.props;
 const t = useTranslations(getLocale(Astro.currentLocale));
 const labels = t.experiencesPage;
 ---
 
-<article class="flex flex-col overflow-clip rounded-tarjeta border border-verde-oscuro/15 bg-white" data-experience data-category={experience.category}>
+<article class:list={['flex flex-col overflow-clip rounded-tarjeta border border-verde-oscuro/15 bg-white', experience.image && 'flotar']} style={`--flotar-delay: ${index * -1.9}s;`} data-experience data-category={experience.category}>
   {experience.image ? (
-    <img class="block aspect-[4/3] w-full object-cover" src={experience.image.src} width={experience.image.width} height={experience.image.height} alt={experience.image.alt} loading="lazy" decoding="async" />
+    <Image class="block aspect-[4/3] w-full object-cover" src={experience.image.asset} widths={[400, 800]} sizes="(min-width: 1280px) 400px, (min-width: 700px) 50vw, 100vw" alt={experience.image.alt} />
   ) : (
     <div class="flex aspect-[4/3] items-end border-b border-dashed border-verde-oscuro/30 bg-arena p-3.5" role="img" aria-label={labels.photoPending}>
       <p class="text-nota text-gris-texto"><span class="font-semibold">{labels.photoPending}.</span> {experience.photoNote}</p>

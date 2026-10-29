@@ -1,10 +1,16 @@
 ---
-import { getPageUrl, type PageKey } from '../data/routes';
+import type { ImageMetadata } from 'astro';
+import alegreyaLatin from '@fontsource-variable/alegreya/files/alegreya-latin-wght-normal.woff2?url';
+import sourceSansLatin from '@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-normal.woff2?url';
 import '@fontsource-variable/alegreya';
 import '@fontsource-variable/alegreya/wght-italic.css';
 import '@fontsource-variable/source-sans-3';
 import '@fontsource-variable/source-sans-3/wght-italic.css';
 import '../styles/global.css';
+import defaultImage from '../assets/rio-celeste.webp';
+import { getPageUrl, type PageKey } from '../data/routes';
+import { getPageSchema, getShareImage, getSiteSchema, type SchemaNode } from '../data/schema';
+import { brandColors, siteName } from '../data/site';
 import { defaultLocale, localeMeta, locales } from '../i18n/config';
 import { getLocale, useTranslations } from '../i18n/utils';
 
@@ -14,15 +20,36 @@ const t = useTranslations(locale);
 interface Props {
   title?: string;
   description?: string;
+  // Omit only on pages without a URL of their own (the 404s): no canonical, hreflang or og:url.
   pageKey?: PageKey;
+  // Placeholder, legal and 404 pages pass true. The sitemap reads this robots meta from the
+  // built HTML, so a noindex page is also left out of the sitemap.
   noindex?: boolean;
+  // Social share image (og:image, twitter:image), cropped to 1200x630.
+  image?: ImageMetadata;
+  imageAlt?: string;
+  // Page-specific JSON-LD nodes, merged into the same @graph as the site-wide ones.
+  schema?: SchemaNode[];
 }
 
-const { title = t.meta.title, description = t.meta.description, pageKey = 'home', noindex = false } = Astro.props;
+const { title = t.meta.title, description = t.meta.description, pageKey, noindex = false, image = defaultImage, imageAlt = t.meta.imageAlt, schema = [] } = Astro.props;
 
-const canonical = getPageUrl(pageKey, locale);
-const alternates = locales.map((code) => ({ code, href: getPageUrl(pageKey, code) }));
+const canonical = pageKey && getPageUrl(pageKey, locale);
+const alternates = pageKey ? locales.map((code) => ({ code, href: getPageUrl(pageKey, code) })) : [];
 const otherLocales = locales.filter((code) => code !== locale);
+
+const shareImage = await getShareImage(image);
+const shareImageUrl = shareImage.url;
+// The organization keeps the same image on every page, whatever the page shares.
+const brandImageUrl = (await getShareImage(defaultImage)).url;
+
+const graph = [
+  ...getSiteSchema({ locale, imageUrl: brandImageUrl }),
+  ...(pageKey && !noindex ? getPageSchema({ locale, pageKey, title, description, imageUrl: shareImageUrl }) : []),
+  ...(noindex ? [] : schema),
+];
+// Escaping `<` keeps any copy from closing the script tag early.
+const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replaceAll('<', '\\u003c');
 ---
 
 <!doctype html>
@@ -30,21 +57,37 @@ const otherLocales = locales.filter((code) => code !== locale);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
-    {noindex && <meta name="robots" content="noindex" />}
-    <meta name="generator" content={Astro.generator} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
     <title>{title}</title>
-    <link rel="canonical" href={canonical} />
+    <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'} />
+    {canonical && <link rel="canonical" href={canonical} />}
     {alternates.map(({ code, href }) => <link rel="alternate" hreflang={code} href={href} />)}
-    <link rel="alternate" hreflang="x-default" href={getPageUrl(pageKey, defaultLocale)} />
+    {pageKey && <link rel="alternate" hreflang="x-default" href={getPageUrl(pageKey, defaultLocale)} />}
+    <link rel="preload" href={alegreyaLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={sourceSansLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content={brandColors.theme} />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
+    {canonical && <meta property="og:url" content={canonical} />}
     <meta property="og:locale" content={localeMeta[locale].ogLocale} />
     {otherLocales.map((code) => <meta property="og:locale:alternate" content={localeMeta[code].ogLocale} />)}
+    <meta property="og:image" content={shareImageUrl} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content={String(shareImage.width)} />
+    <meta property="og:image:height" content={String(shareImage.height)} />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={shareImageUrl} />
+    <meta name="twitter:image:alt" content={imageAlt} />
+    <script type="application/ld+json" set:html={jsonLd} />
   </head>
   <body class="bg-verde-oscuro">
     <slot />

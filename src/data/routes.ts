@@ -1,5 +1,6 @@
 import { getAbsoluteLocaleUrl, getRelativeLocaleUrl } from 'astro:i18n';
 import type { Locale } from '../i18n/config';
+import { whatsappNumber } from './site';
 
 export const pageKeys = ['home', 'experiences', 'destinations', 'transport', 'about', 'blog', 'faq', 'privacy', 'terms', 'cookies', 'cancellations', 'customTrips', 'localExperiences', 'teamBuilding', 'educationalTrips'] as const;
 export type PageKey = (typeof pageKeys)[number];
@@ -50,9 +51,7 @@ export function getContactPath(locale: Locale, segment?: string) {
   return `${getPagePath('home', locale)}${query}#contanos`;
 }
 
-export const instagramUrl = 'https://instagram.com/elguia.cr';
-
-const whatsappNumber = '50685878863';
+export { instagramUrl } from './site';
 
 export function getWhatsappUrl(message: string) {
   return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;

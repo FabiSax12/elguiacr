@@ -13,7 +13,7 @@ The package manager is pnpm (`packageManager` in `package.json`; the README's `n
 - `pnpm dev`: dev server at `localhost:4321`. Per `AGENTS.md`, start it in background mode with `astro dev --background` and manage it with `astro dev stop|status|logs`.
 - `pnpm build`: static build into `dist/`.
 - `pnpm preview`: serve the production build.
-- There are no tests, linter or formatter configured. `pnpm build` does not type-check. Type errors (e.g. a missing dictionary key) only show in the editor or via `pnpm astro check`, which needs `@astrojs/check` and `typescript` (not installed yet).
+- There are no tests, linter or formatter configured. `pnpm build` does not type-check. Type errors (e.g. a missing dictionary key) only show in the editor or via `pnpm astro check` (`@astrojs/check` and `typescript` are dev dependencies).
 
 Always verify visual or animation changes against `pnpm build && pnpm preview`, not only dev. The production CSS pipeline (Lightning CSS minification) behaves differently from dev; see the scroll-driven animations note below.
 
@@ -25,11 +25,13 @@ Three branches, promoted by merging forward (`dev` → `staging` → `main`):
 - `staging`: what the client reviews before release. Preview at `staging-elguiacr.<subdomain>.workers.dev`.
 - `main`: production (elguiacr.com). Only merge here after the client approves staging.
 
-Never commit straight to `main` or `staging`. Previews come from Workers Builds "Worker Previews" (`npx wrangler preview`, preview name = branch name); `workers.dev` preview URLs send `X-Robots-Tag: noindex` automatically.
+Never commit straight to `main` or `staging`. Previews come from Workers Builds "Worker Previews" (`npx wrangler preview`, preview name = branch name), which requires the `previews` block in `wrangler.jsonc` (empty is fine); `workers.dev` preview URLs send `X-Robots-Tag: noindex` automatically.
 
 Cloudflare Workers Builds, on every push to `main`: it runs `pnpm run build`, then `npx wrangler deploy`. `wrangler.jsonc` serves `dist/` as static assets (no adapter, no SSR). Keep that file: without it, `wrangler deploy` tries to auto-configure the project (`astro add cloudflare`, adding wrangler to `package.json`), which fails under pnpm with `ERR_PNPM_IGNORED_BUILDS`.
 
-Unknown URLs get the nearest `404.html` (`not_found_handling: "404-page"`). Astro emits the English one as `en/404/index.html`, so the `flattenLocale404` integration in `astro.config.mjs` moves it to `en/404.html` after the build. The 404 pages (`NotFoundPage.astro`, copy under `notFound` in the dictionaries) are not in `routes.ts` and render `<Nav />` without a `pageKey`.
+Unknown URLs get the nearest `404.html` (`not_found_handling: "404-page"`). Astro emits the English one as `en/404/index.html`, so the `flattenLocale404` integration in `astro.config.mjs` moves it to `en/404.html` after the build. The 404 pages (`NotFoundPage.astro`, copy under `notFound` in the dictionaries) are not in `routes.ts` and render `<Layout>` and `<Nav />` without a `pageKey` (so no canonical or hreflang).
+
+`public/_headers` sets long immutable caching for `/_astro/*` and a couple of security headers. Don't put `X-Robots-Tag` there.
 
 ## Architecture
 
@@ -57,6 +59,16 @@ Adding a page means: add the key and both slugs in `routes.ts`, add its copy to 
 `src/data/*.ts` (spots, audiences, content, experiences, landings) combine language-neutral fields (ids, map coordinates, images from `src/assets`, colors, audience fit) with translated text from the dictionary, exposed through locale-taking helpers. Ids are declared as `as const` tuples and their text types are imported back into the dictionaries, so adding an id forces adding its copy in both languages.
 
 Client scripts read localized data from the page instead of embedding it (e.g. the destinations map reads the `#spots-data` JSON). Anchor ids like `#contanos` and `#destinos` are identical in every locale.
+
+### SEO
+
+- `trailingSlash: 'always'` in `astro.config.mjs` matches how Cloudflare serves `dir/index.html` (it redirects `/dir` to `/dir/`). Canonicals, hreflang, the sitemap and internal links all use the slash form, so never hand-write a URL without it.
+- `Layout.astro` emits title, description, robots, canonical, hreflang (+ `x-default`), Open Graph, Twitter card, icons, manifest link, font preloads and one JSON-LD `@graph`. Props: `pageKey`, `noindex`, `image` (an `ImageMetadata`, cropped to a 1200x630 JPG for `og:image`; defaults to `rio-celeste.webp`), `imageAlt` and `schema` (extra JSON-LD nodes).
+- Indexable pages are home, experiences and the four audience landings. Every `PlaceholderPage` (including legal) is `noindex, follow`. When a placeholder gets its own component, drop the `noindex` with it; nothing else needs to change.
+- The sitemap (`@astrojs/sitemap`) reads each built page's `<head>`: noindex pages are left out and the hreflang alternates are copied from the page's own `<link rel="alternate">` tags. Don't keep a separate URL list.
+- `src/pages/robots.txt.ts` generates `robots.txt` (allows search and AI-answer crawlers, points to `sitemap-index.xml`). `src/pages/[icon].png.ts` renders the apple-touch and manifest icons from `public/favicon.svg` with sharp; `src/pages/site.webmanifest.ts` builds the manifest.
+- JSON-LD builders live in `src/data/schema.ts` (TravelAgency, WebSite, WebPage, BreadcrumbList, the experiences `ItemList` of `TouristTrip`, the landings' `Service` and `FAQPage`). Business facts (email, phone, Instagram, region, brand colors) live in `src/data/site.ts`. Only add facts the client has confirmed: no invented address, hours, prices or ratings.
+- Meta titles stay at 60 characters or fewer with the brand last (`… | El Guía CR`); descriptions run 140 to 160 characters.
 
 ### Styling
 
