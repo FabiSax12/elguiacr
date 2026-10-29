@@ -1,0 +1,247 @@
+---
+import { getImage } from 'astro:assets';
+import CostaRicaMap from './CostaRicaMap.astro';
+import { DEFAULT_SPOT_ID, TOUR_ORDER, getSpots } from '../data/spots';
+import { getLocale, useTranslations } from '../i18n/utils';
+
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+const spots = getSpots(locale).sort((a, b) => TOUR_ORDER.indexOf(a.id) - TOUR_ORDER.indexOf(b.id));
+// Kept in tour order: the client script visits them in array order.
+const resolved = await Promise.all(
+  spots.map(async (spot) => {
+    const { image, ...rest } = spot;
+    const optimized = image ? await getImage({ src: image, width: 800 }) : undefined;
+    return { ...rest, imageSrc: optimized?.src, imageWidth: optimized?.attributes.width, imageHeight: optimized?.attributes.height };
+  }),
+);
+const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved[0];
+---
+
+<div id="destinos" class="w-full scroll-mt-24">
+  <div class="relative mx-auto max-w-[450px] lg:mr-0 lg:w-3/4 lg:max-w-none">
+    <div class="relative aspect-[648.3/613] w-full" role="group" aria-label={t.destinations.listLabel}>
+      <CostaRicaMap />
+      {resolved.map((spot) => (
+        <button type="button" class="group absolute top-(--y) left-(--x) -mt-[22px] -ml-[22px] flex size-11 cursor-pointer items-center justify-center p-0" data-spot={spot.id} data-marker aria-label={spot.name} aria-pressed={spot.id === initial.id ? 'true' : 'false'} style={`--x: ${spot.x}%; --y: ${spot.y}%;`}>
+          <span class="absolute hidden size-5 animate-pulso rounded-full bg-mostaza-calido group-aria-pressed:block" aria-hidden="true"></span>
+          <span class="relative hidden size-[22px] rounded-full border-4 border-crema-luminoso bg-mostaza-calido group-aria-pressed:block" aria-hidden="true"></span>
+          <span class="absolute bottom-10 left-1/2 z-10 hidden -translate-x-1/2 rounded-md bg-crema-luminoso px-2.5 py-1 text-dato font-semibold whitespace-nowrap text-verde-oscuro group-aria-pressed:block" aria-hidden="true">{spot.short}</span>
+          <span class="size-3.5 rounded-full border-3 border-verde-oscuro bg-mostaza-calido group-aria-pressed:hidden" aria-hidden="true"></span>
+        </button>
+      ))}
+
+      <!-- Traveler jeep: drives between spots and selects each one on arrival. It parks just below the selected marker. -->
+      <div data-traveler class="pointer-events-none absolute top-(--y) left-(--x) z-[5] mt-2 -ml-6 w-12" style={`--x: ${initial.x}%; --y: ${initial.y}%;`} aria-hidden="true">
+        <div data-traveler-flip>
+          <svg data-traveler-body viewBox="0 0 40 26" class="block w-full overflow-visible drop-shadow-[0_2px_2px_rgb(12_32_26/0.5)]">
+            <rect x="12" y="0.75" width="11" height="2.5" rx="1" class="fill-crema-luminoso stroke-verde-oscuro" stroke-width="1.2" />
+            <path d="M8 9.5 L11.5 3.25 H25 L29.5 9.5 Z" class="fill-crema-luminoso stroke-verde-oscuro" stroke-width="1.5" stroke-linejoin="round" />
+            <path d="M18.5 3.5 V9.5" class="stroke-verde-oscuro" stroke-width="1.5" />
+            <rect x="2" y="9.5" width="35" height="9.5" rx="3" class="fill-mostaza-calido stroke-verde-oscuro" stroke-width="1.5" />
+            <circle cx="10" cy="20" r="4" class="fill-verde-oscuro" />
+            <circle cx="29" cy="20" r="4" class="fill-verde-oscuro" />
+            <circle cx="10" cy="20" r="1.5" class="fill-crema-luminoso" />
+            <circle cx="29" cy="20" r="1.5" class="fill-crema-luminoso" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Selected destination photo: below the map on small screens, floating over its south-west (ocean) corner on wide ones.
+         The text fields stay in #spots-data; the hero only shows the photo and the CTA. -->
+    <aside class="flotar relative z-20 mt-3 aspect-4/3 w-full overflow-clip rounded-tarjeta bg-verde-principal xl:absolute xl:-bottom-24 xl:-left-18 xl:mt-0 xl:w-80">
+      <img class="absolute inset-0 block size-full animate-foto-entra object-cover object-(--pos)" data-field="image" src={initial.imageSrc} width={initial.imageWidth} height={initial.imageHeight} alt={initial.alt} loading="eager" fetchpriority="high" decoding="async" hidden={!initial.imageSrc} style={`--pos: ${initial.position ?? '50% 50%'};`} />
+      <p data-field="credit" hidden={!initial.imageSrc || !initial.credit} class="absolute top-1.5 right-1.5 left-1.5 rounded-md bg-verde-oscuro/70 px-2 py-0.5 text-eyebrow text-crema-luminoso/85">
+        {t.destinations.photoCredit}: <a data-field="creditAuthor" href={initial.credit?.photoUrl} class="text-crema-luminoso underline-offset-2 hover:text-crema-luminoso hover:underline" target="_blank" rel="noopener">{initial.credit?.author}</a> · <a data-field="creditLicense" href={initial.credit?.licenseUrl} class="text-crema-luminoso underline-offset-2 hover:text-crema-luminoso hover:underline" target="_blank" rel="noopener">{initial.credit?.license}</a>
+      </p>
+      <a class="absolute bottom-3 left-3 inline-flex min-h-10 items-center gap-2 rounded-full bg-mostaza-calido px-4 py-1.5 text-nota font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro" href="#contanos" data-pick-destination>{t.destinations.pick} <span class="inline-block" aria-hidden="true">→</span></a>
+    </aside>
+  </div>
+</div>
+
+<script is:inline type="application/json" id="spots-data" set:html={JSON.stringify(resolved)} />
+
+<script>
+  interface ClientSpot {
+    id: string;
+    name: string;
+    x: number;
+    y: number;
+    imageSrc?: string;
+    alt?: string;
+    position?: string;
+    credit?: { author: string; photoUrl: string; license?: string; licenseUrl?: string };
+  }
+
+  interface Point {
+    x: number;
+    y: number;
+  }
+
+  type Phase =
+    | { kind: 'parked'; elapsed: number }
+    | { kind: 'driving'; elapsed: number; from: Point; to: ClientSpot; duration: number };
+
+  const PARKED_MS = 3500;
+  // Driving time per map percent travelled, clamped so short hops and cross-country trips both read well.
+  const MS_PER_PERCENT = 45;
+  const MIN_DRIVE_MS = 1200;
+  const MAX_DRIVE_MS = 3200;
+
+  const root = document.getElementById('destinos');
+  const dataEl = document.getElementById('spots-data');
+  const traveler = root?.querySelector<HTMLElement>('[data-traveler]');
+  const travelerFlip = root?.querySelector<HTMLElement>('[data-traveler-flip]');
+  const travelerBody = root?.querySelector<SVGElement>('[data-traveler-body]');
+
+  if (root && dataEl?.textContent && traveler && travelerFlip && travelerBody) {
+    const spots: ClientSpot[] = JSON.parse(dataEl.textContent);
+    const field = (name: string) => root.querySelector<HTMLElement>(`[data-field="${name}"]`);
+    const image = field('image') as HTMLImageElement | null;
+    const credit = field('credit');
+    const creditAuthor = field('creditAuthor') as HTMLAnchorElement | null;
+    const creditLicense = field('creditLicense') as HTMLAnchorElement | null;
+    let selectedId = root.querySelector<HTMLElement>('[data-marker][aria-pressed="true"]')?.dataset.spot;
+
+    const select = (id: string) => {
+      const spot = spots.find((candidate) => candidate.id === id);
+      if (!spot || id === selectedId) return;
+      selectedId = id;
+
+      root.querySelectorAll<HTMLElement>('[data-spot]').forEach((el) => {
+        el.setAttribute('aria-pressed', String(el.dataset.spot === id));
+      });
+
+      if (image) {
+        image.hidden = !spot.imageSrc;
+        if (spot.imageSrc) {
+          image.src = spot.imageSrc;
+          image.alt = spot.alt ?? '';
+          image.style.setProperty('--pos', spot.position ?? '50% 50%');
+          // Replay the fade-in on every change.
+          image.classList.remove('animate-foto-entra');
+          void image.offsetWidth;
+          image.classList.add('animate-foto-entra');
+        }
+      }
+
+      if (credit && creditAuthor && creditLicense) {
+        credit.hidden = !spot.imageSrc || !spot.credit;
+        if (spot.credit) {
+          creditAuthor.href = spot.credit.photoUrl;
+          creditAuthor.textContent = spot.credit.author;
+          creditLicense.href = spot.credit.licenseUrl ?? '';
+          creditLicense.textContent = spot.credit.license ?? '';
+        }
+      }
+    };
+
+    // --- Traveler tour ---------------------------------------------------
+
+    const selectedSpot = () => spots.find((spot) => spot.id === selectedId) ?? spots[0];
+    let position: Point = { x: selectedSpot().x, y: selectedSpot().y };
+    let phase: Phase = { kind: 'parked', elapsed: 0 };
+    let frame: number | undefined;
+    let lastFrameAt: number | undefined;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    // The tour stops while any of these hold, so it never moves while someone reads or uses the map.
+    const pauses = { hovered: false, focused: false, offscreen: true, tabHidden: document.hidden };
+
+    const moveTraveler = (point: Point) => {
+      position = point;
+      traveler.style.setProperty('--x', `${point.x}%`);
+      traveler.style.setProperty('--y', `${point.y}%`);
+    };
+
+    const setDriving = (driving: boolean) => {
+      travelerBody.classList.toggle('animate-traqueteo', driving);
+    };
+
+    const easeInOut = (progress: number) =>
+      progress < 0.5 ? 2 * progress * progress : 1 - (-2 * progress + 2) ** 2 / 2;
+
+    const startDriving = () => {
+      const current = spots.findIndex((spot) => spot.id === selectedId);
+      const to = spots[(current + 1) % spots.length];
+      const distance = Math.hypot(to.x - position.x, to.y - position.y);
+      const duration = Math.min(Math.max(distance * MS_PER_PERCENT, MIN_DRIVE_MS), MAX_DRIVE_MS);
+      if (to.imageSrc) new Image().src = to.imageSrc;
+      travelerFlip.style.transform = to.x < position.x ? 'scaleX(-1)' : '';
+      phase = { kind: 'driving', elapsed: 0, from: position, to, duration };
+      setDriving(true);
+    };
+
+    const arrive = (spot: ClientSpot) => {
+      moveTraveler({ x: spot.x, y: spot.y });
+      select(spot.id);
+      phase = { kind: 'parked', elapsed: 0 };
+      setDriving(false);
+    };
+
+    const tick = (now: number) => {
+      phase.elapsed += lastFrameAt === undefined ? 0 : now - lastFrameAt;
+      lastFrameAt = now;
+
+      if (phase.kind === 'parked') {
+        if (phase.elapsed >= PARKED_MS) startDriving();
+      } else {
+        const { from, to, elapsed, duration } = phase;
+        const progress = easeInOut(Math.min(elapsed / duration, 1));
+        moveTraveler({ x: from.x + (to.x - from.x) * progress, y: from.y + (to.y - from.y) * progress });
+        if (elapsed >= duration) arrive(to);
+      }
+
+      frame = requestAnimationFrame(tick);
+    };
+
+    const syncTour = () => {
+      const shouldRun = !reducedMotion.matches && !Object.values(pauses).some(Boolean);
+      if (shouldRun && frame === undefined) {
+        lastFrameAt = undefined;
+        frame = requestAnimationFrame(tick);
+        setDriving(phase.kind === 'driving');
+      } else if (!shouldRun && frame !== undefined) {
+        cancelAnimationFrame(frame);
+        frame = undefined;
+        setDriving(false);
+      }
+    };
+
+    root.addEventListener('pointerenter', () => { pauses.hovered = true; syncTour(); });
+    root.addEventListener('pointerleave', () => { pauses.hovered = false; syncTour(); });
+    // Only keyboard focus pauses: a mouse click leaves focus on the marker and would freeze the tour for good.
+    root.addEventListener('focusin', (event) => {
+      if (!(event.target instanceof Element && event.target.matches(':focus-visible'))) return;
+      pauses.focused = true;
+      syncTour();
+    });
+    root.addEventListener('focusout', (event) => {
+      if (root.contains(event.relatedTarget as Node | null)) return;
+      pauses.focused = false;
+      syncTour();
+    });
+    document.addEventListener('visibilitychange', () => { pauses.tabHidden = document.hidden; syncTour(); });
+    reducedMotion.addEventListener('change', syncTour);
+    new IntersectionObserver(([entry]) => {
+      pauses.offscreen = !entry.isIntersecting;
+      syncTour();
+    }).observe(root);
+
+    root.querySelectorAll<HTMLElement>('[data-spot]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const spot = spots.find((candidate) => candidate.id === el.dataset.spot);
+        if (!spot) return;
+        travelerFlip.style.transform = '';
+        arrive(spot);
+      });
+    });
+
+    root.querySelector('[data-pick-destination]')?.addEventListener('click', () => {
+      const spot = spots.find((candidate) => candidate.id === selectedId);
+      if (!spot) return;
+      document.dispatchEvent(new CustomEvent('destination-picked', { detail: { name: spot.name } }));
+    });
+  }
+</script>

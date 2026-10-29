@@ -34,11 +34,6 @@ export const en: Dictionary = {
     primaryCta: 'Tell us what you\'re looking for',
     secondaryCta: 'Explore Costa Rica',
     segments: 'Travelers · Locals · Companies · Education',
-    videoLabel: 'Hero video · 15 s loop',
-    videoNote: '[VIDEO: 2–3 s cuts with no audio. Hands roasting coffee on a farm, a group crossing a hanging bridge in the cloud forest, students measuring a river with a specialist. People doing, not posing.]',
-    photoLabel: 'Photo',
-    photoNoteMain: '[PHOTO: Bernald talking with a local host on his farm, afternoon light.]',
-    photoAltSecondary: 'A group chopping fresh herbs together to prepare an outdoor meal',
   },
   manifesto: {
     eyebrow: '01 · What we do',
@@ -85,13 +80,10 @@ export const en: Dictionary = {
     cta: 'Talk to Bernald',
   },
   destinations: {
-    eyebrow: '04 · Destinations',
-    title: 'Costa Rica, point by point.',
-    intro: 'Some of the most visited and best-loved places in the country. Tap a point: we will tell you what it offers and who it works for.',
+    listLabel: 'Destinations on the map',
     idealFor: 'Works for:',
     photoCredit: 'Photo',
-    pick: 'I am interested in this destination',
-    footnote: 'The map is a starting point. The experience is designed around what you are looking for, not the other way around.',
+    pick: "I'm interested",
   },
   map: {
     ariaLabel: 'Map of Costa Rica by province with featured destinations',
@@ -116,7 +108,7 @@ export const en: Dictionary = {
     puertoviejo: { short: 'South Caribbean', name: 'Puerto Viejo · South Caribbean', region: 'Limón', desc: 'Afro-Caribbean culture, its own cuisine, cacao and the beaches of the southern Caribbean.', photoNote: '[PHOTO: a cook preparing rice and beans with coconut for a group.]' },
   },
   stories: {
-    eyebrow: '05 · Stories',
+    eyebrow: '04 · Stories',
     title: 'Better to see it than to tell it.',
     intro: 'Keep scrolling: the stories move sideways. Real experiences, allies and behind the scenes.',
     regionLabel: 'Video stories',
@@ -133,12 +125,12 @@ export const en: Dictionary = {
   },
   values: {
     photoAlt: 'A farmer pointing across his pastures, with hay bales in the field',
-    eyebrow: '06 · What matters to us',
+    eyebrow: '05 · What matters to us',
     quote: '“Premium does not mean luxury. It means more personalization, care, quality, coordination and attention.”',
     text: 'We work with people, places and specialists we know and trust. If luxury or specialization needs to be added, it is added; it is not a requirement.',
   },
   contact: {
-    eyebrow: '07 · Let\'s get started',
+    eyebrow: '06 · Let\'s get started',
     title: 'Tell us what you\'re looking for.',
     intro: 'You do not need to have everything figured out. This is enough to start a conversation; we will go over budget and details later, calmly.',
     steps: [

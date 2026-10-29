@@ -1,15 +1,14 @@
 ---
-import { Image } from 'astro:assets';
-import teamCooking from '../assets/team-cooking-outdoors.webp';
 import { getPagePath } from '../data/routes';
+import HeroMap from './HeroMap.astro';
 import { getLocale, useTranslations } from '../i18n/utils';
 
 const locale = getLocale(Astro.currentLocale);
 const t = useTranslations(locale);
 ---
 <section id="inicio" class="oscuro relative flex min-h-svh flex-col justify-center overflow-clip bg-verde-oscuro text-crema-luminoso">
-  <div class="mx-auto flex w-full max-w-sitio flex-wrap items-center gap-9 px-gutter pt-hero pb-24">
-    <div class="relative z-[2] min-w-0 flex-[1_1_380px]">
+  <div class="mx-auto grid w-full max-w-sitio items-start gap-x-12 gap-y-10 px-gutter pt-hero pb-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
+    <div class="relative z-[2] min-w-0">
       <p class="mb-4 text-label font-semibold tracking-eyebrow text-mostaza-calido uppercase">{t.hero.eyebrow}</p>
       <h1 class="font-titulos text-hero font-extrabold tracking-[-0.02em]">{t.hero.titleBefore} <em class="font-semibold text-mostaza-calido italic">{t.hero.titleEmphasis}</em> {t.hero.titleAfter}</h1>
       <p class="mt-5 max-w-[420px] text-[length:clamp(15px,1.1vw,17px)]/[1.55] text-crema-luminoso">{t.hero.intro}</p>
@@ -20,23 +19,8 @@ const t = useTranslations(locale);
       <p class="mt-7 text-dato font-medium text-crema-luminoso opacity-85">{t.hero.segments}</p>
     </div>
 
-    <!-- parallax collage -->
-    <div class="relative h-[410px] min-w-0 flex-[1_1_300px]">
-      <div class="parallax-a absolute top-0 right-0 flex h-[370px] w-[74%] flex-col justify-end overflow-clip rounded-imagen bg-verde-principal p-4">
-        <svg viewBox="0 0 300 80" preserveAspectRatio="none" aria-hidden="true" class="absolute top-[38%] left-0 h-20 w-full opacity-50"><polyline points="0,70 60,48 110,58 165,26 215,40 270,10 300,18" fill="none" stroke="#e0a632" stroke-width="3" vector-effect="non-scaling-stroke"></polyline></svg>
-        <div class="absolute top-4 left-4 flex items-center gap-2.5 text-eyebrow font-semibold tracking-eyebrow-sm text-crema-luminoso uppercase">
-          <span class="inline-flex size-9 items-center justify-center rounded-full border-2 border-crema-luminoso"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5 L13 8 L4 13.5 Z" fill="#fff7e8"></path></svg></span>
-          {t.hero.videoLabel}
-        </div>
-        <p class="relative text-cuerpo text-crema-luminoso">{t.hero.videoNote}</p>
-      </div>
-      <div class="parallax-b absolute top-[200px] left-0 flex h-[165px] w-[44%] flex-col justify-end rounded-imagen border-[6px] border-verde-oscuro bg-arena p-4 text-verde-oscuro">
-        <p class="mb-1.5 text-eyebrow font-semibold tracking-eyebrow-sm text-verde-principal uppercase">{t.hero.photoLabel}</p>
-        <p class="text-nota">{t.hero.photoNoteMain}</p>
-      </div>
-      <div class="parallax-c absolute top-7 left-[12%] h-[125px] w-[34%] overflow-clip rounded-imagen border-[6px] border-verde-oscuro bg-mostaza-calido">
-        <Image class="block size-full object-cover" src={teamCooking} widths={[300, 600]} sizes="(min-width: 900px) 220px, 34vw" alt={t.hero.photoAltSecondary} loading="eager" fetchpriority="high" />
-      </div>
+    <div class="relative z-[1] min-w-0">
+      <HeroMap />
     </div>
   </div>
 

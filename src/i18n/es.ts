@@ -155,11 +155,6 @@ export const es = {
     primaryCta: 'Cuéntanos qué estás buscando',
     secondaryCta: 'Explora Costa Rica',
     segments: 'Viajeros · Locales · Empresas · Educación',
-    videoLabel: 'Video hero · loop 15 s',
-    videoNote: '[VIDEO: cortes de 2–3 s sin audio. Manos tostando café en una finca, un grupo cruzando un puente colgante en bosque nuboso, estudiantes midiendo un río con un especialista. Gente haciendo, no posando.]',
-    photoLabel: 'Foto',
-    photoNoteMain: '[FOTO: Bernald conversando con un anfitrión local en su finca, luz de tarde.]',
-    photoAltSecondary: 'Grupo picando hierbas frescas juntos para preparar una comida al aire libre',
   },
   manifesto: {
     eyebrow: '01 · Qué hacemos',
@@ -191,13 +186,10 @@ export const es = {
     cta: 'Habla con Bernald',
   },
   destinations: {
-    eyebrow: '04 · Destinos',
-    title: 'Costa Rica, punto por punto.',
-    intro: 'Algunos de los lugares más visitados y queridos del país. Toca un punto: te contamos qué tiene y para quién funciona.',
+    listLabel: 'Destinos del mapa',
     idealFor: 'Funciona para:',
     photoCredit: 'Foto',
-    pick: 'Me interesa este destino',
-    footnote: 'El mapa es un punto de partida. La experiencia se diseña alrededor de lo que tú buscas, no al revés.',
+    pick: 'Me interesa',
   },
   map: {
     ariaLabel: 'Mapa de Costa Rica por provincias con destinos destacados',
@@ -209,7 +201,7 @@ export const es = {
   },
   spots,
   stories: {
-    eyebrow: '05 · Historias',
+    eyebrow: '04 · Historias',
     title: 'Mejor verlo que contarlo.',
     intro: 'Sigue bajando: las historias pasan de lado. Experiencias reales, aliados y el detrás de cámaras.',
     regionLabel: 'Historias en video',
@@ -219,12 +211,12 @@ export const es = {
   },
   values: {
     photoAlt: 'Un finquero señalando sus potreros, con pacas de heno en el campo',
-    eyebrow: '06 · Lo que nos importa',
+    eyebrow: '05 · Lo que nos importa',
     quote: '“Premium no significa lujo. Significa más personalización, cuidado, calidad, coordinación y atención.”',
     text: 'Trabajamos con personas, lugares y especialistas que conocemos y en los que confiamos. Si hay que sumar lujo o especialización, se suma; no es requisito.',
   },
   contact: {
-    eyebrow: '07 · Empecemos',
+    eyebrow: '06 · Empecemos',
     title: 'Cuéntanos qué estás buscando.',
     intro: 'No hace falta tener todo claro. Con esto arrancamos una conversación; presupuesto y detalles los vemos después, con calma.',
     steps: [

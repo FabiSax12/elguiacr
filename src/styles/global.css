@@ -76,6 +76,7 @@
   --animate-pulso: pulso 2.4s ease-out infinite;
   --animate-cinta: cinta 38s linear infinite;
   --animate-foto-entra: fotoEntra 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-traqueteo: traqueteo 0.3s ease-in-out infinite alternate;
 }
 
 @layer base {
@@ -111,12 +112,9 @@
   0% { transform: scale(0.6); opacity: 0.9; }
   100% { transform: scale(2.4); opacity: 0; }
 }
+@keyframes traqueteo { to { transform: translateY(-1.5px) rotate(-1.5deg); } }
 /* Slow vertical bob for floating cards (see the flotar utility). */
 @keyframes flotar { to { --flotar-y: -6px; } }
-/* Subtle parallax: keep amplitude within about 24px. */
-@keyframes pxA { from { transform: translateY(16px); } to { transform: translateY(-16px); } }
-@keyframes pxB { from { transform: translateY(24px); } to { transform: translateY(-24px); } }
-@keyframes pxC { from { transform: translateY(-12px); } to { transform: translateY(12px); } }
 @keyframes revelar {
   from { opacity: 0; transform: translateY(48px); }
   to { opacity: 1; transform: none; }
@@ -185,30 +183,6 @@
 }
 
 /* Scroll-driven effects (applied only where animation-timeline is supported) */
-@utility parallax-a {
-  @supports (animation-timeline: view()) {
-    animation-name: pxA;
-    animation-timing-function: linear;
-    animation-fill-mode: both;
-    animation-timeline: view();
-  }
-}
-@utility parallax-b {
-  @supports (animation-timeline: view()) {
-    animation-name: pxB;
-    animation-timing-function: linear;
-    animation-fill-mode: both;
-    animation-timeline: view();
-  }
-}
-@utility parallax-c {
-  @supports (animation-timeline: view()) {
-    animation-name: pxC;
-    animation-timing-function: linear;
-    animation-fill-mode: both;
-    animation-timeline: view();
-  }
-}
 @utility revelar {
   @supports (animation-timeline: view()) {
     animation-name: revelar;
