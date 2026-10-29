@@ -10,7 +10,7 @@ export const landingPageKeyByAudience: Record<AudienceId, LandingPageKey> = {
 };
 
 export interface LandingText {
-  // SEO: title up to 60 characters, description up to 155.
+  // SEO: title up to 60 characters, description 140 to 160.
   title: string;
   description: string;
   eyebrow: string;
@@ -29,8 +29,8 @@ export interface LandingText {
 
 const travelers: Record<Locale, LandingText> = {
   es: {
-    title: 'Viajes personalizados a Costa Rica | El Guía CR',
-    description: 'Armamos tu viaje a Costa Rica a tu ritmo y presupuesto: itinerario, tours en La Fortuna y transporte coordinados con un solo contacto.',
+    title: 'Viajes personalizados a Costa Rica a tu ritmo | El Guía CR',
+    description: 'Planificamos tu viaje a Costa Rica a tu medida: itinerario, tours en La Fortuna y transporte entre destinos, con un solo contacto antes y durante el viaje.',
     eyebrow: 'Para viajeros',
     h1: 'Viajes personalizados en Costa Rica, hechos a tu ritmo',
     intro: [
@@ -61,8 +61,8 @@ const travelers: Record<Locale, LandingText> = {
     ctaText: 'No hace falta tener todo claro. Con unas pocas respuestas empezamos a armar la propuesta.',
   },
   en: {
-    title: 'Custom Trips to Costa Rica, Planned for You | El Guía CR',
-    description: 'We plan your Costa Rica trip around your pace and budget: itinerary, La Fortuna tours and transport, all coordinated through one contact.',
+    title: 'Custom Costa Rica Trip & Itinerary Planner | El Guía CR',
+    description: 'Get a custom Costa Rica itinerary built around your pace and budget: La Fortuna tours, farm stays and transfers, coordinated by one local contact the whole way.',
     eyebrow: 'For travelers',
     h1: 'Custom trips to Costa Rica, built around your pace',
     intro: [
@@ -96,8 +96,8 @@ const travelers: Record<Locale, LandingText> = {
 
 const locals: Record<Locale, LandingText> = {
   es: {
-    title: 'Experiencias para locales en Costa Rica | El Guía CR',
-    description: 'Actividades diferentes en Costa Rica para ticos y residentes: escapadas, celebraciones y planes de fin de semana con la logística resuelta.',
+    title: 'Escapadas y planes diferentes en Costa Rica | El Guía CR',
+    description: 'Actividades diferentes en Costa Rica para ticos y residentes: paseos de un día, escapadas de fin de semana y celebraciones, con comida y transporte resueltos.',
     eyebrow: 'Para locales',
     h1: 'Actividades diferentes en Costa Rica para ver tu país con otros ojos',
     intro: [
@@ -128,8 +128,8 @@ const locals: Record<Locale, LandingText> = {
     ctaText: 'Dinos con quién vas y qué quieren vivir. Nosotros armamos el resto.',
   },
   en: {
-    title: 'Experiences for Locals in Costa Rica | El Guía CR',
-    description: 'Different things to do in Costa Rica for locals and residents: getaways, celebrations and weekend plans with the logistics handled.',
+    title: 'Things to Do in Costa Rica for Locals | El Guía CR',
+    description: 'Different things to do in Costa Rica for locals and residents: day trips, weekend getaways and celebrations, with food, transport and logistics sorted for you.',
     eyebrow: 'For locals',
     h1: 'Different things to do in Costa Rica, for people who already live here',
     intro: [
@@ -163,8 +163,8 @@ const locals: Record<Locale, LandingText> = {
 
 const companies: Record<Locale, LandingText> = {
   es: {
-    title: 'Team building en Costa Rica a medida | El Guía CR',
-    description: 'Team building y actividades para empresas en Costa Rica, diseñadas desde el objetivo de tu equipo. También retiros corporativos.',
+    title: 'Team building en Costa Rica para empresas | El Guía CR',
+    description: 'Team building, actividades de integración y retiros corporativos en Costa Rica, diseñados desde el objetivo de tu equipo, con lugar, comida y traslados listos.',
     eyebrow: 'Para empresas',
     h1: 'Team building y actividades para empresas en Costa Rica',
     intro: [
@@ -195,8 +195,8 @@ const companies: Record<Locale, LandingText> = {
     ctaText: 'Cuéntanos el objetivo y el tamaño del grupo. Te respondemos con una propuesta pensada para ustedes.',
   },
   en: {
-    title: 'Team Building in Costa Rica, Made to Measure | El Guía CR',
-    description: 'Team building and corporate retreats in Costa Rica designed around your team\'s goal, with logistics handled by a single contact.',
+    title: 'Costa Rica Team Building & Corporate Retreats | El Guía CR',
+    description: 'Team building activities and corporate retreats in Costa Rica, designed around your team\'s goal, with venue, meals and transport handled by a single contact.',
     eyebrow: 'For companies',
     h1: 'Team building and corporate activities in Costa Rica',
     intro: [
@@ -230,8 +230,8 @@ const companies: Record<Locale, LandingText> = {
 
 const education: Record<Locale, LandingText> = {
   es: {
-    title: 'Giras educativas en Costa Rica | El Guía CR',
-    description: 'Giras educativas y académicas en Costa Rica diseñadas desde tu curso y tus objetivos de aprendizaje, con logística coordinada.',
+    title: 'Giras educativas y académicas en Costa Rica | El Guía CR',
+    description: 'Giras educativas en Costa Rica para colegios y universidades, diseñadas desde el programa del curso: trabajo de campo, especialistas y la logística del grupo.',
     eyebrow: 'Para educación',
     h1: 'Giras educativas y académicas en Costa Rica, diseñadas desde tu curso',
     intro: [
@@ -262,8 +262,8 @@ const education: Record<Locale, LandingText> = {
     ctaText: 'Cuéntanos el curso, el nivel y lo que quieres que aprenda el grupo. Armamos una propuesta contigo.',
   },
   en: {
-    title: 'Educational Trips in Costa Rica | El Guía CR',
-    description: 'Educational trips and field trips in Costa Rica designed around your course and learning goals, with the logistics coordinated.',
+    title: 'Educational Trips & Field Trips in Costa Rica | El Guía CR',
+    description: 'Educational trips to Costa Rica for schools and universities, built around your syllabus: hands-on fieldwork, local specialists and group logistics in one plan.',
     eyebrow: 'For education',
     h1: 'Educational travel and field trips in Costa Rica, built around your course',
     intro: [

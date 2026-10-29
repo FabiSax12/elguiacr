@@ -11,7 +11,7 @@ const t = useTranslations(locale);
   <div class="mx-auto flex w-full max-w-sitio flex-wrap items-center gap-9 px-gutter pt-hero pb-24">
     <div class="relative z-[2] min-w-0 flex-[1_1_380px]">
       <p class="mb-4 text-label font-semibold tracking-eyebrow text-mostaza-calido uppercase">{t.hero.eyebrow}</p>
-      <h1 class="font-titulos text-hero font-extrabold tracking-[-0.02em]">{t.hero.titleBefore} <em class="font-semibold text-mostaza-calido italic">{t.hero.titleEmphasis}</em></h1>
+      <h1 class="font-titulos text-hero font-extrabold tracking-[-0.02em]">{t.hero.titleBefore} <em class="font-semibold text-mostaza-calido italic">{t.hero.titleEmphasis}</em> {t.hero.titleAfter}</h1>
       <p class="mt-5 max-w-[420px] text-[length:clamp(15px,1.1vw,17px)]/[1.55] text-crema-luminoso">{t.hero.intro}</p>
       <div class="mt-7 flex flex-wrap gap-3">
         <a class="inline-flex min-h-11 items-center gap-2.5 rounded-full bg-mostaza-calido px-7 text-base font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro" href="#contanos">{t.hero.primaryCta} <span class="inline-block" aria-hidden="true">→</span></a>
@@ -35,7 +35,7 @@ const t = useTranslations(locale);
         <p class="text-nota">{t.hero.photoNoteMain}</p>
       </div>
       <div class="parallax-c absolute top-7 left-[12%] h-[125px] w-[34%] overflow-clip rounded-imagen border-[6px] border-verde-oscuro bg-mostaza-calido">
-        <Image class="block size-full object-cover" src={teamCooking} width={600} alt={t.hero.photoAltSecondary} loading="eager" />
+        <Image class="block size-full object-cover" src={teamCooking} widths={[300, 600]} sizes="(min-width: 900px) 220px, 34vw" alt={t.hero.photoAltSecondary} loading="eager" fetchpriority="high" />
       </div>
     </div>
   </div>

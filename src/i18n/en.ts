@@ -2,8 +2,10 @@ import type { Dictionary } from './ui';
 
 export const en: Dictionary = {
   meta: {
-    title: 'El Guía CR · Experiences designed with purpose',
-    description: 'elguiacr.com · Design and coordination of experiences in Costa Rica. Travelers, locals, companies and education.',
+    title: 'Custom Costa Rica Trips, Tours & Experiences | El Guía CR',
+    description: 'Custom Costa Rica trips, tours and experiences for travelers, locals, companies and schools. Tell us what you want; a person replies within one business day.',
+    // Alt text of the default share image (src/assets/rio-celeste.webp).
+    imageAlt: 'Río Celeste waterfall dropping into a turquoise pool ringed by forest',
   },
   nav: {
     ariaLabel: 'Main',
@@ -26,7 +28,8 @@ export const en: Dictionary = {
   hero: {
     eyebrow: 'elguiacr.com · Design and coordination of experiences in Costa Rica',
     titleBefore: 'Experiences designed with',
-    titleEmphasis: 'purpose.',
+    titleEmphasis: 'purpose',
+    titleAfter: 'in Costa Rica.',
     intro: 'You tell us what you want to live, learn or achieve in Costa Rica. El Guía takes care of connecting the pieces: places, people, allies and logistics.',
     primaryCta: 'Tell us what you\'re looking for',
     secondaryCta: 'Explore Costa Rica',
@@ -230,9 +233,9 @@ export const en: Dictionary = {
   },
   pages: {
     experiences: {
-      title: 'Tailor-Made Experiences in Costa Rica | El Guía CR',
-      description: 'Tailor-made experiences in Costa Rica for travelers, locals, companies and schools. Browse ideas and tell us what you are looking for.',
-      heading: 'Experiences designed around you',
+      title: 'Costa Rica Tours & Experiences, Tailor-Made | El Guía CR',
+      description: 'Ideas for Costa Rica tours and experiences: Tortuguero canals, Arenal, Monteverde, coffee farms and local cooking, all tailored to your group, pace and budget.',
+      heading: 'Costa Rica experiences designed around you',
       intro: 'Every experience we build starts with a conversation with you, not a catalog. You can ask for something completely tailored; the examples on this page are inspiration, not fixed packages.',
     },
     destinations: {

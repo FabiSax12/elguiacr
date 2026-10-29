@@ -23,7 +23,7 @@ const audiences = getAudiences(locale);
         <div class="group relative flex flex-col overflow-clip rounded-tarjeta bg-crema-luminoso text-verde-oscuro transition-transform duration-500 ease-[cubic-bezier(.2,.7,.2,1)] hover:-translate-y-2">
           <div class:list={['relative flex h-[155px] items-end overflow-clip p-3.5', audience.photoBg]}>
             {audience.image ? (
-              <Image class="absolute inset-0 block size-full object-cover" src={audience.image} width={800} alt={audience.alt ?? ''} />
+              <Image class="absolute inset-0 block size-full object-cover" src={audience.image} widths={[400, 800]} sizes="(min-width: 1280px) 300px, (min-width: 600px) 50vw, 100vw" alt={audience.alt ?? ''} />
             ) : (
               <p class:list={['text-nota', audience.photoNoteColor]}>{audience.photoNote}</p>
             )}

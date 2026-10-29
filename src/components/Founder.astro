@@ -14,7 +14,7 @@ const t = useTranslations(getLocale(Astro.currentLocale));
     <div class="mt-9 flex flex-wrap items-center gap-x-18 gap-y-12">
       <figure class="min-w-0 flex-[1_1_420px]">
         <div class="relative aspect-[4/5] overflow-clip rounded-imagen bg-verde-principal">
-          <Image class="zoom-lento absolute inset-0 block size-full object-cover object-[68%_40%]" src={founder} width={1000} alt={t.founder.photoAlt} />
+          <Image class="zoom-lento absolute inset-0 block size-full object-cover object-[68%_40%]" src={founder} widths={[500, 1000]} sizes="(min-width: 1000px) 560px, 100vw" alt={t.founder.photoAlt} />
         </div>
         <svg viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true" class="mt-4 block h-10 w-full"><polyline class="trazar" pathLength="1" points="0,34 70,18 130,26 200,6 260,16 330,2 400,10" fill="none" stroke="#e0a632" stroke-width="3" vector-effect="non-scaling-stroke"></polyline></svg>
       </figure>

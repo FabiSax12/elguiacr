@@ -9,8 +9,8 @@ const t = useTranslations(locale);
 const resolved = await Promise.all(
   getSpots(locale).map(async (spot) => {
     const { image, ...rest } = spot;
-    const imageSrc = image ? (await getImage({ src: image, width: 1000 })).src : undefined;
-    return { ...rest, imageSrc };
+    const optimized = image ? await getImage({ src: image, width: 1000 }) : undefined;
+    return { ...rest, imageSrc: optimized?.src, imageWidth: optimized?.attributes.width, imageHeight: optimized?.attributes.height };
   }),
 );
 const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved[0];
@@ -30,7 +30,7 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
         <div class="relative aspect-[648.3/613] w-full">
           <CostaRicaMap />
           {resolved.map((spot) => (
-            <button type="button" class="group absolute top-(--y) left-(--x) -mt-[22px] -ml-[22px] flex size-11 cursor-pointer items-center justify-center p-0" data-spot={spot.id} data-marker aria-label={spot.name} aria-pressed={String(spot.id === initial.id)} style={`--x: ${spot.x}%; --y: ${spot.y}%;`}>
+            <button type="button" class="group absolute top-(--y) left-(--x) -mt-[22px] -ml-[22px] flex size-11 cursor-pointer items-center justify-center p-0" data-spot={spot.id} data-marker aria-label={spot.name} aria-pressed={spot.id === initial.id ? 'true' : 'false'} style={`--x: ${spot.x}%; --y: ${spot.y}%;`}>
               <span class="absolute hidden size-5 animate-pulso rounded-full bg-mostaza-calido group-aria-pressed:block" aria-hidden="true"></span>
               <span class="relative hidden size-[22px] rounded-full border-4 border-crema-luminoso bg-mostaza-calido group-aria-pressed:block" aria-hidden="true"></span>
               <span class="absolute bottom-10 left-1/2 hidden -translate-x-1/2 rounded-md bg-verde-oscuro px-2.5 py-1 text-dato font-semibold whitespace-nowrap text-crema-luminoso group-aria-pressed:block" aria-hidden="true">{spot.short}</span>
@@ -41,7 +41,7 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
         <!-- accessible / mobile list -->
         <div class="mt-5 flex flex-wrap gap-2">
           {resolved.map((spot) => (
-            <button type="button" class="min-h-10 cursor-pointer rounded-full border-2 border-verde-oscuro bg-transparent px-3.5 text-dato font-medium text-verde-oscuro hover:bg-verde-oscuro hover:text-crema-luminoso aria-pressed:bg-verde-oscuro aria-pressed:text-crema-luminoso" data-spot={spot.id} aria-pressed={String(spot.id === initial.id)}>{spot.short}</button>
+            <button type="button" class="min-h-10 cursor-pointer rounded-full border-2 border-verde-oscuro bg-transparent px-3.5 text-dato font-medium text-verde-oscuro hover:bg-verde-oscuro hover:text-crema-luminoso aria-pressed:bg-verde-oscuro aria-pressed:text-crema-luminoso" data-spot={spot.id} aria-pressed={spot.id === initial.id ? 'true' : 'false'}>{spot.short}</button>
           ))}
         </div>
       </div>
@@ -49,7 +49,7 @@ const initial = resolved.find((spot) => spot.id === DEFAULT_SPOT_ID) ?? resolved
       <!-- destination panel -->
       <aside class="flex min-w-0 flex-[1_1_360px] flex-col overflow-clip rounded-tarjeta bg-verde-oscuro text-crema-luminoso" aria-live="polite">
         <div class="relative h-[230px] overflow-clip bg-verde-principal">
-          <img class="absolute inset-0 block size-full animate-foto-entra object-cover object-(--pos)" data-field="image" src={initial.imageSrc} alt={initial.alt} hidden={!initial.imageSrc} style={`--pos: ${initial.position ?? '50% 50%'};`} />
+          <img class="absolute inset-0 block size-full animate-foto-entra object-cover object-(--pos)" data-field="image" src={initial.imageSrc} width={initial.imageWidth} height={initial.imageHeight} alt={initial.alt} loading="lazy" decoding="async" hidden={!initial.imageSrc} style={`--pos: ${initial.position ?? '50% 50%'};`} />
           <div data-field="placeholder" hidden={Boolean(initial.imageSrc)} class="absolute inset-0 flex items-end p-[18px]">
             <p data-field="photoNote" class="text-nota text-crema-luminoso">{initial.photoNote}</p>
           </div>

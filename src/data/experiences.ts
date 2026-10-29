@@ -189,7 +189,7 @@ export interface Experience {
   description: string;
   duration: string;
   audiences: { id: AudienceId; label: string }[];
-  image?: { src: string; width: number; height: number; alt: string };
+  image?: { asset: ImageMetadata; alt: string };
   photoNote: string;
   contactHref: string;
 }
@@ -206,7 +206,7 @@ export function getExperiences(locale: Locale, audience?: AudienceId): Experienc
       description: item.description[locale],
       duration: item.duration[locale],
       audiences: item.audiences.map((id) => ({ id, label: audiences.items[id].segment })),
-      image: item.image && { src: item.image.asset.src, width: item.image.asset.width, height: item.image.asset.height, alt: item.image.alt[locale] },
+      image: item.image && { asset: item.image.asset, alt: item.image.alt[locale] },
       photoNote: item.photoNote[locale],
       contactHref: getContactPath(locale, item.audiences[0]),
     }));

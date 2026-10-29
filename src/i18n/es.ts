@@ -23,9 +23,9 @@ const legalLinks: Record<LegalPageKey, string> = {
 
 const pages: Record<PlaceholderPageKey, PlaceholderPageText> = {
   experiences: {
-    title: 'Experiencias a medida en Costa Rica | El Guía CR',
-    description: 'Experiencias en Costa Rica diseñadas a tu medida para viajeros, locales, empresas y educación. Explora ideas y cuéntanos qué buscas.',
-    heading: 'Experiencias diseñadas a tu medida',
+    title: 'Tours y experiencias a medida en Costa Rica | El Guía CR',
+    description: 'Ideas de tours y experiencias en Costa Rica: Tortuguero, Arenal, Monteverde, fincas de café y cocina local. Las adaptamos a tu grupo, tu ritmo y tu presupuesto.',
+    heading: 'Experiencias en Costa Rica diseñadas a tu medida',
     intro: 'Cada experiencia que armamos parte de una conversación contigo, no de un catálogo. Puedes pedirnos algo completamente a tu medida; los ejemplos de esta página son una inspiración, no paquetes cerrados.',
   },
   destinations: {
@@ -131,8 +131,10 @@ const spots: Record<SpotId, SpotText> = {
 
 export const es = {
   meta: {
-    title: 'El Guía CR · Experiencias diseñadas con propósito',
-    description: 'elguiacr.com · Diseño y coordinación de experiencias en Costa Rica. Viajeros, locales, empresas y educación.',
+    title: 'Experiencias y viajes a medida en Costa Rica | El Guía CR',
+    description: 'Experiencias en Costa Rica diseñadas y coordinadas para viajeros, locales, empresas y giras educativas. Te responde una persona en menos de un día hábil.',
+    // Alt text of the default share image (src/assets/rio-celeste.webp).
+    imageAlt: 'Catarata de Río Celeste cayendo a una poza turquesa rodeada de bosque',
   },
   nav: {
     ariaLabel: 'Principal',
@@ -147,7 +149,8 @@ export const es = {
   hero: {
     eyebrow: 'elguiacr.com · Diseño y coordinación de experiencias en Costa Rica',
     titleBefore: 'Experiencias diseñadas con',
-    titleEmphasis: 'propósito.',
+    titleEmphasis: 'propósito',
+    titleAfter: 'en Costa Rica.',
     intro: 'Tú nos cuentas qué quieres vivir, aprender o lograr en Costa Rica. El Guía se encarga de conectar las piezas: lugares, personas, aliados y logística.',
     primaryCta: 'Cuéntanos qué estás buscando',
     secondaryCta: 'Explora Costa Rica',

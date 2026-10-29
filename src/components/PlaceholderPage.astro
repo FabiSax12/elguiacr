@@ -13,10 +13,12 @@ const { pageKey } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 const t = useTranslations(locale);
 const page = t.pages[pageKey];
+// Every placeholder is noindex (and so left out of the sitemap) while its content is thin.
+// A page becomes indexable by getting its own component instead of this one.
 const isLegal = legalPageKeys.some((key) => key === pageKey);
 ---
 
-<Layout title={page.title} description={page.description} pageKey={pageKey} noindex={isLegal}>
+<Layout title={page.title} description={page.description} pageKey={pageKey} noindex>
   <div class="font-texto min-w-80 w-full overflow-x-clip bg-crema-luminoso leading-[normal] text-verde-oscuro">
     <Nav pageKey={pageKey} />
     <main class="flex min-h-[60svh] flex-col justify-center px-gutter py-seccion">
