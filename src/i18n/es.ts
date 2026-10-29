@@ -10,7 +10,7 @@ const navLinks: Record<NavPageKey, string> = {
   destinations: 'Destinos',
   transport: 'Transporte y rutas',
   about: 'Nosotros',
-  blog: 'Blog / Guía de Costa Rica',
+  blog: 'Blog',
   faq: 'FAQ',
 };
 

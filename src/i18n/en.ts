@@ -16,7 +16,7 @@ export const en: Dictionary = {
       destinations: 'Destinations',
       transport: 'Transport & routes',
       about: 'About',
-      blog: 'Blog / Costa Rica Guide',
+      blog: 'Blog',
       faq: 'FAQ',
     },
     cta: 'Tell us what you\'re looking for',
