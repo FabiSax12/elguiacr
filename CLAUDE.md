@@ -25,7 +25,7 @@ Three branches, promoted by merging forward (`dev` → `staging` → `main`):
 - `staging`: what the client reviews before release. Preview at `staging-elguiacr.<subdomain>.workers.dev`.
 - `main`: production (elguiacr.com). Only merge here after the client approves staging.
 
-Never commit straight to `main` or `staging`. Previews come from Workers Builds "Worker Previews" (`npx wrangler preview`, preview name = branch name); `workers.dev` preview URLs send `X-Robots-Tag: noindex` automatically.
+Never commit straight to `main` or `staging`. Previews come from Workers Builds "Worker Previews" (`npx wrangler preview`, preview name = branch name), which requires the `previews` block in `wrangler.jsonc` (empty is fine); `workers.dev` preview URLs send `X-Robots-Tag: noindex` automatically.
 
 Cloudflare Workers Builds, on every push to `main`: it runs `pnpm run build`, then `npx wrangler deploy`. `wrangler.jsonc` serves `dist/` as static assets (no adapter, no SSR). Keep that file: without it, `wrangler deploy` tries to auto-configure the project (`astro add cloudflare`, adding wrangler to `package.json`), which fails under pnpm with `ERR_PNPM_IGNORED_BUILDS`.
 
