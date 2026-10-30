@@ -144,7 +144,6 @@ const interests: Record<InterestId, string> = {
   rural: 'Experiencias rurales y de finca',
   learning: 'Aprendizaje y educación',
   celebrations: 'Celebraciones y experiencias especiales',
-  unsure: 'Todavía no lo tengo claro',
 };
 
 const timings: Record<TimingId, string> = {
@@ -268,8 +267,10 @@ export const es = {
     phoneLabel: 'Número de teléfono',
     emailLabel: 'Correo electrónico',
     whatLabel: '¿Qué quieres vivir, descubrir, aprender o lograr?',
-    whatHelp: 'Cuéntanos tu idea con tus propias palabras. No importa si todavía no tienes todos los detalles.',
+    whatHelp: 'Cuéntanos tu idea con tus propias palabras, aunque todavía no tengas todos los detalles. Si hay algo importante, como alimentación, accesibilidad, edades o una ocasión especial, inclúyelo aquí.',
     whatPlaceholder: 'Ej.: celebrar los 15 años de la empresa con algo que no sea otra cena; una gira de biología para 30 estudiantes; nuestro primer viaje a Costa Rica, sin prisas.',
+    detailsTitle: '¿Nos das un poco más de contexto?',
+    detailsHint: 'Todo es opcional, pero nos ayuda a llegar con una mejor primera propuesta.',
     interestsLabel: '¿Qué tipo de experiencias te interesan?',
     interestsHint: 'Puedes elegir más de una.',
     interests,
@@ -283,9 +284,6 @@ export const es = {
     zones,
     zoneNameLabel: '¿Cuál?',
     zoneNamePlaceholder: 'La Fortuna, Monteverde, Guanacaste...',
-    extraLabel: '¿Hay algo más que debamos saber?',
-    extraHelp: 'Puedes contarnos sobre alimentación, accesibilidad, edades, una ocasión especial o cualquier otro detalle importante.',
-    optional: '(opcional)',
     errorChoice: 'Elige una opción.',
     errorField: 'Completa este campo.',
     errorEmail: 'Escribe un correo válido.',

@@ -4,10 +4,8 @@ import { useTranslations } from '../i18n/utils';
 export const contactMethodIds = ['whatsapp', 'email'] as const;
 export type ContactMethodId = (typeof contactMethodIds)[number];
 
-export const interestIds = ['nature', 'adventure', 'culture', 'food', 'wellness', 'rural', 'learning', 'celebrations', 'unsure'] as const;
+export const interestIds = ['nature', 'adventure', 'culture', 'food', 'wellness', 'rural', 'learning', 'celebrations'] as const;
 export type InterestId = (typeof interestIds)[number];
-// Picking this option clears the others, and picking any other clears it.
-export const exclusiveInterestId: InterestId = 'unsure';
 
 export const timingIds = ['fixed', 'approximate', 'flexible', 'unknown'] as const;
 export type TimingId = (typeof timingIds)[number];

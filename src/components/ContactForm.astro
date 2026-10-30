@@ -2,14 +2,13 @@
 import { getLocale, useTranslations } from '../i18n/utils';
 import { getPagePath } from '../data/routes';
 import { getSegments } from '../data/audiences';
-import { exclusiveInterestId, getContactChoices, timingIdsWithDate } from '../data/contactForm';
+import { getContactChoices, timingIdsWithDate } from '../data/contactForm';
 const locale = getLocale(Astro.currentLocale);
 const t = useTranslations(locale);
 const segments = getSegments(locale);
 const { methods, interests, timings, zones } = getContactChoices(locale);
 
 const label = 'block text-subtitulo font-semibold';
-const optional = 'font-normal text-gris-texto';
 const help = 'mt-1 text-nota text-gris-texto';
 const error = 'mt-2 text-nota font-semibold text-evitar-texto empty:hidden';
 const chipRow = 'mt-3 flex flex-wrap gap-2.5';
@@ -17,7 +16,6 @@ const chip = 'group min-h-11 cursor-pointer rounded-full border-2 border-verde-o
 const campo = 'mt-1.5 w-full rounded-campo border-2 border-verde-oscuro/30 bg-white px-3.5 py-2.5 text-entrada text-verde-oscuro placeholder:text-gris-texto focus:border-verde-principal focus:bg-arena aria-invalid:border-evitar-texto';
 const campoCorto = `${campo} max-w-[420px]`;
 const textarea = `${campo} min-h-24 resize-y`;
-const textareaShort = `${campo} min-h-[72px] resize-y`;
 ---
 
 <section id="contanos" data-error-choice={t.contact.errorChoice} data-error-field={t.contact.errorField} data-error-email={t.contact.errorEmail} class="flex min-h-svh flex-col justify-center bg-crema-luminoso px-gutter py-seccion">
@@ -46,6 +44,8 @@ const textareaShort = `${campo} min-h-[72px] resize-y`;
           <p id="f-segmento-error" class={error}></p>
         </fieldset>
 
+        <div><label for="f-que" class={label}>{t.contact.whatLabel}</label><p id="f-que-ayuda" class={help}>{t.contact.whatHelp}</p><textarea id="f-que" class={textarea} placeholder={t.contact.whatPlaceholder} required aria-describedby="f-que-ayuda f-que-error"></textarea><p id="f-que-error" class={error}></p></div>
+
         <div><label for="f-nombre" class={label}>{t.contact.nameLabel}</label><input id="f-nombre" class={campoCorto} type="text" autocomplete="name" placeholder={t.contact.namePlaceholder} required aria-describedby="f-nombre-error"><p id="f-nombre-error" class={error}></p></div>
 
         <div class="flex flex-col gap-5">
@@ -62,46 +62,50 @@ const textareaShort = `${campo} min-h-[72px] resize-y`;
           <div data-reveal="method" data-reveal-values="email" hidden><label for="f-correo" class={label}>{t.contact.emailLabel}</label><input id="f-correo" class={campoCorto} type="email" autocomplete="email" required aria-describedby="f-correo-error"><p id="f-correo-error" class={error}></p></div>
         </div>
 
-        <div><label for="f-que" class={label}>{t.contact.whatLabel}</label><p id="f-que-ayuda" class={help}>{t.contact.whatHelp}</p><textarea id="f-que" class={textarea} placeholder={t.contact.whatPlaceholder} required aria-describedby="f-que-ayuda f-que-error"></textarea><p id="f-que-error" class={error}></p></div>
+        <details id="f-contexto" class="group/detalles border-t-2 border-verde-oscuro/15 pt-7">
+          <summary class="flex cursor-pointer list-none items-start justify-between gap-4 [&::-webkit-details-marker]:hidden">
+            <span><span class="block font-titulos text-[24px]/[1.15] font-bold text-verde-oscuro">{t.contact.detailsTitle}</span><span class={help}>{t.contact.detailsHint}</span></span>
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="mt-1 size-6 shrink-0 text-verde-principal transition-transform group-open/detalles:rotate-180"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </summary>
+          <div class="mt-7 flex flex-col gap-7">
 
-        <fieldset id="f-intereses" data-group="interests" data-multiple data-exclusive={exclusiveInterestId} aria-describedby="f-intereses-ayuda">
-          <legend class={label}>{t.contact.interestsLabel} <span class={optional}>{t.contact.optional}</span></legend>
-          <p id="f-intereses-ayuda" class={help}>{t.contact.interestsHint}</p>
-          <div class={chipRow}>
-            {interests.map((interest) => (
-              <button type="button" class={chip} data-chip={interest.id} aria-pressed="false"><span class="hidden group-aria-pressed:inline">✓ </span>{interest.label}</button>
-            ))}
+          <fieldset id="f-intereses" data-group="interests" data-multiple aria-describedby="f-intereses-ayuda">
+            <legend class={label}>{t.contact.interestsLabel}</legend>
+            <p id="f-intereses-ayuda" class={help}>{t.contact.interestsHint}</p>
+            <div class={chipRow}>
+              {interests.map((interest) => (
+                <button type="button" class={chip} data-chip={interest.id} aria-pressed="false"><span class="hidden group-aria-pressed:inline">✓ </span>{interest.label}</button>
+              ))}
+            </div>
+          </fieldset>
+
+          <div><label for="f-personas" class={label}>{t.contact.peopleLabel}</label><input id="f-personas" class={campoCorto} type="number" min="1" inputmode="numeric" placeholder={t.contact.peoplePlaceholder} aria-describedby="f-personas-error"><p id="f-personas-error" class={error}></p></div>
+
+          <div class="flex flex-col gap-5">
+            <fieldset id="f-cuando" data-group="timing">
+              <legend class={label}>{t.contact.timingLabel}</legend>
+              <div class={chipRow}>
+                {timings.map((timing) => (
+                  <button type="button" class={chip} data-chip={timing.id} aria-pressed="false"><span class="hidden group-aria-pressed:inline">✓ </span>{timing.label}</button>
+                ))}
+              </div>
+            </fieldset>
+            <div data-reveal="timing" data-reveal-values={timingIdsWithDate.join(' ')} hidden><label for="f-fecha" class={label}>{t.contact.dateLabel}</label><input id="f-fecha" class={campoCorto} type="text" placeholder={t.contact.datePlaceholder}></div>
           </div>
-        </fieldset>
 
-        <div><label for="f-personas" class={label}>{t.contact.peopleLabel}</label><input id="f-personas" class={campoCorto} type="number" min="1" inputmode="numeric" placeholder={t.contact.peoplePlaceholder} required aria-describedby="f-personas-error"><p id="f-personas-error" class={error}></p></div>
-
-        <div class="flex flex-col gap-5">
-          <fieldset id="f-cuando" data-group="timing" data-required aria-describedby="f-cuando-error">
-            <legend class={label}>{t.contact.timingLabel}</legend>
-            <div class={chipRow}>
-              {timings.map((timing) => (
-                <button type="button" class={chip} data-chip={timing.id} aria-pressed="false"><span class="hidden group-aria-pressed:inline">✓ </span>{timing.label}</button>
-              ))}
-            </div>
-            <p id="f-cuando-error" class={error}></p>
-          </fieldset>
-          <div data-reveal="timing" data-reveal-values={timingIdsWithDate.join(' ')} hidden><label for="f-fecha" class={label}>{t.contact.dateLabel} <span class={optional}>{t.contact.optional}</span></label><input id="f-fecha" class={campoCorto} type="text" placeholder={t.contact.datePlaceholder}></div>
-        </div>
-
-        <div class="flex flex-col gap-5">
-          <fieldset id="f-zona" data-group="zone">
-            <legend class={label}>{t.contact.zoneLabel} <span class={optional}>{t.contact.optional}</span></legend>
-            <div class={chipRow}>
-              {zones.map((zone) => (
-                <button type="button" class={chip} data-chip={zone.id} aria-pressed="false"><span class="hidden group-aria-pressed:inline">✓ </span>{zone.label}</button>
-              ))}
-            </div>
-          </fieldset>
-          <div data-reveal="zone" data-reveal-values="yes" hidden><label for="f-zona-nombre" class={label}>{t.contact.zoneNameLabel}</label><input id="f-zona-nombre" class={campoCorto} type="text" placeholder={t.contact.zoneNamePlaceholder}></div>
-        </div>
-
-        <div><label for="f-extra" class={label}>{t.contact.extraLabel} <span class={optional}>{t.contact.optional}</span></label><p id="f-extra-ayuda" class={help}>{t.contact.extraHelp}</p><textarea id="f-extra" class={textareaShort} aria-describedby="f-extra-ayuda"></textarea></div>
+          <div class="flex flex-col gap-5">
+            <fieldset id="f-zona" data-group="zone">
+              <legend class={label}>{t.contact.zoneLabel}</legend>
+              <div class={chipRow}>
+                {zones.map((zone) => (
+                  <button type="button" class={chip} data-chip={zone.id} aria-pressed="false"><span class="hidden group-aria-pressed:inline">✓ </span>{zone.label}</button>
+                ))}
+              </div>
+            </fieldset>
+            <div data-reveal="zone" data-reveal-values="yes" hidden><label for="f-zona-nombre" class={label}>{t.contact.zoneNameLabel}</label><input id="f-zona-nombre" class={campoCorto} type="text" placeholder={t.contact.zoneNamePlaceholder}></div>
+          </div>
+          </div>
+        </details>
 
         <div class="flex flex-wrap items-center gap-x-6 gap-y-4">
           <button type="button" class="inline-flex min-h-13 cursor-pointer items-center gap-2.5 rounded-full border-0 bg-verde-principal px-7 text-base font-semibold text-crema-luminoso hover:bg-verde-oscuro" data-submit>{t.contact.submit} <span class="inline-block" aria-hidden="true">→</span></button>
@@ -130,6 +134,7 @@ const textareaShort = `${campo} min-h-[72px] resize-y`;
     // Chip groups and fields in document order, so the first error found is the first one on screen.
     const validated = section.querySelectorAll<HTMLElement>('[data-group][data-required], input, textarea');
     const zoneName = section.querySelector<HTMLInputElement>('#f-zona-nombre');
+    const context = section.querySelector<HTMLDetailsElement>('#f-contexto');
     const messages = section.dataset;
 
     const selected = new Map<string, Set<string>>();
@@ -147,13 +152,11 @@ const textareaShort = `${campo} min-h-[72px] resize-y`;
 
     const choose = (group: HTMLFieldSetElement, id: string) => {
       const ids = picked(group.dataset.group ?? '');
-      const exclusive = group.dataset.exclusive;
       if (ids.has(id)) {
         ids.delete(id);
         return;
       }
-      if (!('multiple' in group.dataset) || id === exclusive) ids.clear();
-      if (exclusive) ids.delete(exclusive);
+      if (!('multiple' in group.dataset)) ids.clear();
       ids.add(id);
     };
 
@@ -197,6 +200,8 @@ const textareaShort = `${campo} min-h-[72px] resize-y`;
       validated.forEach((element) => {
         const message = errorFor(element);
         setError(element, message);
+        // A closed <details> can't take focus, so open it before an error inside it is shown.
+        if (message && context?.contains(element)) context.open = true;
         if (message && !first) first = element instanceof HTMLFieldSetElement ? element.querySelector<HTMLElement>('[data-chip]') : element;
       });
       (first as HTMLElement | null)?.focus();
@@ -236,6 +241,7 @@ const textareaShort = `${campo} min-h-[72px] resize-y`;
       zone.clear();
       zone.add('yes');
       if (zoneName) zoneName.value = (event as CustomEvent<{ name: string }>).detail.name;
+      if (context) context.open = true;
       render();
     });
 
@@ -247,6 +253,7 @@ const textareaShort = `${campo} min-h-[72px] resize-y`;
 
     section.querySelector('[data-reset]')?.addEventListener('click', () => {
       sent = false;
+      if (context) context.open = false;
       selected.forEach((ids) => ids.clear());
       fields.forEach((field) => {
         field.value = '';
