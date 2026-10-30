@@ -179,9 +179,11 @@ export const es = {
   },
   hero: {
     eyebrow: 'elguiacr.com · Diseño y coordinación de experiencias en Costa Rica',
-    titleBefore: 'Experiencias diseñadas con',
+    titleLead: 'Experiencias diseñadas',
+    titleBefore: 'con',
     titleEmphasis: 'propósito',
-    titleAfter: 'en Costa Rica.',
+    titleAfter: 'en',
+    titleCountry: 'Costa Rica',
     intro: 'Tú nos cuentas qué quieres vivir, aprender o lograr en Costa Rica. El Guía se encarga de conectar las piezas.',
     primaryCta: 'Cuéntanos qué estás buscando',
     secondaryCta: 'Explora Costa Rica',

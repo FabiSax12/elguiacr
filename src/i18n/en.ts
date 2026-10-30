@@ -27,9 +27,11 @@ export const en: Dictionary = {
   },
   hero: {
     eyebrow: 'elguiacr.com · Design and coordination of experiences in Costa Rica',
-    titleBefore: 'Experiences designed with',
+    titleLead: 'Experiences designed',
+    titleBefore: 'with',
     titleEmphasis: 'purpose',
-    titleAfter: 'in Costa Rica.',
+    titleAfter: 'in',
+    titleCountry: 'Costa Rica',
     intro: 'You tell us what you want to live, learn or achieve in Costa Rica. El Guía takes care of connecting the pieces.',
     primaryCta: 'Tell us what you\'re looking for',
     secondaryCta: 'Explore Costa Rica',
