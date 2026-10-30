@@ -17,15 +17,15 @@
     }
   },
   "vars": {
-    // Placeholders: set the real inbox before the first deploy. The sender domain must be verified in Resend.
-    "CONTACT_FROM": "El Guía CR <contact@elguiacr.com>",
-    "CONTACT_TO": "REPLACE_WITH_INBOX@example.com"
+    // The sender domain must be verified in Resend.
+    "CONTACT_FROM": "New Client <lead@elguiacr.com>",
+    "CONTACT_TO": "contact@elguiacr.com"
   },
   // Previews do not inherit the top-level vars or secrets, so the branch previews (dev, staging) need their own.
   // Point CONTACT_TO at a test inbox here so previews never email the client.
   "previews": {
     "vars": {
-      "CONTACT_FROM": "El Guía CR <lead@elguiacr.com>",
+      "CONTACT_FROM": "New Client <lead@elguiacr.com>",
       "CONTACT_TO": "contact@elguiacr.com"
     }
   }
