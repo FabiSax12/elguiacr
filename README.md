@@ -29,7 +29,7 @@ src/
 ## Interactive behavior
 
 - Destinations: map markers and chips select a destination and update the detail panel.
-- Contact form: segment chips (also set by the audience cards) and the chosen destination; submit only shows the confirmation state, no backend is wired.
+- Contact form: segment chips (also set by the audience cards) and the chosen destination; submit posts to the Worker at `/api/contact`, which emails the inquiry (see `CLAUDE.md`, Deployment).
 - Leaves: opened by an IntersectionObserver fallback when scroll-driven animations are unsupported.
 
 ## Internationalization
