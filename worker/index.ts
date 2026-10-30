@@ -114,11 +114,16 @@ async function passesTurnstile(token: unknown, secret: string, ip: string | null
   if (ip) form.append('remoteip', ip);
   try {
     const response = await fetch(TURNSTILE_URL, { method: 'POST', body: form, signal: AbortSignal.timeout(8000) });
-    const outcome = (await response.json()) as { success?: boolean; action?: string; hostname?: string };
-    if (outcome.success !== true || outcome.action !== TURNSTILE_ACTION) return false;
+    const outcome = (await response.json()) as { success?: boolean; action?: string; hostname?: string; 'error-codes'?: string[] };
     const allowed = (hostnames ?? '').split(',').map((hostname) => hostname.trim()).filter(Boolean);
-    return allowed.length === 0 || (typeof outcome.hostname === 'string' && allowed.includes(outcome.hostname));
-  } catch {
+    const passed = outcome.success === true
+      && outcome.action === TURNSTILE_ACTION
+      && (allowed.length === 0 || (typeof outcome.hostname === 'string' && allowed.includes(outcome.hostname)));
+    // Never log the token or the secret: the codes, action and hostname are enough to tell what failed.
+    if (!passed) console.warn('turnstile rejected', JSON.stringify({ codes: outcome['error-codes'], action: outcome.action, hostname: outcome.hostname }));
+    return passed;
+  } catch (error) {
+    console.warn('turnstile verification failed', error instanceof Error ? error.name : 'unknown');
     return false;
   }
 }
