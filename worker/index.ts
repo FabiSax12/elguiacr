@@ -174,8 +174,14 @@ async function sendEmail(data: Submission, env: Env): Promise<boolean> {
       }),
       signal: AbortSignal.timeout(10_000),
     });
+    if (!response.ok) {
+      // Resend answers { name, message } (e.g. "validation_error", "The domain is not verified"). No secret in there.
+      const detail = (await response.json().catch(() => ({}))) as { name?: string; message?: string };
+      console.warn('resend rejected', JSON.stringify({ status: response.status, name: detail.name, message: detail.message }));
+    }
     return response.ok;
-  } catch {
+  } catch (error) {
+    console.warn('resend request failed', error instanceof Error ? error.name : 'unknown');
     return false;
   }
 }
