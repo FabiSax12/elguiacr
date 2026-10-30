@@ -1,5 +1,6 @@
 import type { PlaceholderPageText } from './ui';
 import type { AudienceId, AudienceText } from '../data/audiences';
+import type { ContactMethodId, InterestId, TimingId, ZoneId } from '../data/contactForm';
 import type { PillarId, PillarText, StepId, StepText, StoryId, StoryText } from '../data/content';
 import type { LandingPageKey, LegalPageKey, NavPageKey, PlaceholderPageKey } from '../data/routes';
 import type { SpotId, SpotText } from '../data/spots';
@@ -85,24 +86,24 @@ const pages: Record<PlaceholderPageKey, PlaceholderPageText> = {
 };
 
 const audienceItems: Record<AudienceId, AudienceText> = {
-  travelers: { segment: 'Viajeros', word: 'Vivir', description: 'Viajes hechos a tu ritmo, presupuesto e intereses, coordinados de principio a fin.', cta: 'Quiero mi viaje a medida', alt: 'Cocinera con delantal anaranjado doblando una tortilla sobre un comal grande' },
-  locals: { segment: 'Locales', word: 'Descubrir', description: 'Escapadas, celebraciones y planes para ver tu propio país con otros ojos.', cta: 'Quiero algo diferente', alt: 'Persona lanzándose desde un columpio de cuerda a un río en medio del bosque, con más gente bañándose' },
-  companies: { segment: 'Empresas', word: 'Conectar', description: 'Integración, bienestar, reconocimiento o retiros, diseñados a partir del objetivo del equipo.', cta: 'Hablemos de tu equipo', alt: 'Grupo jalando juntos en un juego de equipo sobre un campo de zacate, en un día soleado' },
-  education: { segment: 'Educación', word: 'Aprender', description: 'Giras construidas desde el curso, la carrera y los objetivos de aprendizaje.', cta: 'Planear una gira', alt: 'Guía con sombrero señalando hacia las copas de los árboles en un sendero rocoso, con dos caminantes detrás' },
+  travelers: { segment: 'Viajeros', word: 'Vivir', description: 'Viajes diseñados alrededor de tus intereses, tu ritmo y la forma en que quieres conocer Costa Rica.', cta: 'Diseñar mi viaje', alt: 'Cocinera con delantal anaranjado doblando una tortilla sobre un comal grande' },
+  locals: { segment: 'Locales', word: 'Descubrir', description: 'Escapadas, celebraciones y experiencias para redescubrir Costa Rica con otros ojos.', cta: 'Quiero algo diferente', alt: 'Persona lanzándose desde un columpio de cuerda a un río en medio del bosque, con más gente bañándose' },
+  companies: { segment: 'Empresas', word: 'Conectar', description: 'Experiencias de integración, bienestar y conexión diseñadas alrededor de los objetivos de cada equipo.', cta: 'Hablemos de tu equipo', alt: 'Grupo jalando juntos en un juego de equipo sobre un campo de zacate, en un día soleado' },
+  education: { segment: 'Educación', word: 'Aprender', description: 'Giras diseñadas a partir del curso, la carrera y los objetivos de aprendizaje.', cta: 'Planear una gira', alt: 'Guía con sombrero señalando hacia las copas de los árboles en un sendero rocoso, con dos caminantes detrás' },
 };
 
 const pillars: Record<PillarId, PillarText> = {
-  knowledge: { title: 'Conocimiento local', text: 'Lugares, temporadas, logística y cuándo hace falta un especialista.' },
-  allies: { title: 'Red de aliados', text: 'Gente y negocios que conocemos y en los que confiamos.' },
-  judgment: { title: 'Criterio', text: 'Si El Guía lo recomienda, hay una razón. Y sabemos cuándo no.' },
-  contact: { title: 'Un solo punto de contacto', text: 'Antes, durante y después. Los cambios los resolvemos nosotros.' },
+  knowledge: { title: 'Conocimiento local', text: 'Destinos, temporadas y logística para saber qué funciona y cuándo.' },
+  allies: { title: 'Red de aliados', text: 'Personas, proyectos y negocios que conocemos y en los que confiamos.' },
+  judgment: { title: 'Criterio', text: 'Cada recomendación responde a una razón y a lo que mejor encaja contigo.' },
+  contact: { title: 'Un solo punto de contacto', text: 'Coordinamos la experiencia y te acompañamos antes, durante y después.' },
 };
 
 const steps: Record<StepId, StepText> = {
-  understand: { title: 'Entendemos', text: 'Un formulario corto y una conversación. Para quién es, qué buscas, ritmo, fechas, restricciones.' },
-  design: { title: 'Diseñamos', text: 'Una propuesta que combina lugares conocidos y otros menos obvios, siempre alrededor del propósito.' },
-  coordinate: { title: 'Coordinamos', text: 'Aliados, disponibilidad, transporte y tiempos. Un solo contacto en vez de diez.' },
-  accompany: { title: 'Acompañamos', text: 'Antes, durante y después. Si algo cambia, lo resolvemos sin pasarte el caos.' },
+  understand: { title: 'Entendemos', text: 'Nos cuentas qué buscas, para quién es y qué tienes en mente. Nosotros haremos las preguntas correctas para entenderlo mejor.' },
+  design: { title: 'Diseñamos', text: 'Seleccionamos lugares, experiencias y opciones que realmente tengan sentido para lo que quieres vivir o lograr.' },
+  coordinate: { title: 'Coordinamos', text: 'Organizamos proveedores, disponibilidad y logística para que todo funcione como una sola experiencia.' },
+  accompany: { title: 'Acompañamos', text: 'Antes, durante y después, estamos disponibles para orientarte y ayudarte cuando lo necesites.' },
 };
 
 const storyItems: Record<StoryId, StoryText> = {
@@ -124,9 +125,39 @@ const spots: Record<SpotId, SpotText> = {
   santateresa: { short: 'Santa Teresa', name: 'Santa Teresa · Península de Nicoya', region: 'Puntarenas', desc: 'Pueblo costero al sur de la península, con surf, ritmo lento y caminos de tierra entre playas.', alt: 'Surfistas con sus tablas entrando al mar desde una playa de piedras bordeada de palmeras', photoNote: '[FOTO: tabla de surf apoyada en una cerca, luz de tarde.]' },
   sanjose: { short: 'San José', name: 'San José y el Valle Central', region: 'Valle Central', desc: 'Museos, mercados y cafetales a menos de una hora. La puerta de entrada para la mayoría de visitantes y una sede natural para empresas e instituciones.', alt: 'Granos de café maduros, rojos y verdes, en la rama de un cafeto', photoNote: '[FOTO: grupo recorriendo un beneficio de café con su productor.]' },
   manuel: { short: 'Manuel Antonio', name: 'Manuel Antonio', region: 'Pacífico Central · Quepos', desc: 'Un parque nacional pequeño donde el bosque llega hasta la playa. De los más visitados del país: elegir hora y guía hace la diferencia.', alt: 'Vista aérea de una punta cubierta de bosque entre dos bahías de agua turquesa', photoNote: '[FOTO: guía mostrando fauna por telescopio a una familia.]' },
-  uvita: { short: 'Uvita · Marino Ballena', name: 'Uvita · Parque Nacional Marino Ballena', region: 'Pacífico Sur', desc: 'La punta con forma de cola de ballena y temporadas de avistamiento de ballenas jorobadas.', photoNote: '[FOTO: bote pequeño con biólogo marino explicando a un grupo.]' },
-  osa: { short: 'Osa · Corcovado', name: 'Península de Osa · Corcovado', region: 'Pacífico Sur · Puntarenas', desc: 'De las zonas con mayor biodiversidad del país. Remota: pide guía certificado, buena planificación y tiempo.', alt: 'Playa de arena oscura con rocas y palmeras al borde de la selva en el Parque Nacional Corcovado', photoNote: '[FOTO: grupo cruzando un río en la península con su guía.]' },
+  uvita: { short: 'Uvita · Marino Ballena', name: 'Uvita · Parque Nacional Marino Ballena', region: 'Pacífico Sur', desc: 'Playas, selva costera y vida marina, con temporadas de avistamiento de ballenas jorobadas.', photoNote: '[FOTO: bote pequeño con biólogo marino explicando a un grupo.]' },
+  osa: { short: 'Osa · Corcovado', name: 'Península de Osa · Corcovado', region: 'Pacífico Sur · Puntarenas', desc: 'Uno de los lugares con mayor biodiversidad de Costa Rica. Es remoto, requiere planificación y vale la pena recorrerlo con un buen guía.', alt: 'Playa de arena oscura con rocas y palmeras al borde de la selva en el Parque Nacional Corcovado', photoNote: '[FOTO: grupo cruzando un río en la península con su guía.]' },
   puertoviejo: { short: 'Caribe Sur', name: 'Puerto Viejo · Caribe Sur', region: 'Limón', desc: 'Cultura afrocaribeña, cocina propia, cacao y playas del sur del Caribe.', photoNote: '[FOTO: cocinera preparando rice and beans con coco para un grupo.]' },
+};
+
+const methods: Record<ContactMethodId, string> = {
+  whatsapp: 'WhatsApp',
+  email: 'Correo electrónico',
+};
+
+const interests: Record<InterestId, string> = {
+  nature: 'Naturaleza y vida silvestre',
+  adventure: 'Aventura',
+  culture: 'Cultura y comunidades',
+  food: 'Gastronomía',
+  wellness: 'Bienestar y relajación',
+  rural: 'Experiencias rurales y de finca',
+  learning: 'Aprendizaje y educación',
+  celebrations: 'Celebraciones y experiencias especiales',
+  unsure: 'Todavía no lo tengo claro',
+};
+
+const timings: Record<TimingId, string> = {
+  fixed: 'Tengo una fecha definida',
+  approximate: 'Tengo una fecha aproximada',
+  flexible: 'Mis fechas son flexibles',
+  unknown: 'Todavía no lo sé',
+};
+
+const zones: Record<ZoneId, string> = {
+  yes: 'Sí',
+  open: 'Estoy abierto a recomendaciones',
+  unknown: 'Todavía no lo sé',
 };
 
 export const es = {
@@ -151,16 +182,17 @@ export const es = {
     titleBefore: 'Experiencias diseñadas con',
     titleEmphasis: 'propósito',
     titleAfter: 'en Costa Rica.',
-    intro: 'Tú nos cuentas qué quieres vivir, aprender o lograr en Costa Rica. El Guía se encarga de conectar las piezas: lugares, personas, aliados y logística.',
+    intro: 'Tú nos cuentas qué quieres vivir, aprender o lograr en Costa Rica. El Guía se encarga de conectar las piezas.',
     primaryCta: 'Cuéntanos qué estás buscando',
     secondaryCta: 'Explora Costa Rica',
     segments: 'Viajeros · Locales · Empresas · Educación',
   },
   manifesto: {
     eyebrow: '01 · Qué hacemos',
-    statementBefore: 'No armamos tours sueltos. Primero entendemos qué quieres vivir, descubrir, aprender o lograr; después conectamos',
-    statementEmphasis: 'las personas, los lugares y los aliados',
-    statementAfter: 'que lo hacen posible.',
+    statement: 'No empezamos por un catálogo. Empezamos por entender qué quieres vivir, descubrir, aprender o lograr.',
+    secondBefore: 'Después conectamos',
+    secondEmphasis: 'conocimiento, lugares y personas',
+    secondAfter: 'para darle forma a una experiencia que tenga sentido para ti.',
     pillars,
   },
   audiences: {
@@ -172,7 +204,7 @@ export const es = {
   },
   how: {
     eyebrow: '03 · Cómo funciona',
-    title: 'Tú no tienes que diseñar nada. Para eso estamos.',
+    title: 'No tienes que tenerlo todo claro. Para eso estamos.',
     steps,
   },
   founder: {
@@ -211,35 +243,50 @@ export const es = {
   values: {
     photoAlt: 'Un finquero señalando sus potreros, con pacas de heno en el campo',
     eyebrow: '05 · Lo que nos importa',
-    quote: '“Premium no significa lujo. Significa más personalización, cuidado, calidad, coordinación y atención.”',
-    text: 'Trabajamos con personas, lugares y especialistas que conocemos y en los que confiamos. Si hay que sumar lujo o especialización, se suma; no es requisito.',
+    headline: 'No recomendamos algo solo porque sea popular.',
+    text: 'Buscamos lugares, personas y experiencias que realmente valgan la pena conocer. Queremos saber qué hacen bien, para quién funcionan y cuándo tiene sentido recomendarlos.',
+    closingLead: 'Conocer antes de recomendar.',
+    closingText: 'Esa es parte importante de cómo trabaja El Guía.',
   },
   contact: {
     eyebrow: '06 · Empecemos',
     title: 'Cuéntanos qué estás buscando.',
-    intro: 'No hace falta tener todo claro. Con esto arrancamos una conversación; presupuesto y detalles los vemos después, con calma.',
+    intro: 'No necesitas tener todo definido. Cuéntanos la idea y empezamos desde ahí. Los detalles los podemos ir viendo juntos.',
     steps: [
-      { lead: 'Te escribimos.', rest: 'Una persona, no un bot, en menos de un día hábil.' },
-      { lead: 'Conversamos.', rest: 'Entendemos el propósito, el grupo y el contexto.' },
-      { lead: 'Te enviamos una propuesta', rest: 'diseñada para ti.' },
+      { lead: 'Te contactamos.', rest: 'Te respondemos personalmente para conocer un poco mejor lo que buscas.' },
+      { lead: 'Conversamos.', rest: 'Entendemos la idea, el contexto y lo que esperas de la experiencia.' },
+      { lead: 'Le damos forma.', rest: 'A partir de ahí podemos preparar una propuesta pensada para ti.' },
     ],
     whoFor: '¿Para quién estás buscando esta experiencia?',
     otherOption: 'Otro',
-    nameLabel: 'Nombre',
+    nameLabel: '¿Cómo te llamas?',
     namePlaceholder: 'Tu nombre',
-    contactLabel: 'WhatsApp o correo',
-    contactPlaceholder: 'Por dónde te escribimos',
+    methodLabel: '¿Cómo prefieres que te contactemos?',
+    methods,
+    phoneLabel: 'Número de teléfono',
+    emailLabel: 'Correo electrónico',
     whatLabel: '¿Qué quieres vivir, descubrir, aprender o lograr?',
+    whatHelp: 'Cuéntanos tu idea con tus propias palabras. No importa si todavía no tienes todos los detalles.',
     whatPlaceholder: 'Ej.: celebrar los 15 años de la empresa con algo que no sea otra cena; una gira de biología para 30 estudiantes; nuestro primer viaje a Costa Rica, sin prisas.',
-    destinationPicked: 'Destino que te llamó la atención:',
-    destinationRemove: 'Quitar',
-    peopleLabel: '¿Cuántas personas?',
-    peoplePlaceholder: 'Aprox.',
-    dateLabel: 'Fecha aproximada',
+    interestsLabel: '¿Qué tipo de experiencias te interesan?',
+    interestsHint: 'Puedes elegir más de una.',
+    interests,
+    peopleLabel: '¿Cuántas personas participarían?',
+    peoplePlaceholder: 'Un aproximado está bien',
+    timingLabel: '¿Cuándo te gustaría hacerlo?',
+    timings,
+    dateLabel: 'Fecha o periodo aproximado',
     datePlaceholder: 'Ej.: marzo 2027',
-    extraLabel: '¿Algo más que debamos saber?',
+    zoneLabel: '¿Hay alguna zona de Costa Rica que tengas en mente?',
+    zones,
+    zoneNameLabel: '¿Cuál?',
+    zoneNamePlaceholder: 'La Fortuna, Monteverde, Guanacaste...',
+    extraLabel: '¿Hay algo más que debamos saber?',
+    extraHelp: 'Puedes contarnos sobre alimentación, accesibilidad, edades, una ocasión especial o cualquier otro detalle importante.',
     optional: '(opcional)',
-    extraPlaceholder: 'Restricciones, ideas, lo que se te ocurra.',
+    errorChoice: 'Elige una opción.',
+    errorField: 'Completa este campo.',
+    errorEmail: 'Escribe un correo válido.',
     submit: 'Quiero que El Guía me contacte',
     privacy: 'Usamos tus datos solo para responderte.',
     privacyLink: 'Privacidad',

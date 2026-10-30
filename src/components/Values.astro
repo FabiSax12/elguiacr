@@ -12,12 +12,13 @@ const t = useTranslations(getLocale(Astro.currentLocale));
     </div>
     <div class="min-w-0 flex-[1_1_440px]">
       <p class="text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{t.values.eyebrow}</p>
-      <blockquote class="revelar mt-5">
-        <p class="font-titulos text-[length:clamp(24px,2.3vw,31px)]/[1.2] font-medium italic">{t.values.quote}</p>
-      </blockquote>
+      <h2 class="revelar mt-5 font-titulos text-[length:clamp(24px,2.3vw,31px)]/[1.2] font-medium italic">{t.values.headline}</h2>
       <div class="mt-8 flex overflow-clip rounded-tarjeta bg-arena">
         <span class="shrink-0 grow-0 basis-barra bg-mostaza-calido" aria-hidden="true"></span>
-        <p class="p-bloque text-parrafo">{t.values.text}</p>
+        <div class="p-bloque text-parrafo">
+          <p>{t.values.text}</p>
+          <p class="mt-4"><strong class="block font-semibold text-verde-oscuro">{t.values.closingLead}</strong>{t.values.closingText}</p>
+        </div>
       </div>
     </div>
   </div>
