@@ -13,5 +13,12 @@
     "CONTACT_FROM": "El Guía CR <contact@elguiacr.com>",
     "CONTACT_TO": "REPLACE_WITH_INBOX@example.com"
   },
-  "previews": {}
+  // Previews do not inherit the top-level vars or secrets, so the branch previews (dev, staging) need their own.
+  // Point CONTACT_TO at a test inbox here so previews never email the client.
+  "previews": {
+    "vars": {
+      "CONTACT_FROM": "El Guía CR <contact@elguiacr.com>",
+      "CONTACT_TO": "REPLACE_WITH_TEST_INBOX@example.com"
+    }
+  }
 }
