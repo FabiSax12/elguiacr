@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Static Astro 7 site for elguiacr.com, a Costa Rica experience-design business. Bilingual (Spanish default, English under `/en/`). No UI framework: plain `.astro` components, Tailwind v4 via `@tailwindcss/vite`, and small inline vanilla `<script>`s for interactivity. No backend; the contact form only toggles a confirmation state.
+Static Astro 7 site for elguiacr.com, a Costa Rica experience-design business. Bilingual (Spanish default, English under `/en/`). No UI framework: plain `.astro` components, Tailwind v4 via `@tailwindcss/vite`, and small inline vanilla `<script>`s for interactivity. The only server code is a small Cloudflare Worker for the contact form (`worker/index.ts`, see Deployment).
 
 ## Commands
 
@@ -30,6 +30,16 @@ Never commit straight to `main` or `staging`. Previews come from Workers Builds 
 Cloudflare Workers Builds, on every push to `main`: it runs `pnpm run build`, then `npx wrangler deploy`. `wrangler.jsonc` serves `dist/` as static assets (no adapter, no SSR). Keep that file: without it, `wrangler deploy` tries to auto-configure the project (`astro add cloudflare`, adding wrangler to `package.json`), which fails under pnpm with `ERR_PNPM_IGNORED_BUILDS`.
 
 Unknown URLs get the nearest `404.html` (`not_found_handling: "404-page"`). Astro emits the English one as `en/404/index.html`, so the `flattenLocale404` integration in `astro.config.mjs` moves it to `en/404.html` after the build. The 404 pages (`NotFoundPage.astro`, copy under `notFound` in the dictionaries) are not in `routes.ts` and render `<Layout>` and `<Nav />` without a `pageKey` (so no canonical or hreflang).
+
+### Contact form Worker
+
+`worker/index.ts` handles `POST /api/contact`: it validates the payload against the id tuples in `src/data/contactForm.ts` and the dictionaries, drops honeypot hits (`website` filled) with a silent 200, verifies the Turnstile token and sends a plain-text Spanish email through Resend. Errors are `{ ok: false, error: "validation" | "captcha" | "send" }`. `wrangler.jsonc` sets `main` and `assets.run_worker_first: ["/api/*"]`, so only the API runs the Worker and every page stays static. No Astro adapter.
+
+- Vars in `wrangler.jsonc`: `CONTACT_FROM` and `CONTACT_TO` (the inbox is a placeholder until the client gives one).
+- Secrets: `RESEND_API_KEY` and `TURNSTILE_SECRET_KEY`. Never commit them. Production uses `npx wrangler secret put`. Branch previews (`dev`, `staging`) do not inherit production secrets or vars: set the secrets once for every new preview with `npx wrangler preview base-config secret put <KEY>`, or for an existing one with `npx wrangler preview secret put <KEY> --name <branch>`, and keep their vars in the `previews` block of `wrangler.jsonc`. Without them the preview answers `captcha` to every submit. `wrangler tail` doesn't work while the production Worker only has assets.
+- `PUBLIC_TURNSTILE_SITE_KEY` is read by `ContactForm.astro` and defaults to the production widget's site key (public by design). For local work with `.dev.vars`' test secret, set it to Cloudflare's always-pass test key `1x00000000000000000000AA` in `.env.local`. The Worker also requires the token's `action` to be `contact`, and the hostname to be in `TURNSTILE_HOSTNAMES` (comma-separated var) when that is set.
+- Resend needs the `elguiacr.com` domain verified (DNS records) before `CONTACT_FROM` can send.
+- Local: copy `.dev.vars.example` to `.dev.vars`, then `pnpm build && npx wrangler dev`. Plain `astro dev` doesn't run the Worker, so submitting there fails with the send error message.
 
 `public/_headers` sets long immutable caching for `/_astro/*` and a couple of security headers. Don't put `X-Robots-Tag` there.
 

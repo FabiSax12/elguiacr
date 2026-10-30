@@ -1,9 +1,32 @@
 {
   "name": "elguiacr",
   "compatibility_date": "2026-10-28",
+  "main": "worker/index.ts",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "404-page"
+    "not_found_handling": "404-page",
+    // Only the API runs the Worker; every other request is served straight from dist/.
+    "run_worker_first": ["/api/*"]
   },
-  "previews": {}
+  // Keeps the Worker's console output (e.g. why Resend or Turnstile rejected a request) readable in the dashboard.
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true,
+      "persist": true
+    }
+  },
+  "vars": {
+    // The sender domain must be verified in Resend.
+    "CONTACT_FROM": "New Client <lead@elguiacr.com>",
+    "CONTACT_TO": "contact@elguiacr.com"
+  },
+  // Previews do not inherit the top-level vars or secrets, so the branch previews (dev, staging) need their own.
+  // Point CONTACT_TO at a test inbox here so previews never email the client.
+  "previews": {
+    "vars": {
+      "CONTACT_FROM": "New Client <lead@elguiacr.com>",
+      "CONTACT_TO": "contact@elguiacr.com"
+    }
+  }
 }

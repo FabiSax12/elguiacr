@@ -24,7 +24,7 @@ const backdrop = initial.backdrop;
   <div class="mx-auto w-full max-w-sitio px-gutter pt-hero pb-24">
     <div class="relative z-10 max-w-[620px] min-w-0 lg:max-w-[min(620px,calc(100%-var(--mapa-w)-4rem))]">
       <p class="mb-4 text-label font-semibold tracking-eyebrow text-mostaza-calido uppercase">{t.hero.eyebrow}</p>
-      <h1 class="font-titulos text-hero font-extrabold tracking-[-0.02em]">{t.hero.titleBefore} <em class="font-semibold text-mostaza-calido italic">{t.hero.titleEmphasis}</em> {t.hero.titleAfter}</h1>
+      <h1 class="font-titulos text-hero font-extrabold tracking-[-0.02em] max-sm:text-[length:min(32px,9vw)] *:block *:whitespace-nowrap"><span>{t.hero.titleLead}</span> <span>{t.hero.titleBefore} <em class="font-semibold text-mostaza-calido italic">{t.hero.titleEmphasis}</em> {t.hero.titleAfter}</span> <span>{t.hero.titleCountry}.</span></h1>
       <p class="mt-5 max-w-[420px] text-[length:clamp(15px,1.1vw,17px)]/[1.55] text-crema-luminoso">{t.hero.intro}</p>
       <div class="mt-7 flex flex-wrap gap-3">
         <a class="inline-flex min-h-11 items-center gap-2.5 rounded-full bg-mostaza-calido px-7 text-base font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro" href="#contanos">{t.hero.primaryCta} <span class="inline-block" aria-hidden="true">→</span></a>

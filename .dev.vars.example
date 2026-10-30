@@ -1,0 +1,8 @@
+# Copy to .dev.vars for `npx wrangler dev` (git-ignored). Real secrets go through `wrangler secret put`.
+# Cloudflare's always-pass Turnstile test secret; pairs with the test site key 1x00000000000000000000AA.
+# The built page defaults to the real site key, so run the dev server with PUBLIC_TURNSTILE_SITE_KEY=1x00000000000000000000AA (e.g. in .env.local).
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+# Fake key: the Worker reaches the send step and Resend rejects it, so you get the 502 "send" error.
+RESEND_API_KEY=re_fake_local_key
+CONTACT_FROM=El Guía CR <onboarding@resend.dev>
+CONTACT_TO=delivered@resend.dev
