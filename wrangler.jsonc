@@ -8,6 +8,14 @@
     // Only the API runs the Worker; every other request is served straight from dist/.
     "run_worker_first": ["/api/*"]
   },
+  // Keeps the Worker's console output (e.g. why Resend or Turnstile rejected a request) readable in the dashboard.
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true,
+      "persist": true
+    }
+  },
   "vars": {
     // Placeholders: set the real inbox before the first deploy. The sender domain must be verified in Resend.
     "CONTACT_FROM": "El Guía CR <contact@elguiacr.com>",
@@ -17,8 +25,8 @@
   // Point CONTACT_TO at a test inbox here so previews never email the client.
   "previews": {
     "vars": {
-      "CONTACT_FROM": "El Guía CR <contact@elguiacr.com>",
-      "CONTACT_TO": "REPLACE_WITH_TEST_INBOX@example.com"
+      "CONTACT_FROM": "El Guía CR <lead@elguiacr.com>",
+      "CONTACT_TO": "contact@elguiacr.com"
     }
   }
 }
