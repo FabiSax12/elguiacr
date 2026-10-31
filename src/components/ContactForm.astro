@@ -19,7 +19,7 @@ const campoCorto = `${campo} max-w-[420px]`;
 const textarea = `${campo} min-h-24 resize-y`;
 ---
 
-<section id="contanos" data-error-choice={t.contact.errorChoice} data-error-field={t.contact.errorField} data-error-email={t.contact.errorEmail} data-error-send={t.contact.errorSend} data-error-captcha={t.contact.errorCaptcha} data-sending={t.contact.sending} data-locale={locale} data-turnstile-key={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '0x4AAAAAAFsQDpFNW1NurXpJ'} class="flex min-h-svh flex-col justify-center bg-crema-luminoso px-gutter py-seccion">
+<section id="contanos" data-error-choice={t.contact.errorChoice} data-error-field={t.contact.errorField} data-error-email={t.contact.errorEmail} data-error-consent={t.contact.errorConsent} data-error-send={t.contact.errorSend} data-error-captcha={t.contact.errorCaptcha} data-sending={t.contact.sending} data-locale={locale} data-turnstile-key={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '0x4AAAAAAFsQDpFNW1NurXpJ'} class="flex min-h-svh flex-col justify-center bg-crema-luminoso px-gutter py-seccion">
   <div class="mx-auto w-full flex max-w-sitio flex-wrap items-stretch">
     <div class="oscuro relative min-w-0 flex-[1_1_400px] overflow-clip rounded-tarjeta bg-verde-principal p-[clamp(32px,4vw,56px)] text-crema-luminoso">
       <p class="text-label font-semibold tracking-eyebrow text-crema-luminoso uppercase">{t.contact.eyebrow}</p>
@@ -45,7 +45,7 @@ const textarea = `${campo} min-h-24 resize-y`;
           <p id="f-segmento-error" class={error}></p>
         </fieldset>
 
-        <div><label for="f-que" class={label}>{t.contact.whatLabel}</label><p id="f-que-ayuda" class={help}>{t.contact.whatHelp}</p><textarea id="f-que" class={textarea} placeholder={t.contact.whatPlaceholder} required aria-describedby="f-que-ayuda f-que-error"></textarea><p id="f-que-error" class={error}></p></div>
+        <div><label for="f-que" class={label}>{t.contact.whatLabel}</label><p id="f-que-ayuda" class={help}>{t.contact.whatHelp}</p><p id="f-que-sensible" class={help}>{t.contact.whatSensitive}</p><textarea id="f-que" class={textarea} placeholder={t.contact.whatPlaceholder} required aria-describedby="f-que-ayuda f-que-sensible f-que-error"></textarea><p id="f-que-error" class={error}></p></div>
 
         <div><label for="f-nombre" class={label}>{t.contact.nameLabel}</label><input id="f-nombre" class={campoCorto} type="text" autocomplete="name" placeholder={t.contact.namePlaceholder} required aria-describedby="f-nombre-error"><p id="f-nombre-error" class={error}></p></div>
 
@@ -110,10 +110,17 @@ const textarea = `${campo} min-h-24 resize-y`;
 
         <div aria-hidden="true" class="absolute -left-[9999px] size-px overflow-hidden"><label>Website <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
 
+        <div>
+          <div class="flex items-start gap-3">
+            <input id="f-consentimiento" type="checkbox" required class="mt-1 size-5 shrink-0 cursor-pointer accent-verde-principal aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-evitar-texto" aria-describedby="f-consentimiento-error">
+            <label for="f-consentimiento" class="text-cuerpo cursor-pointer">{t.contact.consentLead} <a class="font-semibold underline" href={getPagePath('privacy', locale)} target="_blank" rel="noopener">{t.contact.consentLink}</a> {t.contact.consentRest}</label>
+          </div>
+          <p id="f-consentimiento-error" class={error}></p>
+        </div>
+
         <div class="flex flex-wrap items-center gap-x-6 gap-y-4">
           <div data-turnstile class="basis-full empty:hidden"></div>
           <button type="button" class="inline-flex min-h-13 cursor-pointer items-center gap-2.5 rounded-full border-0 bg-verde-principal px-7 text-base font-semibold text-crema-luminoso hover:bg-verde-oscuro disabled:cursor-wait disabled:opacity-70" data-submit><span data-submit-label>{t.contact.submit}</span> <span class="inline-block" aria-hidden="true">→</span></button>
-          <p class="text-nota text-gris-texto">{t.contact.privacy} <a class="underline" href={getPagePath('privacy', locale)}>{t.contact.privacyLink}</a></p>
           <p data-send-error role="alert" class={`${error} basis-full`}></p>
           <p data-send-fallback hidden class="basis-full text-nota text-gris-texto"><a class="font-semibold underline" href={`mailto:${contactEmail}`}>{contactEmail}</a> · <a class="font-semibold underline" href={getWhatsappUrl('')}>WhatsApp</a></p>
         </div>
@@ -202,6 +209,7 @@ const textarea = `${campo} min-h-24 resize-y`;
     const errorFor = (element: HTMLElement) => {
       if (element instanceof HTMLFieldSetElement) return picked(element.dataset.group ?? '').size ? '' : (messages.errorChoice ?? '');
       if (!(element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) || element.disabled) return '';
+      if (element instanceof HTMLInputElement && element.type === 'checkbox') return element.checked ? '' : (messages.errorConsent ?? '');
       if (element.required && !element.value.trim()) return messages.errorField ?? '';
       if (element.validity.typeMismatch) return messages.errorEmail ?? '';
       return element.checkValidity() ? '' : (messages.errorField ?? '');
@@ -375,6 +383,7 @@ const textarea = `${campo} min-h-24 resize-y`;
             zone: firstOf('zone'),
             zoneName: valueOf('f-zona-nombre'),
             website: valueOf('f-website'),
+            consent: section.querySelector<HTMLInputElement>('#f-consentimiento')?.checked === true,
             turnstileToken,
           }),
         });
@@ -403,7 +412,8 @@ const textarea = `${campo} min-h-24 resize-y`;
       if (context) context.open = false;
       selected.forEach((ids) => ids.clear());
       fields.forEach((field) => {
-        field.value = '';
+        if (field.type === 'checkbox') (field as HTMLInputElement).checked = false;
+        else field.value = '';
       });
       validated.forEach((element) => setError(element, ''));
       render();

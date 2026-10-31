@@ -1,4 +1,206 @@
 import type { Dictionary } from './ui';
+import type { CookiesSectionId, CookiesSectionText } from '../data/cookies';
+import type { FaqGroupsText } from '../data/faq';
+import type { PrivacySectionId, PrivacySectionText } from '../data/privacy';
+import { contactEmail, privacyRetentionMonths } from '../data/site';
+
+const privacySections: Record<PrivacySectionId, PrivacySectionText> = {
+  controller: {
+    heading: 'Who is responsible',
+    blocks: [
+      { p: 'The party responsible for your data is El Guía CR. Here is how to identify and reach us:' },
+      { p: 'For any question about your data, or to exercise your rights, write to us at {email}.' },
+    ],
+  },
+  data: {
+    heading: 'What data we ask for and what is required',
+    blocks: [
+      { p: 'When you send the form, your data becomes part of an inquiry database kept by El Guía CR: the {email} mailbox and the conversations that follow, by email or WhatsApp.' },
+      { p: 'This data is required, because without it we cannot reply:' },
+      { list: ['who the experience is for;', 'your name;', 'your message;', 'how you prefer to be contacted and the detail to do it: a WhatsApp number or an email address;', 'your authorization, which you give by ticking the box on the form.'] },
+      { p: 'This data is optional: your interests, how many people would take part, the approximate date and the part of Costa Rica you have in mind. If you leave it blank we still reply, but with less to go on for a first proposal.' },
+      { p: 'If you do not provide the required data, the form cannot be sent and we cannot answer your inquiry.' },
+      { p: 'We also keep the date and time you accepted this policy, its version and the language of the site.' },
+      { p: 'If you only visit the site without writing to us, we ask you for no data. Cloudflare Web Analytics records, in aggregate, which page was visited, which page you came from, the type of browser and device, and performance metrics, without identifying you.' },
+    ],
+  },
+  purposes: {
+    heading: 'What we use your data for',
+    blocks: [
+      { p: 'We use your data only to:' },
+      { list: ['answer your inquiry and prepare a quote or an itinerary;', 'keep a record of the conversation and of the authorization you gave;', 'prevent abuse of the form, with the Turnstile check and a trap field for bots;', 'measure, in aggregate, how many people visit the site so we can improve it, without identifying visitors.'] },
+      { p: 'Processing means receiving your inquiry, storing it, reading it, replying to it and, once the retention period ends, deleting or anonymizing it.' },
+      { p: 'We do not use your data for marketing or newsletters, we do not build profiles and we make no automated decisions about you, apart from the bot check. If we ever want to use it for something else, we will ask for your authorization first.' },
+    ],
+  },
+  recipients: {
+    heading: 'Who receives your data',
+    blocks: [
+      { p: 'Inside El Guía CR, only the team that handles inquiries can see your data. To make the form work we use these providers, who process it on our behalf:' },
+      { list: ['Cloudflare: hosts the site, counts visits in aggregate with Web Analytics, runs the Turnstile check and runs the service that receives the form.', 'Resend: emails your inquiry to our mailbox.', 'Hostinger: hosts the {email} mailbox, where your inquiry arrives.', 'WhatsApp (Meta): only if you choose to be contacted on WhatsApp, because the conversation goes through their service.'] },
+      { p: 'These providers may process data outside Costa Rica, for example in the United States. By ticking the box on the form you authorize us to send them your data for that purpose.' },
+      { p: 'We do not sell your data, we do not share it with anyone else and we do not use it for marketing.' },
+    ],
+  },
+  retention: {
+    heading: 'How long we keep it',
+    blocks: [
+      { p: `We keep your inquiry for as long as we need it to reply to you, and up to ${privacyRetentionMonths} months after the last contact. After that we delete or anonymize it, unless a law requires us to keep it longer.` },
+      { p: 'If you want us to delete it sooner, you can ask at any time.' },
+    ],
+  },
+  sensitive: {
+    heading: 'Sensitive data',
+    blocks: [
+      { p: 'We do not need sensitive data to answer your inquiry, and nobody is obliged to provide it. Please do not write it in the message: health data (including allergies or disability), religion, ethnic origin, sex life, political opinions or socioeconomic situation.' },
+      { p: 'If we need to know something like that to organize your experience safely, we will ask later, through direct contact and only what is strictly necessary. If you already included it in a message, you can ask us to delete it.' },
+    ],
+  },
+  rights: {
+    heading: 'Your rights and how to use them',
+    blocks: [
+      { p: 'Law 8968 gives you the right to:' },
+      { list: ['access your data and know how we use it;', 'correct or update it if it is wrong or out of date;', 'ask us to delete it (cancellation);', 'consent to, or refuse, its disclosure or transfer, and revoke the authorization you gave at any time.'] },
+      { p: 'To use them, write to us at {email} and tell us what you want to do. It is free. We may ask you to confirm that you are the person the data belongs to, so we do not hand it to someone else.' },
+      { p: 'We reply within 5 business days. If you revoke your authorization, we apply that within the same time; revoking does not affect what we did before receiving it. You can ask for access to your data whenever you like, but no more than once every 6 months.' },
+      { p: 'If we do not reply or you disagree with our answer, you can file a complaint with PRODHAB, Costa Rica\'s data protection agency (Agencia de Protección de Datos de los Habitantes): {prodhab}.' },
+    ],
+  },
+  security: {
+    heading: 'Security and incidents',
+    blocks: [
+      { p: 'We protect your data with reasonable measures: the site uses an encrypted connection (HTTPS) and your inquiry goes straight from the form to our mailbox, without us storing it in any other database of our own. The providers that process it may keep their own technical records.' },
+      { p: 'If a security incident affects your data, we will tell you within 5 business days. The notice explains what happened, what data was affected and what we did about it.' },
+    ],
+  },
+  cookies: {
+    heading: 'Cookies, the bot check and visit measurement',
+    blocks: [
+      { p: 'This site does not use advertising or marketing cookies. To count visits in aggregate we use Cloudflare Web Analytics, which according to Cloudflare does not use cookies, local storage or fingerprinting.' },
+      { p: 'The form uses Cloudflare Turnstile, which checks technical signals from your browser, such as the IP address, to tell people from bots. Turnstile loads when you get near the form or start using it, and we do not add that information to your inquiry.' },
+      { p: 'More detail on the {cookies}. Before adding any tool that identifies people or sets cookies, we will update this policy and the cookie one.' },
+    ],
+  },
+  minors: {
+    heading: 'Minors',
+    blocks: [
+      { p: 'The form is for adults. If you are inquiring on behalf of a minor, write to us yourself, as a parent, guardian or carer, and do not include more data about the minor than we need to put a proposal together, such as their age.' },
+    ],
+  },
+  changes: {
+    heading: 'Changes to this policy',
+    blocks: [
+      { p: 'If we change this policy, we publish the new version on this page with its update date. If the change affects what we use your data for, we will ask for your authorization again before applying it.' },
+    ],
+  },
+};
+
+const cookiesSections: Record<CookiesSectionId, CookiesSectionText> = {
+  what: {
+    heading: 'What cookies are',
+    blocks: [
+      { p: 'Cookies are small files that a website saves in your browser to remember something, such as a preference or the fact that you already proved you are a person. There are similar technologies, such as the browser\'s local storage, and here we include them whenever we talk about cookies.' },
+    ],
+  },
+  stores: {
+    heading: 'What this site stores in your browser',
+    blocks: [
+      {
+        table: {
+          head: ['Service', 'What it is for', 'Cookies or storage'],
+          rows: [
+            ['This site (El Guía CR)', 'Showing the pages and the contact form.', 'None. We do not set our own cookies or use advertising or marketing trackers.'],
+            ['Cloudflare Turnstile', 'Telling people from bots when you use the contact form.', 'Possible technical storage, needed for the check. It only loads when you get near the form or start using it.'],
+            ['Cloudflare Web Analytics', 'Counting visits in aggregate, to improve the site.', 'None, according to Cloudflare: it does not use cookies or local storage.'],
+            ['Links to other sites', 'Opening WhatsApp or Instagram if you decide to write to us or follow us.', 'Only if you click. Each service applies its own cookies and policies.'],
+          ],
+        },
+      },
+      { p: 'Fonts and images are served from our own site, not from external services.' },
+    ],
+  },
+  turnstile: {
+    heading: 'Bot check (Turnstile)',
+    blocks: [
+      { p: 'The contact form uses Cloudflare Turnstile. It loads only when you get near the form or start using it, not when you open any page. To tell people from bots, it processes technical signals: your IP address, the TLS fingerprint of your connection, your browser\'s user agent, the site key and its origin.' },
+      { p: 'According to Cloudflare, it cannot directly identify individuals from those signals, and it may use technical cookies or similar temporary storage that are strictly necessary for the check. That is why we list it above as possible technical storage.' },
+      { p: 'More detail in the {turnstilePolicy} and the {cloudflareCookies}.' },
+    ],
+  },
+  analytics: {
+    heading: 'Measuring visits (Web Analytics)',
+    blocks: [
+      { p: 'We use Cloudflare Web Analytics to learn, in aggregate, how many people visit each page, so we can improve the site. According to Cloudflare, this tool does not use cookies, local storage or fingerprinting. The metrics we see are aggregate.' },
+      { p: 'More information at {webAnalytics}.' },
+    ],
+  },
+  links: {
+    heading: 'Links to other sites',
+    blocks: [
+      { p: 'If you click a link to WhatsApp or Instagram, you leave our site. Those services apply their own cookies and policies, which we do not control. The same goes for the photo credit links.' },
+    ],
+  },
+  banner: {
+    heading: 'Why there is no cookie banner',
+    blocks: [
+      { p: 'We do not show a cookie consent banner because we use no advertising or marketing cookies, and the only thing the site could store in your browser is the technical storage of Turnstile, which Cloudflare describes as strictly necessary for the check. If that ever changes, we will first add a banner asking for your permission and update this page and the {privacy}.' },
+    ],
+  },
+  control: {
+    heading: 'How to control or delete cookies',
+    blocks: [
+      { p: 'You can view, block and delete cookies in your browser\'s privacy settings, and you can also set it to warn you when a site wants to store one. Your browser\'s help pages explain how.' },
+      { p: 'If you have trouble sending the form, write to us at {email} or on WhatsApp.' },
+    ],
+  },
+  contact: {
+    heading: 'Contact and more information',
+    blocks: [
+      { p: 'Questions about this page? Write to us at {email}. To learn how we handle the data you send us through the form, read the {privacy}.' },
+    ],
+  },
+};
+
+const faqGroups: FaqGroupsText = {
+  how: {
+    heading: 'How it works',
+    questions: {
+      approach: { question: 'How does El Guía CR work?', answer: 'We do not start with a catalog. We start by understanding what you want to live, discover, learn or achieve. Then we design an experience that makes sense for you, coordinate providers, availability and logistics, and stay with you before, during and after.' },
+      unclear: { question: 'Do I need to have everything worked out before writing to you?', answer: 'No. You do not need to have everything worked out: tell us the idea and we will start from there. We can figure out the details together.' },
+      catalog: { question: 'Do you have packages or a catalog to choose from?', answer: 'There is no menu you have to pick from. Tell us who it is for, what they want to experience and how much time they have, and we will build something around you. The examples on the experiences page are not fixed packages: we combine them, change them or drop them depending on what you are after.' },
+      contactPerson: { question: 'Who do I talk to during the process?', answer: 'A single point of contact: one person at El Guía who knows your plan, coordinates the experience and adjusts it if something changes, before and during the trip.' },
+    },
+  },
+  who: {
+    heading: 'Who it is for',
+    questions: {
+      audiences: { question: 'Who are El Guía CR experiences for?', answer: 'For travelers, locals, companies and schools and universities. What changes is the goal; the way we work is the same: listen, design and coordinate.' },
+      groups: { question: 'Do you organize plans for groups of different sizes?', answer: 'Yes. We design for the real group, from a couple to a big family get-together or a work team, including differences in age, fitness and restrictions. Tell us what your group is like and we will build that in.' },
+      locals: { question: 'Do you offer plans for people who live in Costa Rica?', answer: 'Yes. We design getaways, celebrations and days in the countryside for people who already live here. Many plans are a full day or half a day, and we also build getaways that last longer if you prefer.' },
+      education: { question: 'Can you design a trip around a course syllabus?', answer: 'Yes, that is exactly how we work. Share the objectives and content with us and we will propose places and activities that line up. We work with schools as well as universities: the level changes the pace, the content and the care measures, and we factor that in when designing.' },
+      teams: { question: 'Do you only do team building, or multi-day retreats as well?', answer: 'Both. It can be a single integration day near San José or a multi-day retreat in another destination, depending on what you need.' },
+    },
+  },
+  contact: {
+    heading: 'When you write to us',
+    questions: {
+      anticipation: { question: 'How far ahead should I get in touch?', answer: 'The earlier the better, since there are more options, especially in high season or with fixed dates. Even so, if your date is close, write to us and we will tell you what is possible.' },
+      channels: { question: 'How can I contact you?', answer: `You can leave your inquiry in the form on the site and choose whether you would rather hear from us on WhatsApp or by email. You can also write to us directly at ${contactEmail} or on WhatsApp.` },
+      reply: { question: 'How long do you take to reply?', answer: 'A person from El Guía replies within one business day.' },
+      next: { question: 'What happens after I send the form?', answer: 'We reply personally to learn a little more about what you are looking for. We talk to understand the idea, the context and what you expect from the experience, and from there we put together a proposal designed for you.' },
+      budget: { question: 'How is the budget set?', answer: 'It depends on the group, the dates and what the plan includes. We talk it through at the start and, after speaking with you, we send a proposal with the details so you can decide with a clear picture.' },
+      logistics: { question: 'Do you take care of transport and meals?', answer: 'Yes. We coordinate transport and meals with local partners so you have one contact, and we spell it out in the proposal.' },
+    },
+  },
+  data: {
+    heading: 'Your data and cookies',
+    questions: {
+      dataUse: { question: 'What happens to the data I send in the form?', answer: 'We use it only to answer your inquiry, prepare a quote or an itinerary, keep a record of the conversation and of your authorization, and prevent abuse of the form. We do not sell it or use it for marketing.' },
+      deleteData: { question: 'Can I ask you to delete my data?', answer: `Yes. Write to us at ${contactEmail} and tell us what you want to do: access your data, correct it or delete it. It is free and we reply within 5 business days.` },
+      cookies: { question: 'Does the site use cookies?', answer: 'The site does not use advertising or marketing cookies. The form uses Cloudflare Turnstile to tell people from bots, and we count visits in aggregate with Cloudflare Web Analytics, which according to Cloudflare does not use cookies. The cookies page explains it in more detail.' },
+    },
+  },
+};
 
 export const en: Dictionary = {
   meta: {
@@ -154,7 +356,8 @@ export const en: Dictionary = {
     phoneLabel: 'Phone number',
     emailLabel: 'Email',
     whatLabel: 'What do you want to live, discover, learn or achieve?',
-    whatHelp: 'Tell us your idea in your own words, even if you do not have all the details yet. If something matters, like dietary needs, accessibility, ages or a special occasion, include it here.',
+    whatHelp: 'Tell us your idea in your own words, even if you do not have all the details yet. If something matters, like ages or a special occasion, include it here.',
+    whatSensitive: 'Please do not include sensitive data, such as health conditions, allergies or religion. If we need any for your safety, we will ask later, only what is strictly necessary and through direct contact.',
     whatPlaceholder: 'E.g.: celebrate the company\'s 15th anniversary with something other than another dinner; a biology field trip for 30 students; our first trip to Costa Rica, no rush.',
     detailsTitle: 'Can you give us a bit more context?',
     detailsHint: 'Everything here is optional, but it helps us come back with a better first proposal.',
@@ -193,11 +396,13 @@ export const en: Dictionary = {
     errorField: 'Fill in this field.',
     errorEmail: 'Enter a valid email address.',
     errorSend: 'We could not send your message. Try again or write to us directly:',
+    errorConsent: 'Tick this box to send your inquiry.',
     errorCaptcha: 'We could not verify that you are a person. Try again in a few seconds.',
     sending: 'Sending…',
     submit: 'I want El Guía to contact me',
-    privacy: 'We only use your details to reply to you.',
-    privacyLink: 'Privacy',
+    consentLead: 'I have read the',
+    consentLink: 'privacy policy',
+    consentRest: 'and I authorize El Guía CR to use my details to answer this inquiry, and to have them processed by providers that may be outside Costa Rica.',
     sentTitle: 'Done. We are on it.',
     sentText: 'We received your message. Someone from El Guía will write to you to talk. In the meantime, you do not need to do anything else.',
     sentReset: 'Send another inquiry',
@@ -263,6 +468,49 @@ export const en: Dictionary = {
     heading: 'This trail leads nowhere',
     intro: 'The page you are looking for does not exist or has moved. Head back home or write to us and we will help you find what you need.',
   },
+  privacy: {
+    title: 'Privacy Policy & Personal Data | El Guía CR',
+    description: 'What personal data El Guía CR receives when you write to us, what we use it for, who processes it, how long we keep it and how to use your rights (Law 8968).',
+    heading: 'Privacy policy',
+    intro: 'Here we explain what data we receive from you when you write to us from elguiacr.com, what we use it for and how you can exercise your rights. We follow Costa Rica\'s Law 8968 on the protection of individuals in the processing of personal data.',
+    updatedLabel: 'Last updated',
+    tocLabel: 'On this page',
+    controllerLabels: { brand: 'Trade name', legalName: 'Legal name', idNumber: 'ID number', address: 'Address', email: 'Email' },
+    links: { cookies: 'cookies page' },
+    sections: privacySections,
+  },
+  cookies: {
+    title: 'Cookie Policy: What This Site Stores | El Guía CR',
+    description: 'Which cookies and storage elguiacr.com uses: Cloudflare Turnstile on the contact form, Cloudflare Web Analytics to count visits, and how to control them.',
+    heading: 'Cookie policy',
+    intro: 'Here we explain what elguiacr.com stores in your browser, what for and how you can control it. In short: the site does not set its own cookies or advertising cookies.',
+    updatedLabel: 'Last updated',
+    tocLabel: 'On this page',
+    links: {
+      privacy: 'privacy policy',
+      turnstilePolicy: 'Turnstile privacy policy',
+      cloudflareCookies: 'Cloudflare cookie policy',
+      webAnalytics: 'Cloudflare Web Analytics',
+    },
+    sections: cookiesSections,
+  },
+  faq: {
+    title: 'FAQ: How El Guía CR Works | El Guía CR',
+    description: 'Answers about how El Guía CR works: who the experiences are for, what happens when you write to us, how the budget is set and how we look after your data.',
+    eyebrow: 'FAQ',
+    heading: 'Frequently asked questions',
+    intro: 'Here are the most common questions about how we work. If yours is not here, tell us and we will answer personally.',
+    moreLead: 'More about your data:',
+    moreLinks: { privacy: 'Privacy policy', cookies: 'Cookie policy' },
+    ctaTitle: 'Still have a question?',
+    ctaText: 'Tell us what you are looking for and a person at El Guía will reply.',
+    groups: faqGroups,
+  },
+  about: {
+    title: 'About El Guía CR: Who We Are and How We Work | El Guía CR',
+    description: 'Meet Bernald Ramirez, founder of El Guía CR, and how we design experiences in Costa Rica with local knowledge, allies and a single point of contact.',
+    heading: 'Experiences designed with purpose in Costa Rica',
+  },
   pages: {
     experiences: {
       title: 'Costa Rica Tours & Experiences, Tailor-Made | El Guía CR',
@@ -282,41 +530,17 @@ export const en: Dictionary = {
       heading: 'Transport & routes',
       intro: 'We are building a practical guide to getting around Costa Rica: realistic travel times, routes and transport options between destinations. If you need help with logistics, tell us and we will coordinate it with you.',
     },
-    about: {
-      title: 'About · El Guía CR',
-      description: 'The people behind El Guía CR and how we work.',
-      heading: 'About us',
-      intro: 'This page will tell you more about who we are and how we work. For now, you can meet Bernald, our founder, on the home page.',
-    },
     blog: {
       title: 'Blog / Costa Rica Guide · El Guía CR',
       description: 'Articles and practical guides to get to know Costa Rica with good judgment.',
       heading: 'Blog / Costa Rica Guide',
       intro: 'There are no articles yet. We are preparing practical guides to help you get to know Costa Rica. If there is something you would like to know, write to us and we will take it into account.',
     },
-    faq: {
-      title: 'FAQ · El Guía CR',
-      description: 'Answers to the most common questions about how El Guía CR works.',
-      heading: 'Frequently asked questions',
-      intro: 'We are gathering the most common questions about how we work. In the meantime, if you have a question, tell us and we will answer personally.',
-    },
-    privacy: {
-      title: 'Privacy · El Guía CR',
-      description: 'El Guía CR privacy policy.',
-      heading: 'Privacy',
-      intro: 'This is where we will explain how we use and protect your data. For now, we only use it to reply to your inquiry.',
-    },
     terms: {
       title: 'Terms & conditions · El Guía CR',
       description: 'El Guía CR terms and conditions.',
       heading: 'Terms & conditions',
       intro: 'This is where we will publish the terms for booking and enjoying our experiences.',
-    },
-    cookies: {
-      title: 'Cookies · El Guía CR',
-      description: 'El Guía CR cookie policy.',
-      heading: 'Cookies',
-      intro: 'This is where we will explain which cookies this site uses and why.',
     },
     cancellations: {
       title: 'Cancellations · El Guía CR',

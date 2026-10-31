@@ -3,6 +3,7 @@
 import type { ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
 import type { AudienceId } from './audiences';
+import { getFaqGroups, type FaqItemText } from './faq';
 import { categoryLabels, categoryIds, type Experience } from './experiences';
 import { getLanding, landingPageKeyByAudience } from './landings';
 import { getPageUrl, type PageKey } from './routes';
@@ -157,6 +158,25 @@ export async function getExperiencesSchema(locale: Locale, experiences: Experien
   ];
 }
 
+// FAQPage node for the questions rendered on the page at `url`.
+function getFaqNode(url: string, items: FaqItemText[]): SchemaNode {
+  return {
+    '@type': 'FAQPage',
+    '@id': `${url}#faq`,
+    isPartOf: { '@id': webPageId(url) },
+    mainEntity: items.map(({ question, answer }) => ({
+      '@type': 'Question',
+      name: question,
+      acceptedAnswer: { '@type': 'Answer', text: answer },
+    })),
+  };
+}
+
+// FAQ page: every question of every group, in the order shown.
+export function getFaqSchema(locale: Locale): SchemaNode[] {
+  return [getFaqNode(getPageUrl('faq', locale), getFaqGroups(locale).flatMap((group) => group.items))];
+}
+
 // Audience landing: the service it describes, plus the FAQ rendered on the page.
 export function getLandingSchema(audience: AudienceId, locale: Locale, imageUrl?: string): SchemaNode[] {
   const t = useTranslations(locale);
@@ -177,15 +197,6 @@ export function getLandingSchema(audience: AudienceId, locale: Locale, imageUrl?
       areaServed: costaRica,
       provider: { '@id': organizationId },
     },
-    {
-      '@type': 'FAQPage',
-      '@id': `${url}#faq`,
-      isPartOf: { '@id': webPageId(url) },
-      mainEntity: landing.faq.map(({ question, answer }) => ({
-        '@type': 'Question',
-        name: question,
-        acceptedAnswer: { '@type': 'Answer', text: answer },
-      })),
-    },
+    getFaqNode(url, landing.faq),
   ];
 }

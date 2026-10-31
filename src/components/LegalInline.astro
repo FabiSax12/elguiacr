@@ -1,0 +1,18 @@
+---
+import type { LegalLink } from '../data/legal';
+
+interface Props {
+  text: string;
+  links: Record<string, LegalLink>;
+}
+
+const { text, links } = Astro.props;
+// Splitting on a capturing group puts the token names at the odd positions.
+const parts = text.split(/\{(\w+)\}/).map((part, index) => {
+  if (index % 2 === 0) return part;
+  const target = links[part];
+  if (!target) throw new Error(`Unknown token {${part}} in the legal page text`);
+  return target;
+});
+---
+{parts.map((part) => (typeof part === 'string' ? part : <a class="font-semibold underline" href={part.href} rel={part.rel}>{part.label}</a>))}
