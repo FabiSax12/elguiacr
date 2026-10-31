@@ -1,9 +1,11 @@
 // Cloudflare Worker for the only dynamic route of the site: POST /api/contact.
 // Everything else is served from `dist/` by the static assets binding (see `run_worker_first` in wrangler.jsonc).
 import { locales } from '../src/i18n/config';
-import { contactMethodIds, interestIds, timingIds, timingIdsWithDate, zoneIds, type ContactMethodId, type InterestId, type TimingId, type ZoneId } from '../src/data/contactForm';
+import { contactMethodIds, interestIds, timingIds, timingIdsWithDate, zoneIds, type InterestId } from '../src/data/contactForm';
 import { privacyUpdated } from '../src/data/site';
 import { es } from '../src/i18n/es';
+import { buildLeadEmailHtml } from './leadEmail';
+import type { Submission } from './types';
 
 interface Env {
   CONTACT_FROM: string;
@@ -12,22 +14,6 @@ interface Env {
   TURNSTILE_SECRET_KEY: string;
   // Comma-separated hostnames allowed to produce a token. Unset skips the hostname check.
   TURNSTILE_HOSTNAMES?: string;
-}
-
-interface Submission {
-  locale: string;
-  segment: string;
-  name: string;
-  method: ContactMethodId;
-  phone?: string;
-  email?: string;
-  what: string;
-  interests: InterestId[];
-  people?: number;
-  timing?: TimingId;
-  date?: string;
-  zone?: ZoneId;
-  zoneName?: string;
 }
 
 type ErrorCode = 'validation' | 'captcha' | 'send';
@@ -132,8 +118,8 @@ async function passesTurnstile(token: unknown, secret: string, ip: string | null
   }
 }
 
-// Plain text on purpose: nothing from the visitor is ever interpreted as markup, so there is nothing to escape.
-function buildEmail(data: Submission) {
+// The plain-text alternative: nothing from the visitor is ever interpreted as markup here, so there is nothing to escape.
+function buildEmail(data: Submission, submittedAt: Date) {
   const { contact } = es;
   const line = (label: string, value: string | undefined) => (value ? `${label}: ${value}` : undefined);
   const timing = data.timing ? [contact.timings[data.timing], data.date].filter(Boolean).join(' · ') : undefined;
@@ -157,7 +143,7 @@ function buildEmail(data: Submission) {
     line('Idioma del sitio', data.locale),
     '',
     // Evidence of the consent (Ley 8968, art. 5.2): the policy version the visitor accepted and when.
-    line('Consentimiento', `aceptó la política de privacidad (versión ${privacyUpdated}) el ${new Date().toISOString()}`),
+    line('Consentimiento', `aceptó la política de privacidad (versión ${privacyUpdated}) el ${submittedAt.toISOString()}`),
   ]
     .filter((entry) => entry !== undefined)
     .join('\n');
@@ -167,7 +153,15 @@ function buildEmail(data: Submission) {
 }
 
 async function sendEmail(data: Submission, env: Env): Promise<boolean> {
-  const { subject, body } = buildEmail(data);
+  const submittedAt = new Date();
+  const { subject, body } = buildEmail(data, submittedAt);
+  // A template bug must not lose the lead: without the HTML the plain-text alternative still goes out.
+  let html: string | undefined;
+  try {
+    html = buildLeadEmailHtml(data, { subject, submittedAt });
+  } catch (error) {
+    console.warn('lead email template failed', error instanceof Error ? error.name : 'unknown');
+  }
   try {
     const response = await fetch(RESEND_URL, {
       method: 'POST',
@@ -176,6 +170,7 @@ async function sendEmail(data: Submission, env: Env): Promise<boolean> {
         from: env.CONTACT_FROM,
         to: [env.CONTACT_TO],
         subject,
+        ...(html ? { html } : {}),
         text: body,
         ...(data.email ? { reply_to: data.email } : {}),
       }),
