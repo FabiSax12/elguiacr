@@ -3,6 +3,8 @@ import type { AudienceId, AudienceText } from '../data/audiences';
 import type { ContactMethodId, InterestId, TimingId, ZoneId } from '../data/contactForm';
 import type { PillarId, PillarText, StepId, StepText, StoryId, StoryText } from '../data/content';
 import type { LandingPageKey, LegalPageKey, NavPageKey, PlaceholderPageKey } from '../data/routes';
+import type { PrivacySectionId, PrivacySectionText } from '../data/privacy';
+import { privacyRetentionMonths } from '../data/site';
 import type { SpotId, SpotText } from '../data/spots';
 
 const navLinks: Record<NavPageKey, string> = {
@@ -58,12 +60,6 @@ const pages: Record<PlaceholderPageKey, PlaceholderPageText> = {
     description: 'Respuestas a las preguntas más comunes sobre cómo trabaja El Guía CR.',
     heading: 'Preguntas frecuentes',
     intro: 'Estamos reuniendo las preguntas más comunes sobre cómo trabajamos. Mientras tanto, si tienes una duda, cuéntanos y te respondemos personalmente.',
-  },
-  privacy: {
-    title: 'Privacidad · El Guía CR',
-    description: 'Política de privacidad de El Guía CR.',
-    heading: 'Privacidad',
-    intro: 'Aquí publicaremos cómo usamos y protegemos tus datos. Por ahora, solo los usamos para responder a tu consulta.',
   },
   terms: {
     title: 'Términos y condiciones · El Guía CR',
@@ -157,6 +153,95 @@ const zones: Record<ZoneId, string> = {
   yes: 'Sí',
   open: 'Estoy abierto a recomendaciones',
   unknown: 'Todavía no lo sé',
+};
+
+const privacySections: Record<PrivacySectionId, PrivacySectionText> = {
+  controller: {
+    heading: 'Quién es el responsable',
+    blocks: [
+      { p: 'El responsable de tus datos es El Guía CR. Así puedes identificarnos y escribirnos:' },
+      { p: 'Para cualquier consulta sobre tus datos, o para ejercer tus derechos, escríbenos a {email}.' },
+    ],
+  },
+  data: {
+    heading: 'Qué datos pedimos y cuáles son obligatorios',
+    blocks: [
+      { p: 'Cuando envías el formulario, tus datos pasan a formar parte de una base de datos de consultas de El Guía CR: el buzón {email} y las conversaciones que siguen después, por correo o por WhatsApp.' },
+      { p: 'Estos datos son obligatorios, porque sin ellos no podemos responderte:' },
+      { list: ['para quién es la experiencia;', 'tu nombre;', 'tu mensaje;', 'cómo prefieres que te contactemos y el dato para hacerlo: un número de WhatsApp o un correo electrónico;', 'tu autorización, que das marcando la casilla del formulario.'] },
+      { p: 'Estos son opcionales: tus intereses, cuántas personas participarían, la fecha aproximada y la zona de Costa Rica que tienes en mente. Si los dejas en blanco te respondemos igual, pero con menos información para ajustar la primera propuesta.' },
+      { p: 'Si no das los datos obligatorios, el formulario no se envía y no podemos responder tu consulta.' },
+      { p: 'Además guardamos la fecha y la hora en que aceptaste esta política, su versión y el idioma del sitio.' },
+    ],
+  },
+  purposes: {
+    heading: 'Para qué usamos tus datos',
+    blocks: [
+      { p: 'Usamos tus datos solo para:' },
+      { list: ['responder tu consulta y preparar una cotización o un itinerario;', 'guardar el registro de la conversación y de la autorización que diste;', 'prevenir abusos del formulario, con la verificación de Turnstile y un campo trampa para robots.'] },
+      { p: 'El tratamiento consiste en recibir tu consulta, guardarla, leerla, responderla y, cuando termina el plazo de conservación, borrarla o anonimizarla.' },
+      { p: 'No usamos tus datos para mercadeo ni boletines, no hacemos perfiles y no tomamos decisiones automatizadas sobre ti, salvo la verificación contra robots. Si algún día queremos usarlos para otra cosa, te pedimos tu autorización antes.' },
+    ],
+  },
+  recipients: {
+    heading: 'Quién recibe tus datos',
+    blocks: [
+      { p: 'Dentro de El Guía CR, tus datos los consulta solo el equipo que atiende las consultas. Para que el formulario funcione usamos estos proveedores, que los procesan por encargo nuestro:' },
+      { list: ['Cloudflare: aloja el sitio, hace la verificación Turnstile y ejecuta el servicio que recibe el formulario.', 'Resend: envía tu consulta por correo a nuestro buzón.', 'Hostinger: aloja el buzón {email}, donde llega tu consulta.', 'WhatsApp (Meta): solo si eliges que te contactemos por WhatsApp, porque la conversación pasa por su servicio.'] },
+      { p: 'Estos proveedores pueden procesar datos fuera de Costa Rica, por ejemplo en Estados Unidos. Al marcar la casilla del formulario nos autorizas a enviarles tus datos para eso.' },
+      { p: 'No vendemos tus datos, no los compartimos con nadie más y no los usamos para mercadeo.' },
+    ],
+  },
+  retention: {
+    heading: 'Cuánto tiempo los guardamos',
+    blocks: [
+      { p: `Guardamos tu consulta mientras la necesitemos para responderte y hasta ${privacyRetentionMonths} meses después del último contacto. Pasado ese plazo la borramos o la anonimizamos, salvo que una ley nos obligue a conservarla más tiempo.` },
+      { p: 'Si quieres que la borremos antes, puedes pedirlo en cualquier momento.' },
+    ],
+  },
+  sensitive: {
+    heading: 'Datos sensibles',
+    blocks: [
+      { p: 'Para responder tu consulta no necesitamos datos sensibles, y nadie está obligado a darlos. Por favor no los escribas en el mensaje: datos de salud (incluidas alergias o discapacidad), religión, origen étnico, vida sexual, opiniones políticas o situación socioeconómica.' },
+      { p: 'Si para organizar tu experiencia con seguridad necesitamos saber algo de eso, te lo preguntamos más adelante, por contacto directo y solo lo estrictamente necesario. Si ya lo incluiste en un mensaje, puedes pedirnos que lo borremos.' },
+    ],
+  },
+  rights: {
+    heading: 'Tus derechos y cómo ejercerlos',
+    blocks: [
+      { p: 'La Ley 8968 te da derecho a:' },
+      { list: ['acceder a tus datos y saber cómo los usamos;', 'rectificarlos o actualizarlos si están incorrectos o desactualizados;', 'pedir que los borremos (cancelación);', 'consentir o negarte a que se divulguen o se transfieran, y revocar en cualquier momento la autorización que diste.'] },
+      { p: 'Para ejercerlos, escríbenos a {email} y cuéntanos qué quieres hacer. Es gratis. Podemos pedirte que confirmes que eres la persona titular de los datos, para no entregárselos a alguien más.' },
+      { p: 'Te respondemos en un máximo de 5 días hábiles. Si revocas tu autorización, también la aplicamos en ese plazo; la revocatoria no afecta lo que hicimos antes de recibirla. Puedes pedir acceso a tus datos cuando quieras, pero no más de una vez cada 6 meses.' },
+      { p: 'Si no te respondemos o no estás de acuerdo con la respuesta, puedes presentar una denuncia ante la PRODHAB, la Agencia de Protección de Datos de los Habitantes: {prodhab}.' },
+    ],
+  },
+  security: {
+    heading: 'Seguridad e incidentes',
+    blocks: [
+      { p: 'Protegemos tus datos con medidas razonables: el sitio usa conexión cifrada (HTTPS) y tu consulta va directo del formulario a nuestro buzón, sin que la guardemos en ninguna otra base de datos propia. Los proveedores que la procesan pueden conservar sus propios registros técnicos.' },
+      { p: 'Si ocurre un incidente de seguridad que afecte tus datos, te avisamos en un máximo de 5 días hábiles. El aviso explica qué pasó, qué datos se afectaron y qué medidas tomamos.' },
+    ],
+  },
+  cookies: {
+    heading: 'Cookies y verificación contra robots',
+    blocks: [
+      { p: 'Este sitio no usa cookies de análisis ni de publicidad. El formulario usa Cloudflare Turnstile, que revisa señales técnicas de tu navegador, como la dirección IP, para distinguir a las personas de los robots. Turnstile se carga cuando te acercas al formulario o empiezas a usarlo, y no agregamos esa información a tu consulta.' },
+      { p: 'Más detalle en la {cookies}. Si algún día agregamos herramientas de análisis, actualizaremos esta política y la de cookies antes de activarlas.' },
+    ],
+  },
+  minors: {
+    heading: 'Menores de edad',
+    blocks: [
+      { p: 'El formulario es para personas adultas. Si consultas por un menor, escríbenos tú, como madre, padre o persona encargada, y no incluyas más datos del menor que los necesarios para armar la propuesta, como su edad.' },
+    ],
+  },
+  changes: {
+    heading: 'Cambios en esta política',
+    blocks: [
+      { p: 'Si cambiamos esta política, publicamos la nueva versión en esta página con su fecha de actualización. Si el cambio afecta para qué usamos tus datos, te pedimos tu autorización otra vez antes de aplicarlo.' },
+    ],
+  },
 };
 
 export const es = {
@@ -267,7 +352,8 @@ export const es = {
     phoneLabel: 'Número de teléfono',
     emailLabel: 'Correo electrónico',
     whatLabel: '¿Qué quieres vivir, descubrir, aprender o lograr?',
-    whatHelp: 'Cuéntanos tu idea con tus propias palabras, aunque todavía no tengas todos los detalles. Si hay algo importante, como alimentación, accesibilidad, edades o una ocasión especial, inclúyelo aquí.',
+    whatHelp: 'Cuéntanos tu idea con tus propias palabras, aunque todavía no tengas todos los detalles. Si hay algo importante, como las edades o una ocasión especial, inclúyelo aquí.',
+    whatSensitive: 'No incluyas datos sensibles, como salud, alergias o religión. Si necesitamos alguno para tu seguridad, te lo pedimos más adelante, solo lo estrictamente necesario y por contacto directo.',
     whatPlaceholder: 'Ej.: celebrar los 15 años de la empresa con algo que no sea otra cena; una gira de biología para 30 estudiantes; nuestro primer viaje a Costa Rica, sin prisas.',
     detailsTitle: '¿Nos das un poco más de contexto?',
     detailsHint: 'Todo es opcional, pero nos ayuda a llegar con una mejor primera propuesta.',
@@ -288,11 +374,13 @@ export const es = {
     errorField: 'Completa este campo.',
     errorEmail: 'Escribe un correo válido.',
     errorSend: 'No pudimos enviar tu mensaje. Inténtalo de nuevo o escríbenos directamente:',
+    errorConsent: 'Marca esta casilla para enviar tu consulta.',
     errorCaptcha: 'No pudimos verificar que eres una persona. Inténtalo de nuevo en unos segundos.',
     sending: 'Enviando…',
     submit: 'Quiero que El Guía me contacte',
-    privacy: 'Usamos tus datos solo para responderte.',
-    privacyLink: 'Privacidad',
+    consentLead: 'He leído la',
+    consentLink: 'política de privacidad',
+    consentRest: 'y autorizo a El Guía CR a usar mis datos para responder esta consulta, y a que los procesen proveedores que pueden estar fuera de Costa Rica.',
     sentTitle: 'Listo. Ya estamos en eso.',
     sentText: 'Recibimos tu mensaje. Una persona de El Guía te va a escribir para conversar. Mientras tanto, no tienes que hacer nada más.',
     sentReset: 'Enviar otra consulta',
@@ -352,6 +440,17 @@ export const es = {
     eyebrow: 'Error 404',
     heading: 'Este camino no lleva a ningún lado',
     intro: 'La página que buscas no existe o cambió de lugar. Vuelve al inicio o escríbenos y te ayudamos a encontrar lo que necesitas.',
+  },
+  privacy: {
+    title: 'Política de privacidad y datos personales | El Guía CR',
+    description: 'Qué datos personales recibe El Guía CR cuando nos escribes, para qué los usamos, quién los procesa, cuánto los guardamos y cómo ejercer tus derechos (Ley 8968).',
+    heading: 'Política de privacidad',
+    intro: 'Aquí explicamos qué datos tuyos recibimos cuando nos escribes desde elguiacr.com, para qué los usamos y cómo puedes ejercer tus derechos. Nos guiamos por la Ley 8968, de Protección de la Persona frente al tratamiento de sus datos personales.',
+    updatedLabel: 'Última actualización',
+    tocLabel: 'En esta página',
+    controllerLabels: { brand: 'Nombre comercial', legalName: 'Nombre o razón social', idNumber: 'Cédula', address: 'Dirección', email: 'Correo' },
+    links: { cookies: 'página de cookies' },
+    sections: privacySections,
   },
   pages,
 };

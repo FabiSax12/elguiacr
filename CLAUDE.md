@@ -33,7 +33,7 @@ Unknown URLs get the nearest `404.html` (`not_found_handling: "404-page"`). Astr
 
 ### Contact form Worker
 
-`worker/index.ts` handles `POST /api/contact`: it validates the payload against the id tuples in `src/data/contactForm.ts` and the dictionaries, drops honeypot hits (`website` filled) with a silent 200, verifies the Turnstile token and sends a plain-text Spanish email through Resend. Errors are `{ ok: false, error: "validation" | "captcha" | "send" }`. `wrangler.jsonc` sets `main` and `assets.run_worker_first: ["/api/*"]`, so only the API runs the Worker and every page stays static. No Astro adapter.
+`worker/index.ts` handles `POST /api/contact`: it validates the payload against the id tuples in `src/data/contactForm.ts` and the dictionaries, rejects any payload without `consent === true` (the required privacy checkbox), drops honeypot hits (`website` filled) with a silent 200, verifies the Turnstile token and sends a plain-text Spanish email through Resend, which records the consent (policy version from `privacyUpdated` and timestamp) as evidence. Errors are `{ ok: false, error: "validation" | "captcha" | "send" }`. `wrangler.jsonc` sets `main` and `assets.run_worker_first: ["/api/*"]`, so only the API runs the Worker and every page stays static. No Astro adapter.
 
 - Vars in `wrangler.jsonc`: `CONTACT_FROM` and `CONTACT_TO` (the inbox is a placeholder until the client gives one).
 - Secrets: `RESEND_API_KEY` and `TURNSTILE_SECRET_KEY`. Never commit them. Production uses `npx wrangler secret put`. Branch previews (`dev`, `staging`) do not inherit production secrets or vars: set the secrets once for every new preview with `npx wrangler preview base-config secret put <KEY>`, or for an existing one with `npx wrangler preview secret put <KEY> --name <branch>`, and keep their vars in the `previews` block of `wrangler.jsonc`. Without them the preview answers `captcha` to every submit. `wrangler tail` doesn't work while the production Worker only has assets.
@@ -60,7 +60,8 @@ Each file in `src/pages/` (es) and `src/pages/en/` (en) only renders a shared co
 - `Landing.astro`: the home page, composed of section components (Hero, Manifesto, Audiences, Destinations, Stories, ContactForm, ...).
 - `ExperiencesPage.astro`: the experiences page.
 - `AudienceLanding.astro`: four SEO landing pages, one per audience (`travelers`, `locals`, `companies`, `education`), text in `src/data/landings.ts` (mapped to page keys via `landingPageKeyByAudience`). These are not in the main nav.
-- `PlaceholderPage.astro`: pages not built yet (destinations, transport, about, blog, faq, legal), text in the dictionary's `pages` record.
+- `PrivacyPage.astro`: the privacy policy. Copy lives under `privacy` in the dictionaries as an ordered list of sections (ids in `src/data/privacy.ts`), with `{email}`, `{prodhab}` and `{cookies}` markers that become links. The controller's identity (`dataController`), the policy version (`privacyUpdated`) and the retention period are in `src/data/site.ts`; the `TODO(client)` notes there must be resolved before the page reaches `main`.
+- `PlaceholderPage.astro`: pages not built yet (destinations, transport, about, blog, faq, terms, cookies, cancellations), text in the dictionary's `pages` record.
 
 Adding a page means: add the key and both slugs in `routes.ts`, add its copy to `es.ts` and `en.ts`, then create the wrapper file in both `src/pages/` and `src/pages/en/` with the localized slug as filename.
 
@@ -74,7 +75,7 @@ Client scripts read localized data from the page instead of embedding it (e.g. t
 
 - `trailingSlash: 'always'` in `astro.config.mjs` matches how Cloudflare serves `dir/index.html` (it redirects `/dir` to `/dir/`). Canonicals, hreflang, the sitemap and internal links all use the slash form, so never hand-write a URL without it.
 - `Layout.astro` emits title, description, robots, canonical, hreflang (+ `x-default`), Open Graph, Twitter card, icons, manifest link, font preloads and one JSON-LD `@graph`. Props: `pageKey`, `noindex`, `image` (an `ImageMetadata`, cropped to a 1200x630 JPG for `og:image`; defaults to `rio-celeste.webp`), `imageAlt` and `schema` (extra JSON-LD nodes).
-- Indexable pages are home, experiences and the four audience landings. Every `PlaceholderPage` (including legal) is `noindex, follow`. When a placeholder gets its own component, drop the `noindex` with it; nothing else needs to change.
+- Indexable pages are home, experiences, the privacy policy and the four audience landings. Every `PlaceholderPage` (the other legal pages included) is `noindex, follow`. When a placeholder gets its own component, drop the `noindex` with it; nothing else needs to change.
 - The sitemap (`@astrojs/sitemap`) reads each built page's `<head>`: noindex pages are left out and the hreflang alternates are copied from the page's own `<link rel="alternate">` tags. Don't keep a separate URL list.
 - `src/pages/robots.txt.ts` generates `robots.txt` (allows search and AI-answer crawlers, points to `sitemap-index.xml`). `src/pages/[icon].png.ts` renders the apple-touch and manifest icons from `public/favicon.svg` with sharp; `src/pages/site.webmanifest.ts` builds the manifest.
 - JSON-LD builders live in `src/data/schema.ts` (TravelAgency, WebSite, WebPage, BreadcrumbList, the experiences `ItemList` of `TouristTrip`, the landings' `Service` and `FAQPage`). Business facts (email, phone, Instagram, region, brand colors) live in `src/data/site.ts`. Only add facts the client has confirmed: no invented address, hours, prices or ratings.

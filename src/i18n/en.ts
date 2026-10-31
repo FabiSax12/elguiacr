@@ -1,4 +1,95 @@
 import type { Dictionary } from './ui';
+import type { PrivacySectionId, PrivacySectionText } from '../data/privacy';
+import { privacyRetentionMonths } from '../data/site';
+
+const privacySections: Record<PrivacySectionId, PrivacySectionText> = {
+  controller: {
+    heading: 'Who is responsible',
+    blocks: [
+      { p: 'The party responsible for your data is El Guía CR. Here is how to identify and reach us:' },
+      { p: 'For any question about your data, or to exercise your rights, write to us at {email}.' },
+    ],
+  },
+  data: {
+    heading: 'What data we ask for and what is required',
+    blocks: [
+      { p: 'When you send the form, your data becomes part of an inquiry database kept by El Guía CR: the {email} mailbox and the conversations that follow, by email or WhatsApp.' },
+      { p: 'This data is required, because without it we cannot reply:' },
+      { list: ['who the experience is for;', 'your name;', 'your message;', 'how you prefer to be contacted and the detail to do it: a WhatsApp number or an email address;', 'your authorization, which you give by ticking the box on the form.'] },
+      { p: 'This data is optional: your interests, how many people would take part, the approximate date and the part of Costa Rica you have in mind. If you leave it blank we still reply, but with less to go on for a first proposal.' },
+      { p: 'If you do not provide the required data, the form cannot be sent and we cannot answer your inquiry.' },
+      { p: 'We also keep the date and time you accepted this policy, its version and the language of the site.' },
+    ],
+  },
+  purposes: {
+    heading: 'What we use your data for',
+    blocks: [
+      { p: 'We use your data only to:' },
+      { list: ['answer your inquiry and prepare a quote or an itinerary;', 'keep a record of the conversation and of the authorization you gave;', 'prevent abuse of the form, with the Turnstile check and a trap field for bots.'] },
+      { p: 'Processing means receiving your inquiry, storing it, reading it, replying to it and, once the retention period ends, deleting or anonymizing it.' },
+      { p: 'We do not use your data for marketing or newsletters, we do not build profiles and we make no automated decisions about you, apart from the bot check. If we ever want to use it for something else, we will ask for your authorization first.' },
+    ],
+  },
+  recipients: {
+    heading: 'Who receives your data',
+    blocks: [
+      { p: 'Inside El Guía CR, only the team that handles inquiries can see your data. To make the form work we use these providers, who process it on our behalf:' },
+      { list: ['Cloudflare: hosts the site, runs the Turnstile check and runs the service that receives the form.', 'Resend: emails your inquiry to our mailbox.', 'Hostinger: hosts the {email} mailbox, where your inquiry arrives.', 'WhatsApp (Meta): only if you choose to be contacted on WhatsApp, because the conversation goes through their service.'] },
+      { p: 'These providers may process data outside Costa Rica, for example in the United States. By ticking the box on the form you authorize us to send them your data for that purpose.' },
+      { p: 'We do not sell your data, we do not share it with anyone else and we do not use it for marketing.' },
+    ],
+  },
+  retention: {
+    heading: 'How long we keep it',
+    blocks: [
+      { p: `We keep your inquiry for as long as we need it to reply to you, and up to ${privacyRetentionMonths} months after the last contact. After that we delete or anonymize it, unless a law requires us to keep it longer.` },
+      { p: 'If you want us to delete it sooner, you can ask at any time.' },
+    ],
+  },
+  sensitive: {
+    heading: 'Sensitive data',
+    blocks: [
+      { p: 'We do not need sensitive data to answer your inquiry, and nobody is obliged to provide it. Please do not write it in the message: health data (including allergies or disability), religion, ethnic origin, sex life, political opinions or socioeconomic situation.' },
+      { p: 'If we need to know something like that to organize your experience safely, we will ask later, through direct contact and only what is strictly necessary. If you already included it in a message, you can ask us to delete it.' },
+    ],
+  },
+  rights: {
+    heading: 'Your rights and how to use them',
+    blocks: [
+      { p: 'Law 8968 gives you the right to:' },
+      { list: ['access your data and know how we use it;', 'correct or update it if it is wrong or out of date;', 'ask us to delete it (cancellation);', 'consent to, or refuse, its disclosure or transfer, and revoke the authorization you gave at any time.'] },
+      { p: 'To use them, write to us at {email} and tell us what you want to do. It is free. We may ask you to confirm that you are the person the data belongs to, so we do not hand it to someone else.' },
+      { p: 'We reply within 5 business days. If you revoke your authorization, we apply that within the same time; revoking does not affect what we did before receiving it. You can ask for access to your data whenever you like, but no more than once every 6 months.' },
+      { p: 'If we do not reply or you disagree with our answer, you can file a complaint with PRODHAB, Costa Rica\'s data protection agency (Agencia de Protección de Datos de los Habitantes): {prodhab}.' },
+    ],
+  },
+  security: {
+    heading: 'Security and incidents',
+    blocks: [
+      { p: 'We protect your data with reasonable measures: the site uses an encrypted connection (HTTPS) and your inquiry goes straight from the form to our mailbox, without us storing it in any other database of our own. The providers that process it may keep their own technical records.' },
+      { p: 'If a security incident affects your data, we will tell you within 5 business days. The notice explains what happened, what data was affected and what we did about it.' },
+    ],
+  },
+  cookies: {
+    heading: 'Cookies and the bot check',
+    blocks: [
+      { p: 'This site does not use analytics or advertising cookies. The form uses Cloudflare Turnstile, which checks technical signals from your browser, such as the IP address, to tell people from bots. Turnstile loads when you get near the form or start using it, and we do not add that information to your inquiry.' },
+      { p: 'More detail on the {cookies}. If we ever add analytics tools, we will update this policy and the cookie one before turning them on.' },
+    ],
+  },
+  minors: {
+    heading: 'Minors',
+    blocks: [
+      { p: 'The form is for adults. If you are inquiring on behalf of a minor, write to us yourself, as a parent, guardian or carer, and do not include more data about the minor than we need to put a proposal together, such as their age.' },
+    ],
+  },
+  changes: {
+    heading: 'Changes to this policy',
+    blocks: [
+      { p: 'If we change this policy, we publish the new version on this page with its update date. If the change affects what we use your data for, we will ask for your authorization again before applying it.' },
+    ],
+  },
+};
 
 export const en: Dictionary = {
   meta: {
@@ -154,7 +245,8 @@ export const en: Dictionary = {
     phoneLabel: 'Phone number',
     emailLabel: 'Email',
     whatLabel: 'What do you want to live, discover, learn or achieve?',
-    whatHelp: 'Tell us your idea in your own words, even if you do not have all the details yet. If something matters, like dietary needs, accessibility, ages or a special occasion, include it here.',
+    whatHelp: 'Tell us your idea in your own words, even if you do not have all the details yet. If something matters, like ages or a special occasion, include it here.',
+    whatSensitive: 'Please do not include sensitive data, such as health conditions, allergies or religion. If we need any for your safety, we will ask later, only what is strictly necessary and through direct contact.',
     whatPlaceholder: 'E.g.: celebrate the company\'s 15th anniversary with something other than another dinner; a biology field trip for 30 students; our first trip to Costa Rica, no rush.',
     detailsTitle: 'Can you give us a bit more context?',
     detailsHint: 'Everything here is optional, but it helps us come back with a better first proposal.',
@@ -193,11 +285,13 @@ export const en: Dictionary = {
     errorField: 'Fill in this field.',
     errorEmail: 'Enter a valid email address.',
     errorSend: 'We could not send your message. Try again or write to us directly:',
+    errorConsent: 'Tick this box to send your inquiry.',
     errorCaptcha: 'We could not verify that you are a person. Try again in a few seconds.',
     sending: 'Sending…',
     submit: 'I want El Guía to contact me',
-    privacy: 'We only use your details to reply to you.',
-    privacyLink: 'Privacy',
+    consentLead: 'I have read the',
+    consentLink: 'privacy policy',
+    consentRest: 'and I authorize El Guía CR to use my details to answer this inquiry, and to have them processed by providers that may be outside Costa Rica.',
     sentTitle: 'Done. We are on it.',
     sentText: 'We received your message. Someone from El Guía will write to you to talk. In the meantime, you do not need to do anything else.',
     sentReset: 'Send another inquiry',
@@ -263,6 +357,17 @@ export const en: Dictionary = {
     heading: 'This trail leads nowhere',
     intro: 'The page you are looking for does not exist or has moved. Head back home or write to us and we will help you find what you need.',
   },
+  privacy: {
+    title: 'Privacy Policy & Personal Data | El Guía CR',
+    description: 'What personal data El Guía CR receives when you write to us, what we use it for, who processes it, how long we keep it and how to use your rights (Law 8968).',
+    heading: 'Privacy policy',
+    intro: 'Here we explain what data we receive from you when you write to us from elguiacr.com, what we use it for and how you can exercise your rights. We follow Costa Rica\'s Law 8968 on the protection of individuals in the processing of personal data.',
+    updatedLabel: 'Last updated',
+    tocLabel: 'On this page',
+    controllerLabels: { brand: 'Trade name', legalName: 'Legal name', idNumber: 'ID number', address: 'Address', email: 'Email' },
+    links: { cookies: 'cookies page' },
+    sections: privacySections,
+  },
   pages: {
     experiences: {
       title: 'Costa Rica Tours & Experiences, Tailor-Made | El Guía CR',
@@ -299,12 +404,6 @@ export const en: Dictionary = {
       description: 'Answers to the most common questions about how El Guía CR works.',
       heading: 'Frequently asked questions',
       intro: 'We are gathering the most common questions about how we work. In the meantime, if you have a question, tell us and we will answer personally.',
-    },
-    privacy: {
-      title: 'Privacy · El Guía CR',
-      description: 'El Guía CR privacy policy.',
-      heading: 'Privacy',
-      intro: 'This is where we will explain how we use and protect your data. For now, we only use it to reply to your inquiry.',
     },
     terms: {
       title: 'Terms & conditions · El Guía CR',

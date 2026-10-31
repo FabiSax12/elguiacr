@@ -2,6 +2,7 @@
 // Everything else is served from `dist/` by the static assets binding (see `run_worker_first` in wrangler.jsonc).
 import { locales } from '../src/i18n/config';
 import { contactMethodIds, interestIds, timingIds, timingIdsWithDate, zoneIds, type ContactMethodId, type InterestId, type TimingId, type ZoneId } from '../src/data/contactForm';
+import { privacyUpdated } from '../src/data/site';
 import { es } from '../src/i18n/es';
 
 interface Env {
@@ -60,6 +61,9 @@ function choice<T extends string>(value: unknown, ids: readonly T[]): T | undefi
 
 // Returns undefined for anything the form could not have produced, so a client bug and a hand-made request both end up as a 400.
 function parse(body: Record<string, unknown>): Submission | undefined {
+  // Consent is mandatory and must be explicit: anything other than a literal `true` is rejected.
+  if (body.consent !== true) return undefined;
+
   const segment = choice(body.segment, Object.keys(segmentLabels));
   const method = choice(body.method, contactMethodIds);
   const name = text(body.name, MAX_FIELD);
@@ -151,6 +155,9 @@ function buildEmail(data: Submission) {
     line('Cuándo', timing),
     line('Zona', zone),
     line('Idioma del sitio', data.locale),
+    '',
+    // Evidence of the consent (Ley 8968, art. 5.2): the policy version the visitor accepted and when.
+    line('Consentimiento', `aceptó la política de privacidad (versión ${privacyUpdated}) el ${new Date().toISOString()}`),
   ]
     .filter((entry) => entry !== undefined)
     .join('\n');

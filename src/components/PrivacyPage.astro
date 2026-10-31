@@ -1,0 +1,101 @@
+---
+import Footer from './Footer.astro';
+import Nav from './Nav.astro';
+import Layout from '../layouts/Layout.astro';
+import { getPrivacySections } from '../data/privacy';
+import { getPagePath } from '../data/routes';
+import { contactEmail, dataController, privacyUpdated, prodhabUrl, siteName } from '../data/site';
+import { localeMeta } from '../i18n/config';
+import { getLocale, useTranslations } from '../i18n/utils';
+
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+const { privacy } = t;
+const sections = getPrivacySections(locale);
+
+// Constructed as UTC midnight, so format in UTC to keep the day the same in every timezone.
+const updated = new Intl.DateTimeFormat(localeMeta[locale].ogLocale.replace('_', '-'), { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(privacyUpdated));
+
+// Lines of the controller block; identity fields still pending from the client are left out.
+const controllerLines = [
+  { label: privacy.controllerLabels.brand, value: siteName },
+  { label: privacy.controllerLabels.legalName, value: dataController.legalName },
+  { label: privacy.controllerLabels.idNumber, value: dataController.idNumber },
+  { label: privacy.controllerLabels.address, value: dataController.address },
+].filter((line) => line.value);
+
+// Targets of the `{token}` markers used in the policy text.
+const inlineLinks: Record<string, { href: string; label: string; rel?: string }> = {
+  email: { href: `mailto:${contactEmail}`, label: contactEmail },
+  prodhab: { href: prodhabUrl, label: new URL(prodhabUrl).host, rel: 'noopener' },
+  cookies: { href: getPagePath('cookies', locale), label: privacy.links.cookies },
+};
+// Splitting on a capturing group puts the token names at the odd positions.
+const inline = (text: string) =>
+  text.split(/\{(\w+)\}/).map((part, index) => {
+    if (index % 2 === 0) return part;
+    const target = inlineLinks[part];
+    if (!target) throw new Error(`Unknown token {${part}} in the privacy policy text`);
+    return target;
+  });
+
+const link = 'font-semibold underline';
+---
+
+<Layout title={privacy.title} description={privacy.description} pageKey="privacy">
+  <div class="font-texto min-w-80 w-full overflow-x-clip bg-crema-luminoso leading-[normal] text-verde-oscuro">
+    <Nav pageKey="privacy" />
+    <main class="px-gutter pt-seccion-alta pb-seccion">
+      <div class="mx-auto w-full max-w-sitio">
+        <p class="text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{t.footer.legalHeading}</p>
+        <h1 class="mt-4 max-w-[820px] font-titulos text-titulo-a font-bold">{privacy.heading}</h1>
+        <div class="mt-8 h-px max-w-[820px] bg-mostaza-calido"></div>
+        <p class="mt-8 max-w-[680px] text-lg/[1.6]">{privacy.intro}</p>
+        <p class="mt-4 max-w-[680px] text-cuerpo text-gris-texto">{privacy.updatedLabel}: <time datetime={privacyUpdated}>{updated}</time></p>
+
+        <nav aria-labelledby="privacidad-indice" class="mt-10 max-w-[680px]">
+          <p id="privacidad-indice" class="text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{privacy.tocLabel}</p>
+          <ol class="mt-3 flex list-decimal flex-col gap-1 pl-6 text-subtitulo marker:text-gris-texto">
+            {sections.map((section) => (
+              <li><a class="underline" href={`#${section.id}`}>{section.heading}</a></li>
+            ))}
+          </ol>
+        </nav>
+
+        <div class="mt-14 flex max-w-[680px] flex-col gap-12">
+          {sections.map((section) => (
+            <section id={section.id} aria-labelledby={`${section.id}-titulo`}>
+              <h2 id={`${section.id}-titulo`} class="font-titulos text-[26px]/[1.15] font-bold">{section.heading}</h2>
+              <div class="mt-4 flex flex-col gap-4 text-base/[1.65]">
+                {section.blocks.map((block, index) => (
+                  <>
+                    {'p' in block ? <p>{inline(block.p).map((part) => (typeof part === 'string' ? part : <a class={link} href={part.href} rel={part.rel}>{part.label}</a>))}</p> : (
+                      <ul class="flex list-disc flex-col gap-2 pl-6 marker:text-mostaza-sombra">
+                        {block.list.map((item) => (
+                          <li>{inline(item).map((part) => (typeof part === 'string' ? part : <a class={link} href={part.href} rel={part.rel}>{part.label}</a>))}</li>
+                        ))}
+                      </ul>
+                    )}
+                    {section.id === 'controller' && index === 0 && (
+                      <dl class="grid grid-cols-1 gap-x-6 gap-y-1 sm:grid-cols-[max-content_1fr]">
+                        {controllerLines.map((line) => (
+                          <>
+                            <dt class="font-semibold">{line.label}</dt>
+                            <dd class="mb-2 sm:mb-0">{line.value}</dd>
+                          </>
+                        ))}
+                        <dt class="font-semibold">{privacy.controllerLabels.email}</dt>
+                        <dd><a class={link} href={`mailto:${contactEmail}`}>{contactEmail}</a></dd>
+                      </dl>
+                    )}
+                  </>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+    </main>
+    <Footer />
+  </div>
+</Layout>
