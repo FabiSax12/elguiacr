@@ -8,6 +8,7 @@ import { getAudiences } from '../data/audiences';
 import { getCategories, getExperiences } from '../data/experiences';
 import { landingPageKeyByAudience } from '../data/landings';
 import { getContactPath, getPagePath } from '../data/routes';
+import { getExperiencesSchema } from '../data/schema';
 import { getLocale, useTranslations } from '../i18n/utils';
 
 const locale = getLocale(Astro.currentLocale);
@@ -17,11 +18,12 @@ const labels = t.experiencesPage;
 const experiences = getExperiences(locale);
 const categories = getCategories(locale);
 const audiences = getAudiences(locale);
+const schema = await getExperiencesSchema(locale, experiences);
 
 const chip = 'min-h-11 cursor-pointer rounded-full border-2 border-verde-oscuro bg-transparent px-[18px] text-subtitulo font-semibold text-verde-oscuro not-aria-pressed:hover:bg-verde-oscuro not-aria-pressed:hover:text-crema-luminoso aria-pressed:border-verde-principal aria-pressed:bg-verde-principal aria-pressed:text-crema-luminoso';
 ---
 
-<Layout title={page.title} description={page.description} pageKey="experiences">
+<Layout title={page.title} description={page.description} pageKey="experiences" schema={schema}>
   <div class="font-texto min-w-80 w-full overflow-x-clip bg-crema-luminoso leading-[normal] text-verde-oscuro">
     <Nav pageKey="experiences" />
     <main>
@@ -58,7 +60,7 @@ const chip = 'min-h-11 cursor-pointer rounded-full border-2 border-verde-oscuro 
           </div>
 
           <div class="mt-10 grid grid-cols-[repeat(auto-fill,minmax(290px,1fr))] gap-6" data-experience-grid>
-            {experiences.map((experience) => <ExperienceCard experience={experience} />)}
+            {experiences.map((experience, index) => <ExperienceCard experience={experience} index={index} />)}
           </div>
         </div>
       </section>

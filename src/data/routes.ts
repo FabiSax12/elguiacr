@@ -1,5 +1,6 @@
 import { getAbsoluteLocaleUrl, getRelativeLocaleUrl } from 'astro:i18n';
 import type { Locale } from '../i18n/config';
+import { whatsappNumber } from './site';
 
 export const pageKeys = ['home', 'experiences', 'destinations', 'transport', 'about', 'blog', 'faq', 'privacy', 'terms', 'cookies', 'cancellations', 'customTrips', 'localExperiences', 'teamBuilding', 'educationalTrips'] as const;
 export type PageKey = (typeof pageKeys)[number];
@@ -14,7 +15,8 @@ export type LegalPageKey = (typeof legalPageKeys)[number];
 export const landingPageKeys = ['customTrips', 'localExperiences', 'teamBuilding', 'educationalTrips'] as const;
 export type LandingPageKey = (typeof landingPageKeys)[number];
 
-export type PlaceholderPageKey = Exclude<PageKey, 'home' | LandingPageKey>;
+// Pages with their own component (home, about, faq, the privacy and cookies pages, the landings) are not placeholders.
+export type PlaceholderPageKey = Exclude<PageKey, 'home' | 'about' | 'faq' | 'privacy' | 'cookies' | LandingPageKey>;
 
 // Path segment of each page per locale ('' is the locale root).
 const slugs: Record<PageKey, Record<Locale, string>> = {
@@ -50,9 +52,7 @@ export function getContactPath(locale: Locale, segment?: string) {
   return `${getPagePath('home', locale)}${query}#contanos`;
 }
 
-export const instagramUrl = 'https://instagram.com/elguia.cr';
-
-const whatsappNumber = '50685878863';
+export { instagramUrl } from './site';
 
 export function getWhatsappUrl(message: string) {
   return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;

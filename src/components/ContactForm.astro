@@ -1,18 +1,25 @@
 ---
 import { getLocale, useTranslations } from '../i18n/utils';
-import { getPagePath } from '../data/routes';
+import { getPagePath, getWhatsappUrl } from '../data/routes';
+import { contactEmail } from '../data/site';
 import { getSegments } from '../data/audiences';
+import { getContactChoices, timingIdsWithDate } from '../data/contactForm';
 const locale = getLocale(Astro.currentLocale);
 const t = useTranslations(locale);
 const segments = getSegments(locale);
+const { methods, interests, timings, zones } = getContactChoices(locale);
 
 const label = 'block text-subtitulo font-semibold';
-const campo = 'mt-1.5 w-full rounded-campo border-2 border-verde-oscuro/30 bg-white px-3.5 py-2.5 text-entrada text-verde-oscuro placeholder:text-gris-texto focus:border-verde-principal focus:bg-arena';
+const help = 'mt-1 text-nota text-gris-texto';
+const error = 'mt-2 text-nota font-semibold text-evitar-texto empty:hidden';
+const chipRow = 'mt-3 flex flex-wrap gap-2.5';
+const chip = 'group min-h-11 cursor-pointer rounded-full border-2 border-verde-oscuro bg-transparent px-[18px] text-subtitulo font-semibold text-verde-oscuro not-aria-pressed:hover:bg-verde-oscuro not-aria-pressed:hover:text-crema-luminoso aria-pressed:border-verde-principal aria-pressed:bg-verde-principal aria-pressed:text-crema-luminoso';
+const campo = 'mt-1.5 w-full rounded-campo border-2 border-verde-oscuro/30 bg-white px-3.5 py-2.5 text-entrada text-verde-oscuro placeholder:text-gris-texto focus:border-verde-principal focus:bg-arena aria-invalid:border-evitar-texto';
+const campoCorto = `${campo} max-w-[420px]`;
 const textarea = `${campo} min-h-24 resize-y`;
-const textareaShort = `${campo} min-h-[72px] resize-y`;
 ---
 
-<section id="contanos" class="flex min-h-svh flex-col justify-center bg-crema-luminoso px-gutter py-seccion">
+<section id="contanos" data-error-choice={t.contact.errorChoice} data-error-field={t.contact.errorField} data-error-email={t.contact.errorEmail} data-error-consent={t.contact.errorConsent} data-error-send={t.contact.errorSend} data-error-captcha={t.contact.errorCaptcha} data-sending={t.contact.sending} data-locale={locale} data-turnstile-key={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '0x4AAAAAAFsQDpFNW1NurXpJ'} class="flex min-h-svh flex-col justify-center bg-crema-luminoso px-gutter py-seccion">
   <div class="mx-auto w-full flex max-w-sitio flex-wrap items-stretch">
     <div class="oscuro relative min-w-0 flex-[1_1_400px] overflow-clip rounded-tarjeta bg-verde-principal p-[clamp(32px,4vw,56px)] text-crema-luminoso">
       <p class="text-label font-semibold tracking-eyebrow text-crema-luminoso uppercase">{t.contact.eyebrow}</p>
@@ -28,37 +35,94 @@ const textareaShort = `${campo} min-h-[72px] resize-y`;
 
     <div class="min-w-0 flex-[1.4_1_480px] rounded-tarjeta border-2 border-verde-oscuro bg-white p-[clamp(28px,4vw,56px)]">
       <div data-form-view="form" class="flex flex-col gap-7">
-        <fieldset>
-          <legend class="text-subtitulo font-semibold">{t.contact.whoFor}</legend>
-          <div class="mt-3 flex flex-wrap gap-2.5">
+        <fieldset id="f-segmento" data-group="segment" data-required aria-describedby="f-segmento-error">
+          <legend class={label}>{t.contact.whoFor}</legend>
+          <div class={chipRow}>
             {segments.map((segment) => (
-              <button type="button" class="group min-h-11 cursor-pointer rounded-full border-2 border-verde-oscuro bg-transparent px-[18px] text-subtitulo font-semibold text-verde-oscuro not-aria-pressed:hover:bg-verde-oscuro not-aria-pressed:hover:text-crema-luminoso aria-pressed:border-verde-principal aria-pressed:bg-verde-principal aria-pressed:text-crema-luminoso" data-chip={segment.id} aria-pressed="false"><span class="hidden group-aria-pressed:inline">✓ </span>{segment.label}</button>
+              <button type="button" class={chip} data-chip={segment.id} aria-pressed="false"><span class="hidden group-aria-pressed:inline">✓ </span>{segment.label}</button>
             ))}
           </div>
+          <p id="f-segmento-error" class={error}></p>
         </fieldset>
 
-        <div class="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-6">
-          <div><label for="f-nombre" class={label}>{t.contact.nameLabel}</label><input id="f-nombre" class={campo} type="text" autocomplete="name" placeholder={t.contact.namePlaceholder}></div>
-          <div><label for="f-contacto" class={label}>{t.contact.contactLabel}</label><input id="f-contacto" class={campo} type="text" autocomplete="email" placeholder={t.contact.contactPlaceholder}></div>
+        <div><label for="f-que" class={label}>{t.contact.whatLabel}</label><p id="f-que-ayuda" class={help}>{t.contact.whatHelp}</p><p id="f-que-sensible" class={help}>{t.contact.whatSensitive}</p><textarea id="f-que" class={textarea} placeholder={t.contact.whatPlaceholder} required aria-describedby="f-que-ayuda f-que-sensible f-que-error"></textarea><p id="f-que-error" class={error}></p></div>
+
+        <div><label for="f-nombre" class={label}>{t.contact.nameLabel}</label><input id="f-nombre" class={campoCorto} type="text" autocomplete="name" placeholder={t.contact.namePlaceholder} required aria-describedby="f-nombre-error"><p id="f-nombre-error" class={error}></p></div>
+
+        <div class="flex flex-col gap-5">
+          <fieldset id="f-medio" data-group="method" data-required aria-describedby="f-medio-error">
+            <legend class={label}>{t.contact.methodLabel}</legend>
+            <div class={chipRow}>
+              {methods.map((method) => (
+                <button type="button" class={chip} data-chip={method.id} aria-pressed="false"><span class="hidden group-aria-pressed:inline">✓ </span>{method.label}</button>
+              ))}
+            </div>
+            <p id="f-medio-error" class={error}></p>
+          </fieldset>
+          <div data-reveal="method" data-reveal-values="whatsapp" hidden><label for="f-telefono" class={label}>{t.contact.phoneLabel}</label><input id="f-telefono" class={campoCorto} type="tel" autocomplete="tel" inputmode="tel" required aria-describedby="f-telefono-error"><p id="f-telefono-error" class={error}></p></div>
+          <div data-reveal="method" data-reveal-values="email" hidden><label for="f-correo" class={label}>{t.contact.emailLabel}</label><input id="f-correo" class={campoCorto} type="email" autocomplete="email" required aria-describedby="f-correo-error"><p id="f-correo-error" class={error}></p></div>
         </div>
 
-        <div><label for="f-que" class={label}>{t.contact.whatLabel}</label><textarea id="f-que" class={textarea} placeholder={t.contact.whatPlaceholder}></textarea></div>
+        <details id="f-contexto" class="group/detalles border-t-2 border-verde-oscuro/15 pt-7">
+          <summary class="flex cursor-pointer list-none items-start justify-between gap-4 [&::-webkit-details-marker]:hidden">
+            <span><span class="block font-titulos text-[24px]/[1.15] font-bold text-verde-oscuro">{t.contact.detailsTitle}</span><span class={help}>{t.contact.detailsHint}</span></span>
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="mt-1 size-6 shrink-0 text-verde-principal transition-transform group-open/detalles:rotate-180"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </summary>
+          <div class="mt-7 flex flex-col gap-7">
 
-        <div data-field="destination-row" hidden class="flex flex-wrap items-center gap-3 rounded-campo bg-arena px-4 py-3">
-          <span class="text-sm font-medium">{t.contact.destinationPicked} <strong data-field="destination-name" class="font-semibold"></strong></span>
-          <button type="button" data-clear-destination class="min-h-9 cursor-pointer border-0 bg-transparent px-3 text-sm font-semibold text-verde-principal underline">{t.contact.destinationRemove}</button>
+          <fieldset id="f-intereses" data-group="interests" data-multiple aria-describedby="f-intereses-ayuda">
+            <legend class={label}>{t.contact.interestsLabel}</legend>
+            <p id="f-intereses-ayuda" class={help}>{t.contact.interestsHint}</p>
+            <div class={chipRow}>
+              {interests.map((interest) => (
+                <button type="button" class={chip} data-chip={interest.id} aria-pressed="false"><span class="hidden group-aria-pressed:inline">✓ </span>{interest.label}</button>
+              ))}
+            </div>
+          </fieldset>
+
+          <div><label for="f-personas" class={label}>{t.contact.peopleLabel}</label><input id="f-personas" class={campoCorto} type="number" min="1" inputmode="numeric" placeholder={t.contact.peoplePlaceholder} aria-describedby="f-personas-error"><p id="f-personas-error" class={error}></p></div>
+
+          <div class="flex flex-col gap-5">
+            <fieldset id="f-cuando" data-group="timing">
+              <legend class={label}>{t.contact.timingLabel}</legend>
+              <div class={chipRow}>
+                {timings.map((timing) => (
+                  <button type="button" class={chip} data-chip={timing.id} aria-pressed="false"><span class="hidden group-aria-pressed:inline">✓ </span>{timing.label}</button>
+                ))}
+              </div>
+            </fieldset>
+            <div data-reveal="timing" data-reveal-values={timingIdsWithDate.join(' ')} hidden><label for="f-fecha" class={label}>{t.contact.dateLabel}</label><input id="f-fecha" class={campoCorto} type="text" placeholder={t.contact.datePlaceholder}></div>
+          </div>
+
+          <div class="flex flex-col gap-5">
+            <fieldset id="f-zona" data-group="zone">
+              <legend class={label}>{t.contact.zoneLabel}</legend>
+              <div class={chipRow}>
+                {zones.map((zone) => (
+                  <button type="button" class={chip} data-chip={zone.id} aria-pressed="false"><span class="hidden group-aria-pressed:inline">✓ </span>{zone.label}</button>
+                ))}
+              </div>
+            </fieldset>
+            <div data-reveal="zone" data-reveal-values="yes" hidden><label for="f-zona-nombre" class={label}>{t.contact.zoneNameLabel}</label><input id="f-zona-nombre" class={campoCorto} type="text" placeholder={t.contact.zoneNamePlaceholder}></div>
+          </div>
+          </div>
+        </details>
+
+        <div aria-hidden="true" class="absolute -left-[9999px] size-px overflow-hidden"><label>Website <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
+
+        <div>
+          <div class="flex items-start gap-3">
+            <input id="f-consentimiento" type="checkbox" required class="mt-1 size-5 shrink-0 cursor-pointer accent-verde-principal aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-evitar-texto" aria-describedby="f-consentimiento-error">
+            <label for="f-consentimiento" class="text-cuerpo cursor-pointer">{t.contact.consentLead} <a class="font-semibold underline" href={getPagePath('privacy', locale)} target="_blank" rel="noopener">{t.contact.consentLink}</a> {t.contact.consentRest}</label>
+          </div>
+          <p id="f-consentimiento-error" class={error}></p>
         </div>
-
-        <div class="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-6">
-          <div><label for="f-personas" class={label}>{t.contact.peopleLabel}</label><input id="f-personas" class={campo} type="number" min="1" inputmode="numeric" placeholder={t.contact.peoplePlaceholder}></div>
-          <div><label for="f-fecha" class={label}>{t.contact.dateLabel}</label><input id="f-fecha" class={campo} type="text" placeholder={t.contact.datePlaceholder}></div>
-        </div>
-
-        <div><label for="f-extra" class={label}>{t.contact.extraLabel} <span class="font-normal text-gris-texto">{t.contact.optional}</span></label><textarea id="f-extra" class={textareaShort} placeholder={t.contact.extraPlaceholder}></textarea></div>
 
         <div class="flex flex-wrap items-center gap-x-6 gap-y-4">
-          <button type="button" class="inline-flex min-h-13 cursor-pointer items-center gap-2.5 rounded-full border-0 bg-verde-principal px-7 text-base font-semibold text-crema-luminoso hover:bg-verde-oscuro" data-submit>{t.contact.submit} <span class="inline-block" aria-hidden="true">→</span></button>
-          <p class="text-nota text-gris-texto">{t.contact.privacy} <a class="underline" href={getPagePath('privacy', locale)}>{t.contact.privacyLink}</a></p>
+          <div data-turnstile class="basis-full empty:hidden"></div>
+          <button type="button" class="inline-flex min-h-13 cursor-pointer items-center gap-2.5 rounded-full border-0 bg-verde-principal px-7 text-base font-semibold text-crema-luminoso hover:bg-verde-oscuro disabled:cursor-wait disabled:opacity-70" data-submit><span data-submit-label>{t.contact.submit}</span> <span class="inline-block" aria-hidden="true">→</span></button>
+          <p data-send-error role="alert" class={`${error} basis-full`}></p>
+          <p data-send-fallback hidden class="basis-full text-nota text-gris-texto"><a class="font-semibold underline" href={`mailto:${contactEmail}`}>{contactEmail}</a> · <a class="font-semibold underline" href={getWhatsappUrl('')}>WhatsApp</a></p>
         </div>
       </div>
 
@@ -77,70 +141,281 @@ const textareaShort = `${campo} min-h-[72px] resize-y`;
 
   if (section) {
     const views = section.querySelectorAll<HTMLElement>('[data-form-view]');
-    const chips = section.querySelectorAll<HTMLButtonElement>('[data-chip]');
-    const destinationRow = section.querySelector<HTMLElement>('[data-field="destination-row"]');
-    const destinationName = section.querySelector<HTMLElement>('[data-field="destination-name"]');
+    const groups = section.querySelectorAll<HTMLFieldSetElement>('[data-group]');
+    const reveals = section.querySelectorAll<HTMLElement>('[data-reveal]');
     const fields = section.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea');
+    // Chip groups and fields in document order, so the first error found is the first one on screen.
+    const validated = section.querySelectorAll<HTMLElement>('[data-group][data-required], input, textarea');
+    const zoneName = section.querySelector<HTMLInputElement>('#f-zona-nombre');
+    const context = section.querySelector<HTMLDetailsElement>('#f-contexto');
+    const messages = section.dataset;
+    const submitButton = section.querySelector<HTMLButtonElement>('[data-submit]');
+    const submitLabel = section.querySelector<HTMLElement>('[data-submit-label]');
+    const sendError = section.querySelector<HTMLElement>('[data-send-error]');
+    const sendFallback = section.querySelector<HTMLElement>('[data-send-fallback]');
+    const turnstileBox = section.querySelector<HTMLElement>('[data-turnstile]');
+    const idleLabel = submitLabel?.textContent ?? '';
 
-    let segment: string | null = null;
-    let destination: string | null = null;
+    const selected = new Map<string, Set<string>>();
+    groups.forEach((group) => selected.set(group.dataset.group ?? '', new Set()));
+    const picked = (group: string) => selected.get(group) ?? new Set<string>();
     let sent = false;
+    let sending = false;
+
+    const setError = (target: HTMLElement, message: string) => {
+      const error = document.getElementById(`${target.id}-error`);
+      if (error) error.textContent = message;
+      if (target instanceof HTMLFieldSetElement) return;
+      if (message) target.setAttribute('aria-invalid', 'true');
+      else target.removeAttribute('aria-invalid');
+    };
+
+    const choose = (group: HTMLFieldSetElement, id: string) => {
+      const ids = picked(group.dataset.group ?? '');
+      if (ids.has(id)) {
+        ids.delete(id);
+        return;
+      }
+      if (!('multiple' in group.dataset)) ids.clear();
+      ids.add(id);
+    };
 
     // Pages elsewhere on the site preselect a segment via ?segment=<id>.
     const requestedSegment = new URLSearchParams(window.location.search).get('segment');
-    if (requestedSegment && Array.from(chips).some((chip) => chip.dataset.chip === requestedSegment)) {
-      segment = requestedSegment;
+    if (requestedSegment && section.querySelector(`[data-group="segment"] [data-chip="${CSS.escape(requestedSegment)}"]`)) {
+      picked('segment').add(requestedSegment);
     }
 
     const render = () => {
-      chips.forEach((chip) => chip.setAttribute('aria-pressed', String(chip.dataset.chip === segment)));
-      if (destinationRow && destinationName) {
-        destinationRow.hidden = !destination;
-        destinationName.textContent = destination ?? '';
-      }
+      groups.forEach((group) => {
+        const ids = picked(group.dataset.group ?? '');
+        group.querySelectorAll<HTMLButtonElement>('[data-chip]').forEach((chip) => chip.setAttribute('aria-pressed', String(ids.has(chip.dataset.chip ?? ''))));
+      });
+      reveals.forEach((reveal) => {
+        const ids = picked(reveal.dataset.reveal ?? '');
+        const shown = (reveal.dataset.revealValues ?? '').split(' ').some((id) => ids.has(id));
+        reveal.hidden = !shown;
+        // Disabled fields skip validation, so a hidden required field never blocks the submit.
+        reveal.querySelectorAll<HTMLInputElement>('input').forEach((field) => {
+          field.disabled = !shown;
+          if (!shown) setError(field, '');
+        });
+      });
       views.forEach((view) => {
         view.hidden = (view.dataset.formView === 'sent') !== sent;
       });
     };
 
+    const errorFor = (element: HTMLElement) => {
+      if (element instanceof HTMLFieldSetElement) return picked(element.dataset.group ?? '').size ? '' : (messages.errorChoice ?? '');
+      if (!(element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) || element.disabled) return '';
+      if (element instanceof HTMLInputElement && element.type === 'checkbox') return element.checked ? '' : (messages.errorConsent ?? '');
+      if (element.required && !element.value.trim()) return messages.errorField ?? '';
+      if (element.validity.typeMismatch) return messages.errorEmail ?? '';
+      return element.checkValidity() ? '' : (messages.errorField ?? '');
+    };
+
+    // Shows an error under every missing item and focuses the first one; returns whether the form is complete.
+    const validate = () => {
+      let first: HTMLElement | null = null;
+      validated.forEach((element) => {
+        const message = errorFor(element);
+        setError(element, message);
+        // A closed <details> can't take focus, so open it before an error inside it is shown.
+        if (message && context?.contains(element)) context.open = true;
+        if (message && !first) first = element instanceof HTMLFieldSetElement ? element.querySelector<HTMLElement>('[data-chip]') : element;
+      });
+      (first as HTMLElement | null)?.focus();
+      return !first;
+    };
+
     render();
 
-    chips.forEach((chip) => {
-      chip.addEventListener('click', () => {
-        segment = segment === chip.dataset.chip ? null : (chip.dataset.chip ?? null);
-        render();
+    groups.forEach((group) => {
+      group.querySelectorAll<HTMLButtonElement>('[data-chip]').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          choose(group, chip.dataset.chip ?? '');
+          setError(group, '');
+          render();
+        });
       });
+    });
+
+    fields.forEach((field) => {
+      field.addEventListener('input', () => setError(field, ''));
     });
 
     document.querySelectorAll<HTMLElement>('[data-segment]').forEach((card) => {
       card.addEventListener('click', () => {
-        segment = card.dataset.segment ?? null;
+        const segment = picked('segment');
+        segment.clear();
+        if (card.dataset.segment) segment.add(card.dataset.segment);
+        const group = section.querySelector<HTMLFieldSetElement>('[data-group="segment"]');
+        if (group) setError(group, '');
         render();
       });
     });
 
+    // The hero map's "I'm interested" button names a destination: answer "yes" and fill it in.
     document.addEventListener('destination-picked', (event) => {
-      destination = (event as CustomEvent<{ name: string }>).detail.name;
+      const zone = picked('zone');
+      zone.clear();
+      zone.add('yes');
+      if (zoneName) zoneName.value = (event as CustomEvent<{ name: string }>).detail.name;
+      if (context) context.open = true;
       render();
     });
 
-    section.querySelector('[data-clear-destination]')?.addEventListener('click', () => {
-      destination = null;
-      render();
-    });
+    // Turnstile loads on the first interaction (or when the form nears the viewport), never on page load.
+    type TurnstileApi = {
+      render: (container: HTMLElement, options: Record<string, unknown>) => string;
+      reset: (widgetId?: string) => void;
+    };
+    const turnstileApi = () => (window as unknown as { turnstile?: TurnstileApi }).turnstile;
+    let turnstileReady: Promise<void> | undefined;
+    let widgetId: string | undefined;
+    let token = '';
+    let tokenWaiters: ((value: string) => void)[] = [];
 
-    section.querySelector('[data-submit]')?.addEventListener('click', () => {
-      sent = true;
-      render();
-    });
+    const setToken = (value: string) => {
+      token = value;
+      if (!value) return;
+      tokenWaiters.forEach((resolve) => resolve(value));
+      tokenWaiters = [];
+    };
+
+    const loadTurnstile = () => {
+      turnstileReady ??= new Promise<void>((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+        script.async = true;
+        script.onload = () => {
+          const api = turnstileApi();
+          if (!api || !turnstileBox) return reject(new Error('turnstile'));
+          widgetId = api.render(turnstileBox, {
+            sitekey: messages.turnstileKey,
+            action: 'contact',
+            appearance: 'interaction-only',
+            size: 'flexible',
+            language: messages.locale,
+            callback: setToken,
+            'expired-callback': () => setToken(''),
+            'error-callback': () => setToken(''),
+          });
+          resolve();
+        };
+        script.onerror = () => {
+          turnstileReady = undefined;
+          reject(new Error('turnstile'));
+        };
+        document.head.append(script);
+      });
+      return turnstileReady;
+    };
+
+    const resetToken = () => {
+      token = '';
+      if (widgetId) turnstileApi()?.reset(widgetId);
+    };
+
+    // Resolves with a token, or '' if the challenge does not finish in time.
+    const getToken = async () => {
+      try {
+        await loadTurnstile();
+      } catch {
+        return '';
+      }
+      if (token) return token;
+      return new Promise<string>((resolve) => {
+        tokenWaiters.push(resolve);
+        setTimeout(() => resolve(''), 15000);
+      });
+    };
+
+    section.addEventListener('pointerdown', () => void loadTurnstile().catch(() => {}), { once: true });
+    section.addEventListener('focusin', () => void loadTurnstile().catch(() => {}), { once: true });
+    new IntersectionObserver((entries, observer) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      observer.disconnect();
+      void loadTurnstile().catch(() => {});
+    }, { rootMargin: '400px' }).observe(section);
+
+    // Disabled fields (a hidden reveal) count as empty.
+    const valueOf = (id: string) => {
+      const field = section.querySelector<HTMLInputElement | HTMLTextAreaElement>(`#${id}`);
+      return field && !field.disabled ? field.value.trim() : '';
+    };
+    const firstOf = (group: string) => [...picked(group)][0];
+
+    const showSendError = (message: string | undefined) => {
+      if (sendError) sendError.textContent = message ?? '';
+      if (sendFallback) sendFallback.hidden = !message || message === messages.errorCaptcha;
+    };
+
+    const setSending = (value: boolean) => {
+      sending = value;
+      if (submitButton) submitButton.disabled = value;
+      if (submitLabel) submitLabel.textContent = value ? (messages.sending ?? idleLabel) : idleLabel;
+    };
+
+    const submit = async () => {
+      if (sending || !validate()) return;
+      setSending(true);
+      showSendError('');
+      try {
+        const turnstileToken = await getToken();
+        if (!turnstileToken) return showSendError(messages.errorCaptcha);
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            locale: messages.locale,
+            segment: firstOf('segment'),
+            name: valueOf('f-nombre'),
+            method: firstOf('method'),
+            phone: valueOf('f-telefono'),
+            email: valueOf('f-correo'),
+            what: valueOf('f-que'),
+            interests: [...picked('interests')],
+            people: valueOf('f-personas'),
+            timing: firstOf('timing'),
+            date: valueOf('f-fecha'),
+            zone: firstOf('zone'),
+            zoneName: valueOf('f-zona-nombre'),
+            website: valueOf('f-website'),
+            consent: section.querySelector<HTMLInputElement>('#f-consentimiento')?.checked === true,
+            turnstileToken,
+          }),
+        });
+        const result = (await response.json()) as { ok?: boolean; error?: string };
+        if (result.ok) {
+          sent = true;
+          render();
+        } else {
+          showSendError(result.error === 'captcha' ? messages.errorCaptcha : messages.errorSend);
+        }
+      } catch {
+        showSendError(messages.errorSend);
+      } finally {
+        // A Turnstile token is single use, so every attempt needs a fresh one.
+        resetToken();
+        setSending(false);
+      }
+    };
+
+    submitButton?.addEventListener('click', () => void submit());
 
     section.querySelector('[data-reset]')?.addEventListener('click', () => {
       sent = false;
-      segment = null;
-      destination = null;
+      showSendError('');
+      resetToken();
+      if (context) context.open = false;
+      selected.forEach((ids) => ids.clear());
       fields.forEach((field) => {
-        field.value = '';
+        if (field.type === 'checkbox') (field as HTMLInputElement).checked = false;
+        else field.value = '';
       });
+      validated.forEach((element) => setError(element, ''));
       render();
     });
   }

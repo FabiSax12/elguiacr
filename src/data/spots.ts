@@ -35,11 +35,12 @@ interface SpotBase {
   credit?: PhotoCredit;
 }
 
-export interface Spot extends SpotBase, SpotText {
-  idealLabel: string;
-}
+export type Spot = SpotBase & SpotText;
 
 export const DEFAULT_SPOT_ID: SpotId = 'arenal';
+
+// Order the hero's traveler visits the spots in: the route drawn on the map, a loop that starts and ends at Santa Teresa.
+export const TOUR_ORDER: readonly SpotId[] = ['santateresa', 'tamarindo', 'rincon', 'celeste', 'arenal', 'monteverde', 'sanjose', 'tortuguero', 'puertoviejo', 'manuel', 'uvita', 'osa'];
 
 const base: SpotBase[] = [
   { id: 'rincon', x: 17.7, y: 13.1, ideal: ['travelers', 'education'] },
@@ -58,9 +59,5 @@ const base: SpotBase[] = [
 
 export function getSpots(locale: Locale): Spot[] {
   const t = useTranslations(locale);
-  return base.map((spot) => ({
-    ...spot,
-    ...t.spots[spot.id],
-    idealLabel: spot.ideal.map((id) => t.audiences.items[id].segment).join(' · '),
-  }));
+  return base.map((spot) => ({ ...spot, ...t.spots[spot.id] }));
 }

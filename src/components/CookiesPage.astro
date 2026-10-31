@@ -1,0 +1,33 @@
+---
+import LegalPage from './LegalPage.astro';
+import { cloudflareUrls, getCookiesSections } from '../data/cookies';
+import type { LegalLink } from '../data/legal';
+import { getPagePath } from '../data/routes';
+import { contactEmail, cookiesUpdated } from '../data/site';
+import { getLocale, useTranslations } from '../i18n/utils';
+
+const locale = getLocale(Astro.currentLocale);
+const { cookies } = useTranslations(locale);
+
+const links: Record<string, LegalLink> = {
+  email: { href: `mailto:${contactEmail}`, label: contactEmail },
+  privacy: { href: getPagePath('privacy', locale), label: cookies.links.privacy },
+  turnstilePolicy: { href: cloudflareUrls.turnstilePolicy, label: cookies.links.turnstilePolicy, rel: 'noopener' },
+  cloudflareCookies: { href: cloudflareUrls.cloudflareCookies, label: cookies.links.cloudflareCookies, rel: 'noopener' },
+  webAnalytics: { href: cloudflareUrls.webAnalytics, label: cookies.links.webAnalytics, rel: 'noopener' },
+};
+---
+
+<LegalPage
+  pageKey="cookies"
+  title={cookies.title}
+  description={cookies.description}
+  heading={cookies.heading}
+  intro={cookies.intro}
+  updatedLabel={cookies.updatedLabel}
+  updated={cookiesUpdated}
+  tocLabel={cookies.tocLabel}
+  tocId="cookies-indice"
+  sections={getCookiesSections(locale)}
+  links={links}
+/>

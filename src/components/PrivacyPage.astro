@@ -1,0 +1,48 @@
+---
+import LegalPage from './LegalPage.astro';
+import type { LegalLink, LegalSection } from '../data/legal';
+import { getPrivacySections } from '../data/privacy';
+import { getPagePath } from '../data/routes';
+import { contactEmail, dataController, privacyUpdated, prodhabUrl, siteName } from '../data/site';
+import { getLocale, useTranslations } from '../i18n/utils';
+
+const locale = getLocale(Astro.currentLocale);
+const { privacy } = useTranslations(locale);
+
+// Lines of the controller block; identity fields still pending from the client are left out.
+const controllerFacts = [
+  { label: privacy.controllerLabels.brand, value: siteName },
+  { label: privacy.controllerLabels.legalName, value: dataController.legalName },
+  { label: privacy.controllerLabels.idNumber, value: dataController.idNumber },
+  { label: privacy.controllerLabels.address, value: dataController.address },
+]
+  .filter((fact): fact is { label: string; value: string } => Boolean(fact.value))
+  .concat({ label: privacy.controllerLabels.email, value: '{email}' });
+
+// The contact block goes right after the section's first paragraph.
+const sections: LegalSection[] = getPrivacySections(locale).map((section) => {
+  if (section.id !== 'controller') return section;
+  const [intro, ...rest] = section.blocks;
+  return { ...section, blocks: [intro, { facts: controllerFacts }, ...rest] };
+});
+
+const links: Record<string, LegalLink> = {
+  email: { href: `mailto:${contactEmail}`, label: contactEmail },
+  prodhab: { href: prodhabUrl, label: new URL(prodhabUrl).host, rel: 'noopener' },
+  cookies: { href: getPagePath('cookies', locale), label: privacy.links.cookies },
+};
+---
+
+<LegalPage
+  pageKey="privacy"
+  title={privacy.title}
+  description={privacy.description}
+  heading={privacy.heading}
+  intro={privacy.intro}
+  updatedLabel={privacy.updatedLabel}
+  updated={privacyUpdated}
+  tocLabel={privacy.tocLabel}
+  tocId="privacidad-indice"
+  sections={sections}
+  links={links}
+/>

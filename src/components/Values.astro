@@ -7,17 +7,18 @@ const t = useTranslations(getLocale(Astro.currentLocale));
 ---
 <section class="flex min-h-svh flex-col justify-center bg-crema-luminoso px-gutter py-seccion">
   <div class="mx-auto w-full flex max-w-sitio flex-wrap items-center gap-9">
-    <div class="relative h-[350px] min-w-0 flex-[1_1_460px] overflow-clip rounded-imagen bg-arena">
-      <Image class="zoom-lento absolute inset-0 block size-full object-cover" src={farmerPasture} width={1200} alt={t.values.photoAlt} />
+    <div class="flotar relative h-[350px] min-w-0 flex-[1_1_460px] overflow-clip rounded-imagen bg-arena [--flotar-delay:-3s] [--flotar-hover:0px]">
+      <Image class="zoom-lento absolute inset-0 block size-full object-cover" src={farmerPasture} widths={[600, 1200]} sizes="(min-width: 1000px) 620px, 100vw" alt={t.values.photoAlt} />
     </div>
     <div class="min-w-0 flex-[1_1_440px]">
       <p class="text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{t.values.eyebrow}</p>
-      <blockquote class="revelar mt-5">
-        <p class="font-titulos text-[length:clamp(24px,2.3vw,31px)]/[1.2] font-medium italic">{t.values.quote}</p>
-      </blockquote>
+      <h2 class="revelar mt-5 font-titulos text-[length:clamp(24px,2.3vw,31px)]/[1.2] font-medium italic">{t.values.headline}</h2>
       <div class="mt-8 flex overflow-clip rounded-tarjeta bg-arena">
         <span class="shrink-0 grow-0 basis-barra bg-mostaza-calido" aria-hidden="true"></span>
-        <p class="p-bloque text-parrafo">{t.values.text}</p>
+        <div class="p-bloque text-parrafo">
+          <p>{t.values.text}</p>
+          <p class="mt-4"><strong class="block font-semibold text-verde-oscuro">{t.values.closingLead}</strong>{t.values.closingText}</p>
+        </div>
       </div>
     </div>
   </div>

@@ -11,7 +11,8 @@ const pillars = getPillars(locale);
   <div class="mx-auto w-full flex max-w-sitio flex-wrap items-start gap-x-16 gap-y-8">
     <p class="shrink-0 grow-0 basis-auto text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{t.manifesto.eyebrow}</p>
     <div class="min-w-0 flex-[1_1_640px]">
-      <p class="revelar font-titulos text-[length:clamp(24px,2.5vw,36px)]/[1.18] font-semibold text-verde-oscuro">{t.manifesto.statementBefore} <span class="text-verde-principal italic">{t.manifesto.statementEmphasis}</span> {t.manifesto.statementAfter}</p>
+      <p class="revelar font-titulos text-[length:clamp(24px,2.5vw,36px)]/[1.18] font-semibold text-verde-oscuro">{t.manifesto.statement}</p>
+      <p class="revelar mt-5 font-titulos text-[length:clamp(20px,2vw,28px)]/[1.25] font-medium text-verde-oscuro">{t.manifesto.secondBefore} <span class="font-semibold text-verde-principal italic">{t.manifesto.secondEmphasis}</span> {t.manifesto.secondAfter}</p>
       <div class="mt-9 h-px bg-mostaza-calido"></div>
       <div class="mt-8 grid grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-6">
         {pillars.map((pillar) => (

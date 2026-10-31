@@ -2,7 +2,6 @@
 import ActBand from './ActBand.astro';
 import Audiences from './Audiences.astro';
 import ContactForm from './ContactForm.astro';
-import Destinations from './Destinations.astro';
 import Footer from './Footer.astro';
 import Founder from './Founder.astro';
 import Hero from './Hero.astro';
@@ -15,7 +14,7 @@ import Values from './Values.astro';
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout>
+<Layout pageKey="home">
   <div class="font-texto min-w-80 w-full overflow-x-clip bg-crema-luminoso leading-[normal] text-verde-oscuro">
     <Nav pageKey="home" />
     <Hero />
@@ -24,7 +23,6 @@ import Layout from '../layouts/Layout.astro';
     <Audiences />
     <HowItWorks />
     <Founder />
-    <Destinations />
     <Stories />
     <Values />
     <ContactForm />

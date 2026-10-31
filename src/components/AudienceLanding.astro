@@ -4,10 +4,11 @@ import ExperienceCard from './ExperienceCard.astro';
 import Footer from './Footer.astro';
 import Nav from './Nav.astro';
 import Layout from '../layouts/Layout.astro';
-import type { AudienceId } from '../data/audiences';
+import { getAudiences, type AudienceId } from '../data/audiences';
 import { getExperiences } from '../data/experiences';
 import { getLanding, landingPageKeyByAudience } from '../data/landings';
 import { getContactPath, getPagePath } from '../data/routes';
+import { getLandingSchema, getShareImage } from '../data/schema';
 import { getLocale, useTranslations } from '../i18n/utils';
 
 interface Props {
@@ -23,19 +24,13 @@ const contactHref = getContactPath(locale, audience);
 const experiences = getExperiences(locale, audience);
 const stepTitles = [t.how.steps.understand.title, t.how.steps.design.title, t.how.steps.coordinate.title];
 
-// Built from the same FAQ data that renders on the page.
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: landing.faq.map(({ question, answer }) => ({
-    '@type': 'Question',
-    name: question,
-    acceptedAnswer: { '@type': 'Answer', text: answer },
-  })),
-};
+// The audience photo from the home page doubles as the share image.
+const audienceInfo = getAudiences(locale).find((item) => item.id === audience);
+const shareImage = audienceInfo?.image && (await getShareImage(audienceInfo.image));
+const schema = getLandingSchema(audience, locale, shareImage?.url);
 ---
 
-<Layout title={landing.title} description={landing.description} pageKey={pageKey}>
+<Layout title={landing.title} description={landing.description} pageKey={pageKey} image={audienceInfo?.image} imageAlt={audienceInfo?.alt} schema={schema}>
   <div class="font-texto min-w-80 w-full overflow-x-clip bg-crema-luminoso leading-[normal] text-verde-oscuro">
     <Nav pageKey={pageKey} />
     <main>
@@ -119,6 +114,5 @@ const faqSchema = {
     </main>
     <ActBand contactHref={contactHref} />
     <Footer />
-    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   </div>
 </Layout>

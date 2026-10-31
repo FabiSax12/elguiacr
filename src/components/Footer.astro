@@ -3,6 +3,7 @@ import { getLocale, useTranslations } from '../i18n/utils';
 import logo from '../assets/logo.svg';
 import { navLinks } from '../data/content';
 import { landingPageKeys, getPagePath, instagramUrl, legalPageKeys } from '../data/routes';
+import { contactEmail } from '../data/site';
 
 const locale = getLocale(Astro.currentLocale);
 const t = useTranslations(locale);
@@ -14,7 +15,7 @@ const navLink = 'inline-block py-1.5 text-crema-luminoso no-underline hover:text
   <div class="mx-auto w-full max-w-sitio">
     <div class="flex flex-wrap justify-between gap-10">
       <div class="max-w-[360px]">
-        <img src={logo.src} alt="El Guía CR" width={logo.width} height={logo.height} class="block h-auto w-[200px]" />
+        <img src={logo.src} alt="El Guía CR" width={logo.width} height={logo.height} class="block h-auto w-[200px]" loading="lazy" decoding="async" />
         <p class="mt-6 font-titulos text-[22px]/[1.35] font-medium text-mostaza-calido italic">{t.footer.tagline}</p>
       </div>
       <div class="flex flex-wrap gap-12">
@@ -46,7 +47,7 @@ const navLink = 'inline-block py-1.5 text-crema-luminoso no-underline hover:text
           <p class="mb-3 text-label font-semibold tracking-eyebrow text-mostaza-calido uppercase">{t.footer.contactHeading}</p>
           <ul class="flex flex-col gap-2.5 text-subtitulo">
             <li>WhatsApp +506 8587 8863</li>
-            <li>contact@elguiacr.com</li>
+            <li>{contactEmail}</li>
             <li><a class={navLink} href={instagramUrl} rel="noopener" target="_blank">{t.footer.instagramLabel}</a></li>
             <li>Alajuela, Costa Rica</li>
           </ul>

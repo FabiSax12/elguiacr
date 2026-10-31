@@ -23,10 +23,10 @@ const storyTitle = 'mt-1 block font-titulos text-xl/[1.3] font-semibold';
   <div class="mt-9 scroll-timeline:h-[2600px] scroll-timeline:[view-timeline-name:--horiz]">
     <div class="scroll-timeline:sticky scroll-timeline:top-6">
       <div class="snap-x snap-mandatory overflow-x-auto [-webkit-overflow-scrolling:touch] scroll-timeline:overflow-x-clip" role="region" aria-label={t.stories.regionLabel} tabindex="0">
-        <div class="horiz-pista flex w-max gap-5 px-gutter pb-2 *:snap-start">
-          {stories.map((story) => story.format === 'reel' ? (
+        <div class="horiz-pista flex w-max gap-5 px-gutter pt-3 pb-2 *:snap-start">
+          {stories.map((story, index) => story.format === 'reel' ? (
             <figure class="w-[300px] flex-none">
-              <div class:list={['flex aspect-[9/16] flex-col justify-between rounded-imagen p-[18px]', story.background]}>
+              <div class:list={['flotar flex aspect-[9/16] flex-col justify-between rounded-imagen p-[18px]', story.background]} style={`--flotar-delay: ${index * -1.3}s;`}>
                 <span class="inline-flex size-13 items-center justify-center rounded-full border-2 border-crema-luminoso" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 16 16"><path d="M4 2.5 L13 8 L4 13.5 Z" fill="#fff7e8"></path></svg></span>
                 <p class="text-nota">{story.note}</p>
               </div>
@@ -34,9 +34,9 @@ const storyTitle = 'mt-1 block font-titulos text-xl/[1.3] font-semibold';
             </figure>
           ) : (
             <figure class="w-[520px] flex-none self-center">
-              <div class:list={['relative flex aspect-[4/3] flex-col justify-end overflow-clip rounded-imagen p-[18px]', story.background, story.color]}>
+              <div class:list={['flotar relative flex aspect-[4/3] flex-col justify-end overflow-clip rounded-imagen p-[18px]', story.background, story.color]} style={`--flotar-delay: ${index * -1.3}s;`}>
                 {story.image ? (
-                  <Image class="absolute inset-0 block size-full object-cover" src={story.image} width={1040} alt={story.alt ?? ''} />
+                  <Image class="absolute inset-0 block size-full object-cover" src={story.image} widths={[520, 1040]} sizes="520px" alt={story.alt ?? ''} />
                 ) : (
                   <p class="text-nota">{story.note}</p>
                 )}
