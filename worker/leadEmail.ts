@@ -1,9 +1,9 @@
 // HTML email sent to the business inbox for every contact form submission (design reference: src/assets/lead-email.preview.html).
 // Every value that comes from the visitor goes through `escapeHtml`, and links are built only from validated data.
-import { localeMeta } from '../src/i18n/config';
+import { localeMeta, SITE_URL } from '../src/i18n/config';
 import { privacyUpdated } from '../src/data/site';
 import { es } from '../src/i18n/es';
-import { logoSrc, waveSrc } from './leadEmailAssets';
+import { waveSrc } from './leadEmailAssets';
 import type { Submission } from './types';
 
 const entities: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
@@ -17,6 +17,8 @@ const sans = "font-family:'Source Sans 3', 'Segoe UI', Helvetica, Arial, sans-se
 const serif = "font-family:Alegreya, Georgia, 'Times New Roman', serif;";
 const sectionLabelStyle = `${sans}font-size:12px;line-height:16px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#1F5C46;`;
 const preheaderFiller = '&nbsp;&zwnj;'.repeat(40);
+// Hosted PNG built from src/assets/logo_colorful.svg; it exists on the production site once this change is released.
+const logoSrc = `${SITE_URL}/email-logo.png`;
 const replySubject = encodeURIComponent('Tu consulta en El Guía CR');
 
 const sectionLabel = (text: string) => `<div style="${sectionLabelStyle}">${escapeHtml(text)}</div>`;
@@ -152,7 +154,7 @@ export function buildLeadEmailHtml(data: Submission, options: { subject: string;
 
     <!-- Encabezado -->
     <tr><td class="px" bgcolor="#17362D" style="background:#17362D;padding:36px 40px 0 40px;">
-      <img class="logo" src="${logoSrc}" width="190" alt="El Guía CR" style="display:block;width:190px;height:auto;">
+      <img class="logo" src="${logoSrc}" width="190" height="85" alt="El Guía CR" style="display:block;width:190px;height:auto;${sans}font-size:22px;line-height:26px;font-weight:700;color:#FFF7E8;">
       <div style="padding-top:36px;${sans}font-size:12px;line-height:16px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#E0A632;">${escapeHtml(eyebrow)}</div>
       <h1 class="h1" style="margin:10px 0 0 0;${serif}font-size:40px;line-height:46px;font-weight:700;color:#FFF7E8;">${escapeHtml(data.name)}</h1>
       <div style="padding-top:10px;${sans}font-size:16px;line-height:24px;color:#FFF7E8;">Dejó una consulta en elguiacr.com<br><span style="font-weight:500;">${escapeHtml(submittedAt)}</span></div>
