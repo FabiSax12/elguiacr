@@ -18,6 +18,7 @@ export const privacySectionIds = [
 export type PrivacySectionId = (typeof privacySectionIds)[number];
 
 // Inline `{email}`, `{prodhab}` and `{cookies}` markers in the text become links in PrivacyPage.astro.
+// The controller's contact block is added there, as a `facts` block (see LegalBlock).
 export type PrivacyBlock = { p: string } | { list: string[] };
 
 export interface PrivacySectionText {

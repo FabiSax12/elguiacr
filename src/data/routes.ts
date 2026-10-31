@@ -15,8 +15,8 @@ export type LegalPageKey = (typeof legalPageKeys)[number];
 export const landingPageKeys = ['customTrips', 'localExperiences', 'teamBuilding', 'educationalTrips'] as const;
 export type LandingPageKey = (typeof landingPageKeys)[number];
 
-// Pages with their own component (home, the landings, the privacy policy) are not placeholders.
-export type PlaceholderPageKey = Exclude<PageKey, 'home' | 'privacy' | LandingPageKey>;
+// Pages with their own component (home, about, faq, the privacy and cookies pages, the landings) are not placeholders.
+export type PlaceholderPageKey = Exclude<PageKey, 'home' | 'about' | 'faq' | 'privacy' | 'cookies' | LandingPageKey>;
 
 // Path segment of each page per locale ('' is the locale root).
 const slugs: Record<PageKey, Record<Locale, string>> = {

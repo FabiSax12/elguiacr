@@ -1,0 +1,72 @@
+---
+import Footer from './Footer.astro';
+import Nav from './Nav.astro';
+import Layout from '../layouts/Layout.astro';
+import { getFaqGroups } from '../data/faq';
+import { getContactPath, getPagePath } from '../data/routes';
+import { getFaqSchema } from '../data/schema';
+import { getLocale, useTranslations } from '../i18n/utils';
+
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+const { faq } = t;
+const groups = getFaqGroups(locale);
+const contactHref = getContactPath(locale);
+const moreLinks = [
+  { href: getPagePath('privacy', locale), label: faq.moreLinks.privacy },
+  { href: getPagePath('cookies', locale), label: faq.moreLinks.cookies },
+];
+---
+
+<Layout title={faq.title} description={faq.description} pageKey="faq" schema={getFaqSchema(locale)}>
+  <div class="font-texto min-w-80 w-full overflow-x-clip bg-crema-luminoso leading-[normal] text-verde-oscuro">
+    <Nav pageKey="faq" />
+    <main>
+      <section class="px-gutter pt-seccion-alta pb-seccion">
+        <div class="mx-auto w-full max-w-sitio">
+          <p class="text-label font-semibold tracking-eyebrow text-verde-principal uppercase">{faq.eyebrow}</p>
+          <h1 class="mt-4 max-w-[900px] font-titulos text-titulo-a font-bold">{faq.heading}</h1>
+          <div class="mt-8 h-px max-w-[900px] bg-mostaza-calido"></div>
+          <p class="mt-8 max-w-[680px] text-lg/[1.6]">{faq.intro}</p>
+
+          <div class="mt-14 flex max-w-[860px] flex-col gap-14">
+            {groups.map((group) => (
+              <section aria-labelledby={`faq-${group.id}`}>
+                <h2 id={`faq-${group.id}`} class="font-titulos text-titulo-b font-bold">{group.heading}</h2>
+                <div class="mt-6 flex flex-col gap-3">
+                  {group.items.map((item) => (
+                    <details class="group rounded-tarjeta bg-arena px-6 py-4">
+                      <summary class="flex cursor-pointer list-none items-start justify-between gap-4 text-lg font-semibold marker:content-none">
+                        {item.question}
+                        <span class="shrink-0 transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+                      </summary>
+                      <p class="mt-3 text-subtitulo/[23px]">{item.answer}</p>
+                    </details>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+
+          <p class="mt-12 max-w-[860px] text-subtitulo">
+            {faq.moreLead}
+            {moreLinks.map((link, index) => (
+              <>{index > 0 && ' · '} <a class="font-semibold underline" href={link.href}>{link.label}</a></>
+            ))}
+          </p>
+        </div>
+      </section>
+
+      <section class="oscuro px-gutter py-seccion bg-verde-principal text-crema-luminoso">
+        <div class="mx-auto flex w-full max-w-sitio flex-wrap items-center justify-between gap-x-12 gap-y-8">
+          <div class="min-w-0 flex-[1_1_420px]">
+            <h2 class="max-w-[640px] font-titulos text-titulo-b font-bold">{faq.ctaTitle}</h2>
+            <p class="mt-4 max-w-[520px] text-lg/[1.5]">{faq.ctaText}</p>
+          </div>
+          <a class="inline-flex min-h-12 items-center gap-2.5 rounded-full bg-mostaza-calido px-7 text-base font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro" href={contactHref}>{t.nav.cta} <span class="inline-block" aria-hidden="true">→</span></a>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </div>
+</Layout>

@@ -26,6 +26,8 @@ export const dataController: { legalName?: string; idNumber?: string; address?: 
 export const privacyUpdated = '2026-10-30';
 // TODO(client): confirm retention period. 24 months after the last contact is our proposal.
 export const privacyRetentionMonths = 24;
+// ISO date of the current cookies page text.
+export const cookiesUpdated = '2026-10-30';
 export const prodhabUrl = 'https://www.prodhab.go.cr';
 
 // Mirrors of the `verde-oscuro` and `crema-luminoso` tokens in global.css, for places CSS cannot reach
