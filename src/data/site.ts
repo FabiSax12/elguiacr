@@ -5,7 +5,7 @@ export const siteShortName = 'El Guía';
 
 export const contactEmail = 'contact@elguiacr.com';
 // E.164 without the plus sign, as wa.me expects it.
-export const whatsappNumber = '50685878863';
+export const whatsappNumber = '50688422112';
 export const instagramUrl = 'https://instagram.com/elguia.cr';
 
 // Ciudad Quesada is the district seat of the San Carlos canton; schema.org has no canton field.
