@@ -7,9 +7,11 @@ interface Props {
   experience: Experience;
   /** Position in the grid, used to desync the floating animation of neighbouring cards. */
   index?: number;
+  /** Overrides the card's own contact link, e.g. the form on the same page. */
+  contactHref?: string;
 }
 
-const { experience, index = 0 } = Astro.props;
+const { experience, index = 0, contactHref = experience.contactHref } = Astro.props;
 const t = useTranslations(getLocale(Astro.currentLocale));
 const labels = t.experiencesPage;
 ---
@@ -30,6 +32,6 @@ const labels = t.experiencesPage;
       <div class="flex gap-1.5"><dt class="font-semibold">{labels.durationLabel}:</dt><dd>{experience.duration}</dd></div>
       <div class="flex gap-1.5"><dt class="font-semibold">{labels.forLabel}:</dt><dd>{experience.audiences.map((audience) => audience.label).join(' · ')}</dd></div>
     </dl>
-    <a class="mt-auto inline-flex min-h-11 items-center gap-2.5 self-start pt-3 text-subtitulo font-semibold text-verde-principal underline-offset-4 hover:underline" href={experience.contactHref}>{t.nav.cta} <span class="inline-block" aria-hidden="true">→</span></a>
+    <a class="mt-auto inline-flex min-h-11 items-center gap-2.5 self-start pt-3 text-subtitulo font-semibold text-verde-principal underline-offset-4 hover:underline" href={contactHref}>{t.nav.cta} <span class="inline-block" aria-hidden="true">→</span></a>
   </div>
 </article>

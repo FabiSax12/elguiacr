@@ -4,7 +4,8 @@ import { locales } from '../src/i18n/config';
 import { contactMethodIds, interestIds, timingIds, timingIdsWithDate, zoneIds, type InterestId } from '../src/data/contactForm';
 import { privacyUpdated } from '../src/data/site';
 import { es } from '../src/i18n/es';
-import { buildLeadEmailHtml } from './leadEmail';
+import { buildAutoReply, canAutoReply } from './autoReply';
+import { buildLeadEmailHtml, originRows } from './leadEmail';
 import type { Submission } from './types';
 
 interface Env {
@@ -16,11 +17,17 @@ interface Env {
   TURNSTILE_HOSTNAMES?: string;
 }
 
+// The part of the Workers ExecutionContext this file uses.
+interface Context {
+  waitUntil(promise: Promise<unknown>): void;
+}
+
 type ErrorCode = 'validation' | 'captcha' | 'send';
 
 const MAX_BODY_BYTES = 20_000;
 const MAX_WHAT = 2000;
 const MAX_FIELD = 200;
+const MAX_ORIGIN = 100;
 const TURNSTILE_ACTION = 'contact';
 const TURNSTILE_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 const RESEND_URL = 'https://api.resend.com/emails';
@@ -43,6 +50,14 @@ function text(value: unknown, max: number): string | undefined {
 
 function choice<T extends string>(value: unknown, ids: readonly T[]): T | undefined {
   return ids.find((id) => id === value);
+}
+
+// Lead-source values come from the page URL, so they are cleaned instead of rejected: a long or odd campaign
+// parameter must not cost us the lead. Control characters are dropped and the length is capped.
+function originText(value: unknown): string | undefined {
+  if (typeof value !== 'string') return undefined;
+  const cleaned = value.replace(/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u2028-\u202e\u2066-\u2069]/g, '').trim();
+  return [...cleaned].slice(0, MAX_ORIGIN).join('') || undefined;
 }
 
 // Returns undefined for anything the form could not have produced, so a client bug and a hand-made request both end up as a 400.
@@ -79,6 +94,8 @@ function parse(body: Record<string, unknown>): Submission | undefined {
   const zoneName = optionalText(body.zoneName);
   if (!date.ok || !zoneName.ok) return undefined;
 
+  const page = originText(body.page);
+
   return {
     locale: choice(body.locale, locales) ?? 'es',
     segment,
@@ -93,6 +110,10 @@ function parse(body: Record<string, unknown>): Submission | undefined {
     date: timing && timingIdsWithDate.some((id) => id === timing) ? date.value : undefined,
     zone,
     zoneName: zone === 'yes' ? zoneName.value : undefined,
+    page: page?.startsWith('/') ? page : undefined,
+    utmSource: originText(body.utmSource),
+    utmMedium: originText(body.utmMedium),
+    utmCampaign: originText(body.utmCampaign),
   };
 }
 
@@ -124,6 +145,7 @@ function buildEmail(data: Submission, submittedAt: Date) {
   const line = (label: string, value: string | undefined) => (value ? `${label}: ${value}` : undefined);
   const timing = data.timing ? [contact.timings[data.timing], data.date].filter(Boolean).join(' · ') : undefined;
   const zone = data.zone ? [contact.zones[data.zone], data.zoneName].filter(Boolean).join(' · ') : undefined;
+  const origin = originRows(data);
   const contactValue = data.method === 'whatsapp' ? data.phone : data.email;
 
   const body = [
@@ -141,6 +163,7 @@ function buildEmail(data: Submission, submittedAt: Date) {
     line('Cuándo', timing),
     line('Zona', zone),
     line('Idioma del sitio', data.locale),
+    ...(origin.length ? ['', 'Origen', ...origin.map(([label, value]) => `${label}: ${value}`)] : []),
     '',
     // Evidence of the consent (Ley 8968, art. 5.2): the policy version the visitor accepted and when.
     line('Consentimiento', `aceptó la política de privacidad (versión ${privacyUpdated}) el ${submittedAt.toISOString()}`),
@@ -188,7 +211,24 @@ async function sendEmail(data: Submission, env: Env): Promise<boolean> {
   }
 }
 
-async function handleContact(request: Request, env: Env): Promise<Response> {
+// Best effort: the lead is already delivered, so nothing in here may throw or change the response. Logs carry no visitor data.
+async function sendAutoReply(data: Submission, env: Env): Promise<void> {
+  try {
+    if (!canAutoReply(data)) return;
+    const { subject, html, text } = buildAutoReply(data);
+    const response = await fetch(RESEND_URL, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from: env.CONTACT_FROM, to: [data.email], reply_to: env.CONTACT_TO, subject, html, text }),
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!response.ok) console.warn('auto-reply rejected', response.status);
+  } catch (error) {
+    console.warn('auto-reply failed', error instanceof Error ? error.name : 'unknown');
+  }
+}
+
+async function handleContact(request: Request, env: Env, context: Context): Promise<Response> {
   const raw = await request.text();
   if (raw.length > MAX_BODY_BYTES) return fail('validation', 400);
 
@@ -209,14 +249,17 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
 
   if (!(await passesTurnstile(fields.turnstileToken, env.TURNSTILE_SECRET_KEY, request.headers.get('CF-Connecting-IP'), env.TURNSTILE_HOSTNAMES))) return fail('captcha', 400);
 
-  return (await sendEmail(submission, env)) ? json({ ok: true }) : fail('send', 502);
+  if (!(await sendEmail(submission, env))) return fail('send', 502);
+  // After the response goes out, so the visitor never waits for it.
+  context.waitUntil(sendAutoReply(submission, env));
+  return json({ ok: true });
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, context: Context): Promise<Response> {
     const { pathname } = new URL(request.url);
     if (pathname !== '/api/contact' && pathname !== '/api/contact/') return json({ ok: false, error: 'not_found' }, 404);
     if (request.method !== 'POST') return json({ ok: false, error: 'method_not_allowed' }, 405, { Allow: 'POST' });
-    return handleContact(request, env);
+    return handleContact(request, env, context);
   },
 };

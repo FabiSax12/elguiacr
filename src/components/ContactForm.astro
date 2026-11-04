@@ -2,12 +2,23 @@
 import { getLocale, useTranslations } from '../i18n/utils';
 import { getPagePath, getWhatsappUrl } from '../data/routes';
 import { contactEmail } from '../data/site';
-import { getSegments } from '../data/audiences';
+import { getSegments, type AudienceId } from '../data/audiences';
 import { getContactChoices, timingIdsWithDate } from '../data/contactForm';
+import { homeEyebrow } from '../data/placeholders';
+
+interface Props {
+  // Set on the audience landings: that segment starts selected and the home section number is dropped.
+  segment?: AudienceId;
+  // Pre-filled text of the WhatsApp link shown when sending fails.
+  whatsappMessage?: string;
+}
+
+const { segment, whatsappMessage } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 const t = useTranslations(locale);
 const segments = getSegments(locale);
 const { methods, interests, timings, zones } = getContactChoices(locale);
+const eyebrow = segment ? t.contact.eyebrow.replace(/^\d+ · /, '') : homeEyebrow(t.contact.eyebrow);
 
 const label = 'block text-subtitulo font-semibold';
 const help = 'mt-1 text-nota text-gris-texto';
@@ -19,10 +30,10 @@ const campoCorto = `${campo} max-w-[420px]`;
 const textarea = `${campo} min-h-24 resize-y`;
 ---
 
-<section id="contanos" data-error-choice={t.contact.errorChoice} data-error-field={t.contact.errorField} data-error-email={t.contact.errorEmail} data-error-consent={t.contact.errorConsent} data-error-send={t.contact.errorSend} data-error-captcha={t.contact.errorCaptcha} data-sending={t.contact.sending} data-locale={locale} data-turnstile-key={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '0x4AAAAAAFsQDpFNW1NurXpJ'} class="flex min-h-svh flex-col justify-center bg-crema-luminoso px-gutter py-seccion">
+<section id="contanos" data-error-choice={t.contact.errorChoice} data-error-field={t.contact.errorField} data-error-email={t.contact.errorEmail} data-error-consent={t.contact.errorConsent} data-error-send={t.contact.errorSend} data-error-captcha={t.contact.errorCaptcha} data-sending={t.contact.sending} data-locale={locale} data-default-segment={segment} data-turnstile-key={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '0x4AAAAAAFsQDpFNW1NurXpJ'} class="flex min-h-svh flex-col justify-center bg-crema-luminoso px-gutter py-seccion">
   <div class="mx-auto w-full flex max-w-sitio flex-wrap items-stretch">
     <div class="oscuro relative min-w-0 flex-[1_1_400px] overflow-clip rounded-tarjeta bg-verde-principal p-[clamp(32px,4vw,56px)] text-crema-luminoso">
-      <p class="text-label font-semibold tracking-eyebrow text-crema-luminoso uppercase">{t.contact.eyebrow}</p>
+      <p class="text-label font-semibold tracking-eyebrow text-crema-luminoso uppercase">{eyebrow}</p>
       <h2 class="mt-4 font-titulos text-[length:clamp(26px,2.7vw,37px)]/[1.05] font-bold">{t.contact.title}</h2>
       <p class="mt-5 text-entrada/[1.6]">{t.contact.intro}</p>
       <ol class="mt-10 flex flex-col gap-[22px]">
@@ -122,7 +133,7 @@ const textarea = `${campo} min-h-24 resize-y`;
           <div data-turnstile class="basis-full empty:hidden"></div>
           <button type="button" class="inline-flex min-h-13 cursor-pointer items-center gap-2.5 rounded-full border-0 bg-verde-principal px-7 text-base font-semibold text-crema-luminoso hover:bg-verde-oscuro disabled:cursor-wait disabled:opacity-70" data-submit><span data-submit-label>{t.contact.submit}</span> <span class="inline-block" aria-hidden="true">→</span></button>
           <p data-send-error role="alert" class={`${error} basis-full`}></p>
-          <p data-send-fallback hidden class="basis-full text-nota text-gris-texto"><a class="font-semibold underline" href={`mailto:${contactEmail}`}>{contactEmail}</a> · <a class="font-semibold underline" href={getWhatsappUrl('')}>WhatsApp</a></p>
+          <p data-send-fallback hidden class="basis-full text-nota text-gris-texto"><a class="font-semibold underline" href={`mailto:${contactEmail}`}>{contactEmail}</a> · <a class="font-semibold underline" href={getWhatsappUrl(whatsappMessage ?? t.act.whatsappMessage)}>WhatsApp</a></p>
         </div>
       </div>
 
@@ -180,11 +191,12 @@ const textarea = `${campo} min-h-24 resize-y`;
       ids.add(id);
     };
 
-    // Pages elsewhere on the site preselect a segment via ?segment=<id>.
+    // Pages elsewhere on the site preselect a segment via ?segment=<id>; a landing sets its own default.
+    const hasSegmentChip = (id: string | null | undefined): id is string =>
+      !!id && !!section.querySelector(`[data-group="segment"] [data-chip="${CSS.escape(id)}"]`);
     const requestedSegment = new URLSearchParams(window.location.search).get('segment');
-    if (requestedSegment && section.querySelector(`[data-group="segment"] [data-chip="${CSS.escape(requestedSegment)}"]`)) {
-      picked('segment').add(requestedSegment);
-    }
+    const initialSegment = [requestedSegment, section.dataset.defaultSegment].find(hasSegmentChip);
+    if (initialSegment) picked('segment').add(initialSegment);
 
     const render = () => {
       groups.forEach((group) => {
@@ -358,6 +370,13 @@ const textarea = `${campo} min-h-24 resize-y`;
       if (submitLabel) submitLabel.textContent = value ? (messages.sending ?? idleLabel) : idleLabel;
     };
 
+    // Lead source, read from the URL when the form is sent and kept nowhere: no cookies, no web storage.
+    const leadSource = () => {
+      const params = new URLSearchParams(window.location.search);
+      const param = (name: string) => (params.get(name) ?? '').trim().slice(0, 100);
+      return { utmSource: param('utm_source'), utmMedium: param('utm_medium'), utmCampaign: param('utm_campaign'), page: window.location.pathname };
+    };
+
     const submit = async () => {
       if (sending || !validate()) return;
       setSending(true);
@@ -384,6 +403,7 @@ const textarea = `${campo} min-h-24 resize-y`;
             zoneName: valueOf('f-zona-nombre'),
             website: valueOf('f-website'),
             consent: section.querySelector<HTMLInputElement>('#f-consentimiento')?.checked === true,
+            ...leadSource(),
             turnstileToken,
           }),
         });

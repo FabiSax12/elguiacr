@@ -4,10 +4,12 @@ import friendsHikeLaughing from '../assets/friends-hike-laughing.webp';
 import type { Locale } from '../i18n/config';
 import { useTranslations } from '../i18n/utils';
 
+import { isPageVisible } from './placeholders';
 import { navPageKeys, type NavPageKey } from './routes';
 
-// Main navigation: the brief's seven items, in order.
-export const navLinks: NavPageKey[] = [...navPageKeys];
+// Main navigation: the brief's seven items, in order. The pages still being written are left out until
+// PUBLIC_SHOW_PLACEHOLDER_PAGES is on (see placeholders.ts).
+export const navLinks: NavPageKey[] = navPageKeys.filter(isPageVisible);
 
 export const pillarIds = ['knowledge', 'allies', 'judgment', 'contact'] as const;
 export type PillarId = (typeof pillarIds)[number];

@@ -16,4 +16,9 @@ export interface Submission {
   date?: string;
   zone?: ZoneId;
   zoneName?: string;
+  // Lead source: read from the page URL in memory when the form is sent, never stored in the browser.
+  page?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
 }
