@@ -5,8 +5,8 @@ export const siteShortName = 'El Guía';
 
 export const contactEmail = 'contact@elguiacr.com';
 // E.164 without the plus sign, as wa.me expects it.
-export const whatsappNumber = '50688422112';
-// Costa Rican numbers (506 + 8 digits) read as "+506 8842 2112"; anything else just gets the plus sign.
+export const whatsappNumber = '50685878863';
+// Costa Rican numbers (506 + 8 digits) read as "+506 8587 8863"; anything else just gets the plus sign.
 export const whatsappDisplay = whatsappNumber.replace(/^(506)(\d{4})(\d{4})$/, '+$1 $2 $3').replace(/^(?=\d)/, '+');
 export const instagramUrl = 'https://instagram.com/elguia.cr';
 
