@@ -1,6 +1,5 @@
 import { getAbsoluteLocaleUrl, getRelativeLocaleUrl } from 'astro:i18n';
 import type { Locale } from '../i18n/config';
-import { whatsappNumber } from './site';
 
 export const pageKeys = ['home', 'experiences', 'destinations', 'transport', 'about', 'blog', 'faq', 'privacy', 'terms', 'cookies', 'cancellations', 'customTrips', 'localExperiences', 'teamBuilding', 'educationalTrips'] as const;
 export type PageKey = (typeof pageKeys)[number];
@@ -52,8 +51,4 @@ export function getContactPath(locale: Locale, segment?: string) {
   return `${getPagePath('home', locale)}${query}#contanos`;
 }
 
-export { instagramUrl } from './site';
-
-export function getWhatsappUrl(message: string) {
-  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-}
+export { getWhatsappUrl, instagramUrl } from './site';

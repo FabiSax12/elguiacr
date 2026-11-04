@@ -6,6 +6,7 @@ import '@fontsource-variable/alegreya';
 import '@fontsource-variable/alegreya/wght-italic.css';
 import '@fontsource-variable/source-sans-3';
 import '@fontsource-variable/source-sans-3/wght-italic.css';
+import WhatsappFloat from '../components/WhatsappFloat.astro';
 import '../styles/global.css';
 import defaultImage from '../assets/rio-celeste.webp';
 import { getPageUrl, type PageKey } from '../data/routes';
@@ -30,9 +31,11 @@ interface Props {
   imageAlt?: string;
   // Page-specific JSON-LD nodes, merged into the same @graph as the site-wide ones.
   schema?: SchemaNode[];
+  // Pre-filled text of the floating WhatsApp button; defaults to the generic one.
+  whatsappMessage?: string;
 }
 
-const { title = t.meta.title, description = t.meta.description, pageKey, noindex = false, image = defaultImage, imageAlt = t.meta.imageAlt, schema = [] } = Astro.props;
+const { title = t.meta.title, description = t.meta.description, pageKey, noindex = false, image = defaultImage, imageAlt = t.meta.imageAlt, schema = [], whatsappMessage = t.act.whatsappMessage } = Astro.props;
 
 const canonical = pageKey && getPageUrl(pageKey, locale);
 const alternates = pageKey ? locales.map((code) => ({ code, href: getPageUrl(pageKey, code) })) : [];
@@ -91,5 +94,6 @@ const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': grap
   </head>
   <body class="bg-verde-oscuro">
     <slot />
+    <WhatsappFloat message={whatsappMessage} />
   </body>
 </html>

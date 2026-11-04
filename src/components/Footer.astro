@@ -2,16 +2,19 @@
 import { getLocale, useTranslations } from '../i18n/utils';
 import logo from '../assets/logo.svg';
 import { navLinks } from '../data/content';
-import { landingPageKeys, getPagePath, instagramUrl, legalPageKeys } from '../data/routes';
-import { contactEmail } from '../data/site';
+import { isPageVisible } from '../data/placeholders';
+import { landingPageKeys, getPagePath, getWhatsappUrl, instagramUrl, legalPageKeys } from '../data/routes';
+import { contactEmail, whatsappDisplay } from '../data/site';
 
 const locale = getLocale(Astro.currentLocale);
 const t = useTranslations(locale);
 
+const legalKeys = legalPageKeys.filter(isPageVisible);
+
 const navLink = 'inline-block py-1.5 text-crema-luminoso no-underline hover:text-mostaza-calido';
 ---
 
-<footer class="oscuro bg-verde-oscuro px-gutter pt-12 pb-8 text-crema-luminoso">
+<footer class="oscuro bg-verde-oscuro px-gutter pt-12 pb-24 text-crema-luminoso">
   <div class="mx-auto w-full max-w-sitio">
     <div class="flex flex-wrap justify-between gap-10">
       <div class="max-w-[360px]">
@@ -38,7 +41,7 @@ const navLink = 'inline-block py-1.5 text-crema-luminoso no-underline hover:text
         <div>
           <p class="mb-3 text-label font-semibold tracking-eyebrow text-mostaza-calido uppercase">{t.footer.legalHeading}</p>
           <ul class="flex flex-col gap-1 text-subtitulo">
-            {legalPageKeys.map((key) => (
+            {legalKeys.map((key) => (
               <li><a class={navLink} href={getPagePath(key, locale)}>{t.footer.legalLinks[key]}</a></li>
             ))}
           </ul>
@@ -46,8 +49,8 @@ const navLink = 'inline-block py-1.5 text-crema-luminoso no-underline hover:text
         <div>
           <p class="mb-3 text-label font-semibold tracking-eyebrow text-mostaza-calido uppercase">{t.footer.contactHeading}</p>
           <ul class="flex flex-col gap-2.5 text-subtitulo">
-            <li>WhatsApp +506 8842 2112</li>
-            <li>{contactEmail}</li>
+            <li><a class={navLink} href={getWhatsappUrl(t.act.whatsappMessage)} rel="noopener" target="_blank">WhatsApp {whatsappDisplay}</a></li>
+            <li><a class={navLink} href={`mailto:${contactEmail}`}>{contactEmail}</a></li>
             <li><a class={navLink} href={instagramUrl} rel="noopener" target="_blank">{t.footer.instagramLabel}</a></li>
             <li>Alajuela, Costa Rica</li>
           </ul>

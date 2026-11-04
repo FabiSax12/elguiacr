@@ -25,6 +25,8 @@ export interface LandingText {
   faq: { question: string; answer: string }[];
   ctaTitle: string;
   ctaText: string;
+  // Pre-filled text of the floating WhatsApp button on this landing.
+  whatsappMessage: string;
 }
 
 const travelers: Record<Locale, LandingText> = {
@@ -59,6 +61,7 @@ const travelers: Record<Locale, LandingText> = {
     ],
     ctaTitle: 'Cuéntanos cómo imaginas tu viaje.',
     ctaText: 'No hace falta tener todo claro. Con unas pocas respuestas empezamos a armar la propuesta.',
+    whatsappMessage: 'Hola, quiero que me ayuden a planear un viaje personalizado a Costa Rica con El Guía CR.',
   },
   en: {
     title: 'Custom Costa Rica Trip & Itinerary Planner | El Guía CR',
@@ -91,6 +94,7 @@ const travelers: Record<Locale, LandingText> = {
     ],
     ctaTitle: 'Tell us how you picture your trip.',
     ctaText: 'You do not need to have it all figured out. A few answers are enough to start building a proposal.',
+    whatsappMessage: 'Hi, I would like help planning a custom trip to Costa Rica with El Guía CR.',
   },
 };
 
@@ -126,6 +130,7 @@ const locals: Record<Locale, LandingText> = {
     ],
     ctaTitle: 'Cuéntanos qué plan tienes en mente.',
     ctaText: 'Dinos con quién vas y qué quieren vivir. Nosotros armamos el resto.',
+    whatsappMessage: 'Hola, quiero que me ayuden a organizar una experiencia en Costa Rica para mí y mi grupo con El Guía CR.',
   },
   en: {
     title: 'Things to Do in Costa Rica for Locals | El Guía CR',
@@ -158,6 +163,7 @@ const locals: Record<Locale, LandingText> = {
     ],
     ctaTitle: 'Tell us what you have in mind.',
     ctaText: 'Let us know who is coming and what you want to do. We will build the rest.',
+    whatsappMessage: 'Hi, I would like help organizing an experience in Costa Rica for me and my group with El Guía CR.',
   },
 };
 
@@ -193,6 +199,7 @@ const companies: Record<Locale, LandingText> = {
     ],
     ctaTitle: 'Hablemos de tu equipo.',
     ctaText: 'Cuéntanos el objetivo y el tamaño del grupo. Te respondemos con una propuesta pensada para ustedes.',
+    whatsappMessage: 'Hola, quiero cotizar un team building en Costa Rica para mi empresa con El Guía CR.',
   },
   en: {
     title: 'Costa Rica Team Building & Corporate Retreats | El Guía CR',
@@ -225,6 +232,7 @@ const companies: Record<Locale, LandingText> = {
     ],
     ctaTitle: 'Let\'s talk about your team.',
     ctaText: 'Tell us the goal and the size of the group. We will reply with a proposal built for you.',
+    whatsappMessage: 'Hi, I would like a quote for a team building in Costa Rica for my company with El Guía CR.',
   },
 };
 
@@ -260,6 +268,7 @@ const education: Record<Locale, LandingText> = {
     ],
     ctaTitle: 'Planeemos tu próxima gira.',
     ctaText: 'Cuéntanos el curso, el nivel y lo que quieres que aprenda el grupo. Armamos una propuesta contigo.',
+    whatsappMessage: 'Hola, quiero planear una gira educativa en Costa Rica con El Guía CR.',
   },
   en: {
     title: 'Educational Trips & Field Trips in Costa Rica | El Guía CR',
@@ -292,6 +301,7 @@ const education: Record<Locale, LandingText> = {
     ],
     ctaTitle: 'Let\'s plan your next trip.',
     ctaText: 'Tell us the course, the level and what you want the group to learn. We will build a proposal with you.',
+    whatsappMessage: 'Hi, I would like to plan an educational trip in Costa Rica with El Guía CR.',
   },
 };
 
