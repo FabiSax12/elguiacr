@@ -12,6 +12,7 @@ import Stories from './Stories.astro';
 import Ticker from './Ticker.astro';
 import Values from './Values.astro';
 import Layout from '../layouts/Layout.astro';
+import { showPlaceholderPages } from '../data/placeholders';
 ---
 
 <Layout pageKey="home">
@@ -23,7 +24,7 @@ import Layout from '../layouts/Layout.astro';
     <Audiences />
     <HowItWorks />
     <Founder />
-    <Stories />
+    {showPlaceholderPages && <Stories />}
     <Values />
     <ContactForm />
     <ActBand />

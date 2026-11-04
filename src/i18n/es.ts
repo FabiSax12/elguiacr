@@ -156,6 +156,7 @@ const privacySections: Record<PrivacySectionId, PrivacySectionText> = {
       { p: 'Estos son opcionales: tus intereses, cuántas personas participarían, la fecha aproximada y la zona de Costa Rica que tienes en mente. Si los dejas en blanco te respondemos igual, pero con menos información para ajustar la primera propuesta.' },
       { p: 'Si no das los datos obligatorios, el formulario no se envía y no podemos responder tu consulta.' },
       { p: 'Además guardamos la fecha y la hora en que aceptaste esta política, su versión y el idioma del sitio.' },
+      { p: 'También guardamos de dónde vienes: la página del sitio desde la que nos escribiste y, si llegaste por un enlace de campaña, sus parámetros de origen (utm_source, utm_medium y utm_campaign). El sitio los lee de la dirección de la página en el momento de enviar el formulario y no los guarda en tu navegador.' },
       { p: 'Si solo visitas el sitio, sin escribirnos, no te pedimos ningún dato. Cloudflare Web Analytics registra de forma agregada qué página se visitó, desde qué página llegaste, el tipo de navegador y de dispositivo, y métricas de rendimiento, sin identificarte.' },
     ],
   },
@@ -163,7 +164,7 @@ const privacySections: Record<PrivacySectionId, PrivacySectionText> = {
     heading: 'Para qué usamos tus datos',
     blocks: [
       { p: 'Usamos tus datos solo para:' },
-      { list: ['responder tu consulta y preparar una cotización o un itinerario;', 'guardar el registro de la conversación y de la autorización que diste;', 'prevenir abusos del formulario, con la verificación de Turnstile y un campo trampa para robots;', 'medir de forma agregada cuántas personas visitan el sitio, para mejorarlo, sin identificar a quienes lo visitan.'] },
+      { list: ['responder tu consulta y preparar una cotización o un itinerario;', 'guardar el registro de la conversación y de la autorización que diste;', 'saber desde qué página o campaña nos escribiste, para entender qué contenido funciona;', 'si elegiste el correo, enviarte un aviso automático de que recibimos tu consulta;', 'prevenir abusos del formulario, con la verificación de Turnstile y un campo trampa para robots;', 'medir de forma agregada cuántas personas visitan el sitio, para mejorarlo, sin identificar a quienes lo visitan.'] },
       { p: 'El tratamiento consiste en recibir tu consulta, guardarla, leerla, responderla y, cuando termina el plazo de conservación, borrarla o anonimizarla.' },
       { p: 'No usamos tus datos para mercadeo ni boletines, no hacemos perfiles y no tomamos decisiones automatizadas sobre ti, salvo la verificación contra robots. Si algún día queremos usarlos para otra cosa, te pedimos tu autorización antes.' },
     ],
@@ -172,7 +173,7 @@ const privacySections: Record<PrivacySectionId, PrivacySectionText> = {
     heading: 'Quién recibe tus datos',
     blocks: [
       { p: 'Dentro de El Guía CR, tus datos los consulta solo el equipo que atiende las consultas. Para que el formulario funcione usamos estos proveedores, que los procesan por encargo nuestro:' },
-      { list: ['Cloudflare: aloja el sitio, cuenta las visitas de forma agregada con Web Analytics, hace la verificación Turnstile y ejecuta el servicio que recibe el formulario.', 'Resend: envía tu consulta por correo a nuestro buzón.', 'Hostinger: aloja el buzón {email}, donde llega tu consulta.', 'WhatsApp (Meta): solo si eliges que te contactemos por WhatsApp, porque la conversación pasa por su servicio.'] },
+      { list: ['Cloudflare: aloja el sitio, cuenta las visitas de forma agregada con Web Analytics, hace la verificación Turnstile y ejecuta el servicio que recibe el formulario.', 'Resend: envía tu consulta por correo a nuestro buzón y, si elegiste el correo, el aviso de recibido que te enviamos.', 'Hostinger: aloja el buzón {email}, donde llega tu consulta.', 'WhatsApp (Meta): solo si eliges que te contactemos por WhatsApp, porque la conversación pasa por su servicio.'] },
       { p: 'Estos proveedores pueden procesar datos fuera de Costa Rica, por ejemplo en Estados Unidos. Al marcar la casilla del formulario nos autorizas a enviarles tus datos para eso.' },
       { p: 'No vendemos tus datos, no los compartimos con nadie más y no los usamos para mercadeo.' },
     ],
@@ -499,6 +500,18 @@ export const es = {
     text: 'Cuéntanos qué estás buscando. Una persona de El Guía te responde.',
     whatsappCta: 'Escríbenos por WhatsApp',
     whatsappMessage: 'Hola, estoy interesado/a en una experiencia con El Guía CR. ¿Me pueden ayudar?',
+  },
+  // Confirmation emailed to visitors who chose email (worker/autoReply.ts). Nothing from the visitor goes in the subject.
+  autoReply: {
+    subject: 'Recibimos tu consulta | El Guía CR',
+    preheader: 'Una persona de El Guía te responde en menos de un día hábil.',
+    eyebrow: 'Consulta recibida',
+    heading: 'Gracias por escribirnos',
+    greeting: 'Hola',
+    text: 'Recibimos tu consulta. Una persona de El Guía te responde en menos de un día hábil.',
+    whatsappLead: 'Si prefieres escribirnos ahora, también estamos en WhatsApp:',
+    replyNote: 'Si quieres agregar algo, responde a este correo.',
+    automatic: 'Mensaje automático. Lo recibes porque dejaste tu consulta en elguiacr.com.',
   },
   experiencesPage: {
     eyebrow: 'Experiencias',

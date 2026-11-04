@@ -21,6 +21,7 @@ const privacySections: Record<PrivacySectionId, PrivacySectionText> = {
       { p: 'This data is optional: your interests, how many people would take part, the approximate date and the part of Costa Rica you have in mind. If you leave it blank we still reply, but with less to go on for a first proposal.' },
       { p: 'If you do not provide the required data, the form cannot be sent and we cannot answer your inquiry.' },
       { p: 'We also keep the date and time you accepted this policy, its version and the language of the site.' },
+      { p: 'We also keep where you came from: the page of the site you wrote to us from and, if you arrived through a campaign link, its source parameters (utm_source, utm_medium and utm_campaign). The site reads them from the page address when you send the form and does not store them in your browser.' },
       { p: 'If you only visit the site without writing to us, we ask you for no data. Cloudflare Web Analytics records, in aggregate, which page was visited, which page you came from, the type of browser and device, and performance metrics, without identifying you.' },
     ],
   },
@@ -28,7 +29,7 @@ const privacySections: Record<PrivacySectionId, PrivacySectionText> = {
     heading: 'What we use your data for',
     blocks: [
       { p: 'We use your data only to:' },
-      { list: ['answer your inquiry and prepare a quote or an itinerary;', 'keep a record of the conversation and of the authorization you gave;', 'prevent abuse of the form, with the Turnstile check and a trap field for bots;', 'measure, in aggregate, how many people visit the site so we can improve it, without identifying visitors.'] },
+      { list: ['answer your inquiry and prepare a quote or an itinerary;', 'keep a record of the conversation and of the authorization you gave;', 'know which page or campaign you wrote to us from, to understand which content works;', 'if you chose email, send you an automatic notice that we received your inquiry;', 'prevent abuse of the form, with the Turnstile check and a trap field for bots;', 'measure, in aggregate, how many people visit the site so we can improve it, without identifying visitors.'] },
       { p: 'Processing means receiving your inquiry, storing it, reading it, replying to it and, once the retention period ends, deleting or anonymizing it.' },
       { p: 'We do not use your data for marketing or newsletters, we do not build profiles and we make no automated decisions about you, apart from the bot check. If we ever want to use it for something else, we will ask for your authorization first.' },
     ],
@@ -37,7 +38,7 @@ const privacySections: Record<PrivacySectionId, PrivacySectionText> = {
     heading: 'Who receives your data',
     blocks: [
       { p: 'Inside El Guía CR, only the team that handles inquiries can see your data. To make the form work we use these providers, who process it on our behalf:' },
-      { list: ['Cloudflare: hosts the site, counts visits in aggregate with Web Analytics, runs the Turnstile check and runs the service that receives the form.', 'Resend: emails your inquiry to our mailbox.', 'Hostinger: hosts the {email} mailbox, where your inquiry arrives.', 'WhatsApp (Meta): only if you choose to be contacted on WhatsApp, because the conversation goes through their service.'] },
+      { list: ['Cloudflare: hosts the site, counts visits in aggregate with Web Analytics, runs the Turnstile check and runs the service that receives the form.', 'Resend: emails your inquiry to our mailbox and, if you chose email, the receipt notice we send you.', 'Hostinger: hosts the {email} mailbox, where your inquiry arrives.', 'WhatsApp (Meta): only if you choose to be contacted on WhatsApp, because the conversation goes through their service.'] },
       { p: 'These providers may process data outside Costa Rica, for example in the United States. By ticking the box on the form you authorize us to send them your data for that purpose.' },
       { p: 'We do not sell your data, we do not share it with anyone else and we do not use it for marketing.' },
     ],
@@ -433,6 +434,18 @@ export const en: Dictionary = {
     text: 'Tell us what you\'re looking for. A real person at El Guía will get back to you.',
     whatsappCta: 'Message us on WhatsApp',
     whatsappMessage: 'Hi, I\'m interested in an experience with El Guía CR. Can you help me?',
+  },
+  // Confirmation emailed to visitors who chose email (worker/autoReply.ts). Nothing from the visitor goes in the subject.
+  autoReply: {
+    subject: 'We received your inquiry | El Guía CR',
+    preheader: 'A person from El Guía replies within one business day.',
+    eyebrow: 'Inquiry received',
+    heading: 'Thanks for writing to us',
+    greeting: 'Hi',
+    text: 'We received your inquiry. A person from El Guía replies within one business day.',
+    whatsappLead: 'If you would rather write to us now, we are also on WhatsApp:',
+    replyNote: 'If you want to add anything, reply to this email.',
+    automatic: 'Automatic message. You are receiving it because you left your inquiry on elguiacr.com.',
   },
   experiencesPage: {
     eyebrow: 'Experiences',

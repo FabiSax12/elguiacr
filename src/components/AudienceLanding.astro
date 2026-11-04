@@ -1,5 +1,6 @@
 ---
 import ActBand from './ActBand.astro';
+import ContactForm from './ContactForm.astro';
 import ExperienceCard from './ExperienceCard.astro';
 import Footer from './Footer.astro';
 import Nav from './Nav.astro';
@@ -7,7 +8,7 @@ import Layout from '../layouts/Layout.astro';
 import { getAudiences, type AudienceId } from '../data/audiences';
 import { getExperiences } from '../data/experiences';
 import { getLanding, landingPageKeyByAudience } from '../data/landings';
-import { getContactPath, getPagePath } from '../data/routes';
+import { getPagePath } from '../data/routes';
 import { getLandingSchema, getShareImage } from '../data/schema';
 import { getLocale, useTranslations } from '../i18n/utils';
 
@@ -20,7 +21,8 @@ const locale = getLocale(Astro.currentLocale);
 const t = useTranslations(locale);
 const landing = getLanding(audience, locale);
 const pageKey = landingPageKeyByAudience[audience];
-const contactHref = getContactPath(locale, audience);
+// The form sits on this page, so the calls to action scroll to it instead of leaving.
+const contactHref = '#contanos';
 const experiences = getExperiences(locale, audience);
 const stepTitles = [t.how.steps.understand.title, t.how.steps.design.title, t.how.steps.coordinate.title];
 
@@ -30,7 +32,7 @@ const shareImage = audienceInfo?.image && (await getShareImage(audienceInfo.imag
 const schema = getLandingSchema(audience, locale, shareImage?.url);
 ---
 
-<Layout title={landing.title} description={landing.description} pageKey={pageKey} image={audienceInfo?.image} imageAlt={audienceInfo?.alt} schema={schema}>
+<Layout title={landing.title} description={landing.description} pageKey={pageKey} image={audienceInfo?.image} imageAlt={audienceInfo?.alt} schema={schema} whatsappMessage={landing.whatsappMessage}>
   <div class="font-texto min-w-80 w-full overflow-x-clip bg-crema-luminoso leading-[normal] text-verde-oscuro">
     <Nav pageKey={pageKey} />
     <main>
@@ -81,7 +83,7 @@ const schema = getLandingSchema(audience, locale, shareImage?.url);
             <h2 id="ejemplos-landing" class="font-titulos text-titulo-b font-bold">{landing.examplesHeading}</h2>
             <p class="mt-4 max-w-[620px] text-lg/[1.6]">{landing.examplesIntro}</p>
             <div class="mt-10 grid grid-cols-[repeat(auto-fill,minmax(290px,1fr))] gap-6">
-              {experiences.map((experience) => <ExperienceCard experience={experience} />)}
+              {experiences.map((experience) => <ExperienceCard experience={experience} contactHref={contactHref} />)}
             </div>
             <a class="mt-8 inline-block text-subtitulo font-semibold text-verde-principal underline underline-offset-4" href={getPagePath('experiences', locale)}>{t.landing.allExperiences} <span aria-hidden="true">→</span></a>
           </div>
@@ -111,8 +113,10 @@ const schema = getLandingSchema(audience, locale, shareImage?.url);
           <a class="inline-flex min-h-12 items-center gap-2.5 rounded-full bg-mostaza-calido px-7 text-base font-semibold text-verde-oscuro no-underline hover:bg-crema-luminoso hover:text-verde-oscuro" href={contactHref}>{t.nav.cta} <span class="inline-block" aria-hidden="true">→</span></a>
         </div>
       </section>
+
+      <ContactForm segment={audience} whatsappMessage={landing.whatsappMessage} />
     </main>
-    <ActBand contactHref={contactHref} />
+    <ActBand />
     <Footer />
   </div>
 </Layout>

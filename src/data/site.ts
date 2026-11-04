@@ -6,7 +6,14 @@ export const siteShortName = 'El Guía';
 export const contactEmail = 'contact@elguiacr.com';
 // E.164 without the plus sign, as wa.me expects it.
 export const whatsappNumber = '50685878863';
+// Costa Rican numbers (506 + 8 digits) read as "+506 8587 8863"; anything else just gets the plus sign.
+export const whatsappDisplay = whatsappNumber.replace(/^(506)(\d{4})(\d{4})$/, '+$1 $2 $3').replace(/^(?=\d)/, '+');
 export const instagramUrl = 'https://instagram.com/elguia.cr';
+
+// Shared with the Worker (the visitor auto-reply), so it lives here and not in routes.ts, which needs Astro.
+export function getWhatsappUrl(message: string) {
+  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+}
 
 // Ciudad Quesada is the district seat of the San Carlos canton; schema.org has no canton field.
 export const businessLocality = 'Ciudad Quesada';
@@ -23,7 +30,7 @@ export const dataController: { legalName?: string; idNumber?: string; address?: 
 };
 
 // ISO date of the current privacy policy text. It is shown on the page and stored with each consent as its version.
-export const privacyUpdated = '2026-10-30';
+export const privacyUpdated = '2026-11-03';
 // TODO(client): confirm retention period. 24 months after the last contact is our proposal.
 export const privacyRetentionMonths = 24;
 // ISO date of the current cookies page text.

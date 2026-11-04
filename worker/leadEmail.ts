@@ -1,9 +1,9 @@
 // HTML email sent to the business inbox for every contact form submission (design reference: src/assets/lead-email.preview.html).
 // Every value that comes from the visitor goes through `escapeHtml`, and links are built only from validated data.
-import { localeMeta } from '../src/i18n/config';
+import { localeMeta, SITE_URL } from '../src/i18n/config';
 import { privacyUpdated } from '../src/data/site';
 import { es } from '../src/i18n/es';
-import { logoSrc, waveSrc } from './leadEmailAssets';
+import { waveSrc } from './leadEmailAssets';
 import type { Submission } from './types';
 
 const entities: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
@@ -13,14 +13,16 @@ export const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (char) =>
 // Escape first, then turn the line breaks into <br>, so the visitor's markup never survives.
 const multiline = (value: string) => escapeHtml(value).replace(/\r\n|\r|\n/g, '<br>');
 
-const sans = "font-family:'Source Sans 3', 'Segoe UI', Helvetica, Arial, sans-serif;";
-const serif = "font-family:Alegreya, Georgia, 'Times New Roman', serif;";
+export const sans = "font-family:'Source Sans 3', 'Segoe UI', Helvetica, Arial, sans-serif;";
+export const serif = "font-family:Alegreya, Georgia, 'Times New Roman', serif;";
 const sectionLabelStyle = `${sans}font-size:12px;line-height:16px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#1F5C46;`;
-const preheaderFiller = '&nbsp;&zwnj;'.repeat(40);
+export const preheaderFiller = '&nbsp;&zwnj;'.repeat(40);
+// Hosted PNG built from src/assets/logo_colorful.svg; it exists on the production site once this change is released.
+export const logoSrc = `${SITE_URL}/email-logo.png`;
 const replySubject = encodeURIComponent('Tu consulta en El Guía CR');
 
-const sectionLabel = (text: string) => `<div style="${sectionLabelStyle}">${escapeHtml(text)}</div>`;
-const goldRule = (paddingTop: number) =>
+export const sectionLabel = (text: string) => `<div style="${sectionLabelStyle}">${escapeHtml(text)}</div>`;
+export const goldRule = (paddingTop: number) =>
   `<div style="padding-top:${paddingTop}px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td height="2" style="height:2px;font-size:0;line-height:0;background:#E0A632;" bgcolor="#E0A632">&nbsp;</td></tr></table></div>`;
 
 const timestamp = new Intl.DateTimeFormat('es-CR', { dateStyle: 'long', timeStyle: 'short', timeZone: 'America/Costa_Rica' });
@@ -65,6 +67,59 @@ function contactLinks(data: Submission) {
   };
 }
 
+// The <head> shared by every email: client resets, the web fonts and the mobile layout rules.
+export const emailHead = (title: string) => `<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="x-apple-disable-message-reformatting">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+<title>${escapeHtml(title)}</title>
+<!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,600;0,700;1,600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; padding:0; width:100%; background:#F3EAD8; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }
+  table { border-collapse:collapse; mso-table-lspace:0; mso-table-rspace:0; }
+  img { border:0; outline:none; text-decoration:none; -ms-interpolation-mode:bicubic; }
+  a { color:inherit; }
+  @media only screen and (max-width:620px) {
+    .container { width:100% !important; }
+    .px { padding-left:24px !important; padding-right:24px !important; }
+    .stack { display:block !important; width:100% !important; box-sizing:border-box; }
+    .h1 { font-size:32px !important; line-height:38px !important; }
+    .logo { width:160px !important; height:auto !important; }
+  }
+</style>
+</head>
+`;
+
+const rowSeparator = '<tr><td colspan="2" height="2" style="height:2px;font-size:0;line-height:0;background:#FFF7E8;" bgcolor="#FFF7E8">&nbsp;</td></tr>';
+
+// Label/value rows of the sand-colored tables. Values arrive already escaped; rows without a value are skipped.
+const labelledRows = (rows: Array<[string, string | undefined]>) =>
+  rows
+    .filter((row): row is [string, string] => row[1] !== undefined)
+    .map(
+      ([label, value]) => `
+    <tr>
+      <td class="stack" width="150" valign="top" style="width:150px;padding:14px 20px 0 20px;${sans}font-size:12px;line-height:20px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#1F5C46;">${escapeHtml(label)}</td>
+      <td class="stack" valign="top" style="padding:12px 20px 14px 20px;${sans}font-size:17px;line-height:24px;font-weight:500;color:#17362D;">${value}</td>
+    </tr>
+    ${rowSeparator}`,
+    )
+    .join('');
+
+// Where the lead came from, for the "Origen" block of both versions of the email. Only what is present is returned.
+export function originRows(data: Submission): Array<[string, string]> {
+  const rows: Array<[string, string | undefined]> = [
+    ['Página', data.page],
+    ['Fuente (utm_source)', data.utmSource],
+    ['Medio (utm_medium)', data.utmMedium],
+    ['Campaña (utm_campaign)', data.utmCampaign],
+  ];
+  return rows.filter((row): row is [string, string] => row[1] !== undefined);
+}
+
 export function buildLeadEmailHtml(data: Submission, options: { subject: string; submittedAt: Date }): string {
   const { contact } = es;
   const { label: segmentLabel, word } = audience(data.segment);
@@ -88,18 +143,7 @@ export function buildLeadEmailHtml(data: Submission, options: { subject: string;
     ['Zona', zone ? escapeHtml(zone) : undefined],
     ['Responder en', `${escapeHtml(localeMeta[data.locale].name)} <span style="color:#1F5C46;font-weight:400;">· idioma del sitio</span>`],
   ];
-  const separator = '<tr><td colspan="2" height="2" style="height:2px;font-size:0;line-height:0;background:#FFF7E8;" bgcolor="#FFF7E8">&nbsp;</td></tr>';
-  const knownRows = rows
-    .filter((row): row is [string, string] => row[1] !== undefined)
-    .map(
-      ([label, value]) => `
-    <tr>
-      <td class="stack" width="150" valign="top" style="width:150px;padding:14px 20px 0 20px;${sans}font-size:12px;line-height:20px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#1F5C46;">${escapeHtml(label)}</td>
-      <td class="stack" valign="top" style="padding:12px 20px 14px 20px;${sans}font-size:17px;line-height:24px;font-weight:500;color:#17362D;">${value}</td>
-    </tr>
-    ${separator}`,
-    )
-    .join('');
+  const knownRows = labelledRows(rows);
 
   const chip = (text: string) =>
     `<span style="display:inline-block;margin:0 8px 8px 0;padding:7px 14px;background:#F3EAD8;${sans}font-size:15px;line-height:20px;font-weight:500;color:#17362D;mso-padding-alt:7px 14px;">${escapeHtml(text)}</span>`;
@@ -114,34 +158,22 @@ export function buildLeadEmailHtml(data: Submission, options: { subject: string;
 `
     : '';
 
+  const origin = originRows(data);
+  const originBlock = origin.length
+    ? `
+        <tr><td class="px" style="padding:36px 40px 0 40px;">
+          ${sectionLabel('Origen')}
+          ${goldRule(10)}
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F3EAD8" style="margin-top:14px;background:#F3EAD8;">${labelledRows(origin.map(([label, value]) => [label, escapeHtml(value)]))}</table>
+        </td></tr>
+`
+    : '';
+
   const replyNote = data.email ? ` Si respondes a este correo, tu respuesta llega directo a ${first}.` : '';
 
   return `<!doctype html>
 <html lang="es" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="x-apple-disable-message-reformatting">
-<meta name="color-scheme" content="light">
-<meta name="supported-color-schemes" content="light">
-<title>${escapeHtml(options.subject)}</title>
-<!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
-<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,600;0,700;1,600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  body { margin:0; padding:0; width:100%; background:#F3EAD8; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }
-  table { border-collapse:collapse; mso-table-lspace:0; mso-table-rspace:0; }
-  img { border:0; outline:none; text-decoration:none; -ms-interpolation-mode:bicubic; }
-  a { color:inherit; }
-  @media only screen and (max-width:620px) {
-    .container { width:100% !important; }
-    .px { padding-left:24px !important; padding-right:24px !important; }
-    .stack { display:block !important; width:100% !important; box-sizing:border-box; }
-    .h1 { font-size:32px !important; line-height:38px !important; }
-    .logo { width:160px !important; height:auto !important; }
-  }
-</style>
-</head>
-<body style="margin:0;padding:0;background:#F3EAD8;">
+${emailHead(options.subject)}<body style="margin:0;padding:0;background:#F3EAD8;">
 <div style="display:none;max-height:0;overflow:hidden;opacity:0;mso-hide:all;font-size:1px;line-height:1px;color:#F3EAD8;">${escapeHtml(preheader)}${preheaderFiller}</div>
 
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F3EAD8" style="background:#F3EAD8;">
@@ -152,7 +184,7 @@ export function buildLeadEmailHtml(data: Submission, options: { subject: string;
 
     <!-- Encabezado -->
     <tr><td class="px" bgcolor="#17362D" style="background:#17362D;padding:36px 40px 0 40px;">
-      <img class="logo" src="${logoSrc}" width="190" alt="El Guía CR" style="display:block;width:190px;height:auto;">
+      <img class="logo" src="${logoSrc}" width="190" height="85" alt="El Guía CR" style="display:block;width:190px;height:auto;${sans}font-size:22px;line-height:26px;font-weight:700;color:#FFF7E8;">
       <div style="padding-top:36px;${sans}font-size:12px;line-height:16px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#E0A632;">${escapeHtml(eyebrow)}</div>
       <h1 class="h1" style="margin:10px 0 0 0;${serif}font-size:40px;line-height:46px;font-weight:700;color:#FFF7E8;">${escapeHtml(data.name)}</h1>
       <div style="padding-top:10px;${sans}font-size:16px;line-height:24px;color:#FFF7E8;">Dejó una consulta en elguiacr.com<br><span style="font-weight:500;">${escapeHtml(submittedAt)}</span></div>
@@ -190,7 +222,7 @@ export function buildLeadEmailHtml(data: Submission, options: { subject: string;
             </td>
           </tr></table>
         </td></tr>
-
+${originBlock}
         <tr><td class="px" style="padding:40px 40px 40px 40px;">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
             <td width="5" style="width:5px;background:#E0A632;font-size:0;line-height:0;" bgcolor="#E0A632">&nbsp;</td>
